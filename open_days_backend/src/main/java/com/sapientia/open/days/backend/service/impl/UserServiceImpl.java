@@ -1,7 +1,7 @@
 package com.sapientia.open.days.backend.service.impl;
 
-import com.sapientia.open.days.backend.io.repository.UserRepository;
 import com.sapientia.open.days.backend.io.entity.UserEntity;
+import com.sapientia.open.days.backend.io.repository.UserRepository;
 import com.sapientia.open.days.backend.service.UserService;
 import com.sapientia.open.days.backend.shared.Utils;
 import com.sapientia.open.days.backend.shared.dto.UserDto;
@@ -38,6 +38,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDto getUserByObjectId(String objectId) {
+        UserDto result = new UserDto();
+        UserEntity userEntity = userRepository.findByObjectId(objectId);
+
+        if (userEntity == null) throw new UsernameNotFoundException(objectId);
+
+        BeanUtils.copyProperties(userEntity, result);
+
+        return result;
+    }
+
+    @Override
     public UserDto createUser(UserDto user) {
         UserEntity userEntity = new UserEntity();
         BeanUtils.copyProperties(user, userEntity);
@@ -47,7 +59,7 @@ public class UserServiceImpl implements UserService {
         userEntity.setObjectId(objectId);
         userEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 
-        UserEntity storedUserDetails =  userRepository.save(userEntity);
+        UserEntity storedUserDetails = userRepository.save(userEntity);
 
         UserDto result = new UserDto();
         BeanUtils.copyProperties(storedUserDetails, result);
