@@ -1,10 +1,12 @@
 package com.sapientia.open.days.backend.service.impl;
 
+import com.sapientia.open.days.backend.exceptions.UserServiceException;
 import com.sapientia.open.days.backend.io.entity.UserEntity;
 import com.sapientia.open.days.backend.io.repository.UserRepository;
 import com.sapientia.open.days.backend.service.UserService;
 import com.sapientia.open.days.backend.shared.Utils;
 import com.sapientia.open.days.backend.shared.dto.UserDto;
+import com.sapientia.open.days.backend.ui.model.response.ErrorMessages;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
@@ -42,7 +44,7 @@ public class UserServiceImpl implements UserService {
         UserDto result = new UserDto();
         UserEntity userEntity = userRepository.findByObjectId(objectId);
 
-        if (userEntity == null) throw new UsernameNotFoundException(objectId);
+        if (userEntity == null) throw new UsernameNotFoundException("User with ID: " + objectId + "not found");
 
         BeanUtils.copyProperties(userEntity, result);
 
@@ -65,6 +67,32 @@ public class UserServiceImpl implements UserService {
         BeanUtils.copyProperties(storedUserDetails, result);
 
         return result;
+    }
+
+    @Override
+    public UserDto updateUser(UserDto user, String objectId) {
+        UserDto result = new UserDto();
+        UserEntity userEntity = userRepository.findByObjectId(objectId);
+
+        if (userEntity == null) throw new UserServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+
+        userEntity.setFirstName(user.getFirstName());
+        userEntity.setLastName(user.getLastName());
+
+        UserEntity updatedUserDetails = userRepository.save(userEntity);
+
+        BeanUtils.copyProperties(updatedUserDetails, result);
+
+        return result;
+    }
+
+    @Override
+    public void deleteUser(String objectId) {
+        UserEntity userEntity = userRepository.findByObjectId(objectId);
+
+        if (userEntity == null) throw new UserServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+
+        userRepository.delete(userEntity);
     }
 
     @Override
