@@ -1,8 +1,10 @@
 package com.sapientia.open.days.backend.ui.controller;
 
+import com.sapientia.open.days.backend.exceptions.UserServiceException;
 import com.sapientia.open.days.backend.service.UserService;
 import com.sapientia.open.days.backend.shared.dto.UserDto;
 import com.sapientia.open.days.backend.ui.model.request.UserDetailsRequestModel;
+import com.sapientia.open.days.backend.ui.model.response.ErrorMessages;
 import com.sapientia.open.days.backend.ui.model.response.UserRest;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +28,11 @@ public class UserController {
     }
 
     @PostMapping
-    public UserRest createUser(@RequestBody UserDetailsRequestModel userDetails) {
+    public UserRest createUser(@RequestBody UserDetailsRequestModel userDetails) throws Exception {
         UserRest returnValue = new UserRest();
+
+        if (userDetails.getFirstName().isEmpty())
+            throw new UserServiceException(ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessage());
 
         UserDto userDto = new UserDto();
         BeanUtils.copyProperties(userDetails, userDto);
