@@ -12,6 +12,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping("users")
 public class UserController {
@@ -25,6 +28,22 @@ public class UserController {
 
         UserDto userDto = userService.getUserByObjectId(objectId);
         BeanUtils.copyProperties(userDto, result);
+
+        return result;
+    }
+
+    @GetMapping
+    public List<UserRest> getUsers(@RequestParam(value = "page", defaultValue = "0") int page,
+                                   @RequestParam(value = "limit", defaultValue = "25") int limit) {
+        List<UserRest> result = new ArrayList<>();
+
+        List<UserDto> users = userService.getUsers(page, limit);
+
+        for (UserDto user : users) {
+            UserRest userModel = new UserRest();
+            BeanUtils.copyProperties(user, userModel);
+            result.add(userModel);
+        }
 
         return result;
     }
