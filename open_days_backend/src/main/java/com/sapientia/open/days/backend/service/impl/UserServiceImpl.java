@@ -4,6 +4,7 @@ import com.sapientia.open.days.backend.exceptions.UserServiceException;
 import com.sapientia.open.days.backend.io.entity.UserEntity;
 import com.sapientia.open.days.backend.io.repository.UserRepository;
 import com.sapientia.open.days.backend.service.UserService;
+import com.sapientia.open.days.backend.shared.EmailVerificationService;
 import com.sapientia.open.days.backend.shared.Utils;
 import com.sapientia.open.days.backend.shared.dto.UserDto;
 import com.sapientia.open.days.backend.ui.model.response.ErrorMessages;
@@ -56,7 +57,33 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<UserDto> getUsers(int pageNumber, int recordPerPage) {
+        List<UserDto> result = new ArrayList<>();
+
+        if (pageNumber < 0) pageNumber = 1;
+        if (pageNumber > 0) pageNumber -= 1;
+
+        Pageable pageableRequest = PageRequest.of(pageNumber, recordPerPage);
+
+        Page<UserEntity> userPage = userRepository.findAll(pageableRequest);
+        List<UserEntity> users = userPage.getContent();
+
+        for (UserEntity user : users) {
+            UserDto userDto = new UserDto();
+            BeanUtils.copyProperties(user, userDto);
+            result.add(userDto);
+        }
+
+        return result;
+    }
+
+    @Override
     public UserDto createUser(UserDto user) {
+
+        if (userRepository.findByEmail(user.getEmail()) != null) {
+            throw new RuntimeException("This email already used");
+        }
+
         UserEntity userEntity = new UserEntity();
         BeanUtils.copyProperties(user, userEntity);
 
@@ -64,11 +91,16 @@ public class UserServiceImpl implements UserService {
 
         userEntity.setObjectId(objectId);
         userEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        userEntity.setEmailVerificationToken(utils.generateEmailVerificationToken(objectId));
+        userEntity.setEmailVerificationStatus(false);
 
         UserEntity storedUserDetails = userRepository.save(userEntity);
 
         UserDto result = new UserDto();
         BeanUtils.copyProperties(storedUserDetails, result);
+
+        // Send an email message to user to verify their email address
+        new EmailVerificationService().verifyEmail(result);
 
         return result;
     }
@@ -99,22 +131,22 @@ public class UserServiceImpl implements UserService {
         userRepository.delete(userEntity);
     }
 
+    // Verifies the token if it's expired ot not.
     @Override
-    public List<UserDto> getUsers(int pageNumber, int recordPerPage) {
-        List<UserDto> result = new ArrayList<>();
+    public boolean verifyEmailVerificationToken(String emailVerificationToken) {
+        boolean result = false;
 
-        if (pageNumber < 0) pageNumber = 1;
-        if (pageNumber > 0) pageNumber -= 1;
+        // Find user by token
+        UserEntity userEntity = userRepository.findUserByEmailVerificationToken(emailVerificationToken);
 
-        Pageable pageableRequest = PageRequest.of(pageNumber, recordPerPage);
-
-        Page<UserEntity> userPage = userRepository.findAll(pageableRequest);
-        List<UserEntity> users = userPage.getContent();
-
-        for (UserEntity user : users) {
-            UserDto userDto = new UserDto();
-            BeanUtils.copyProperties(user, userDto);
-            result.add(userDto);
+        if (userEntity != null) {
+            boolean hasTokenExpired = Utils.hasTokenExpired(emailVerificationToken);
+            if (!hasTokenExpired) {
+                userEntity.setEmailVerificationToken(null);
+                userEntity.setEmailVerificationStatus(Boolean.TRUE);
+                userRepository.save(userEntity);
+                result = true;
+            }
         }
 
         return result;
@@ -126,6 +158,9 @@ public class UserServiceImpl implements UserService {
 
         if (userEntity == null) throw new UsernameNotFoundException(email);
 
-        return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(), new ArrayList<>());
+        return new User(userEntity.getUsername(), userEntity.getEncryptedPassword(),
+                userEntity.getEmailVerificationStatus(),
+                true, true,
+                true, new ArrayList<>());
     }
 }

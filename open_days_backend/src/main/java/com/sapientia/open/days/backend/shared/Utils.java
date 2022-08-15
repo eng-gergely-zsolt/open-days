@@ -1,24 +1,46 @@
 package com.sapientia.open.days.backend.shared;
 
+import com.sapientia.open.days.backend.security.SecurityConstants;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.stereotype.Component;
 
 import java.security.SecureRandom;
+import java.util.Date;
 import java.util.Random;
 
 @Component
 public class Utils {
-    private final Random RANDOM_NUMBER = new SecureRandom();
-    private final String CHARACTER_SET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-    public String generateObjectId(int length) { return generateRandomString(length); }
+    public static boolean hasTokenExpired(String token) {
+        Claims claims = Jwts.parser()
+                .setSigningKey(SecurityConstants.getJwtSecretKey())
+                .parseClaimsJws(token).getBody();
 
-    private String generateRandomString(int length) {
+        Date currentDate = new Date();
+        Date tokenExpirationDate = claims.getExpiration();
+
+        return tokenExpirationDate.before(currentDate);
+    }
+
+    public String generateObjectId(int length) {
         StringBuilder result = new StringBuilder(length);
+        final Random randomNumber = new SecureRandom();
 
         for (int i = 0; i < length; ++i) {
-            result.append(CHARACTER_SET.charAt(RANDOM_NUMBER.nextInt(CHARACTER_SET.length())));
+            String CHARACTER_SET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            result.append(CHARACTER_SET.charAt(randomNumber.nextInt(CHARACTER_SET.length())));
         }
 
         return result.toString();
+    }
+
+    public String generateEmailVerificationToken(String userId) {
+        return Jwts.builder()
+                .setSubject(userId)
+                .setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
+                .signWith(SignatureAlgorithm.HS512, SecurityConstants.getJwtSecretKey())
+                .compact();
     }
 }

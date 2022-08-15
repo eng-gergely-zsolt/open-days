@@ -9,18 +9,27 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @SpringBootApplication
 public class OpenDaysBackendApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(OpenDaysBackendApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(OpenDaysBackendApplication.class, args);
+    }
 
-	@Bean
-	public BCryptPasswordEncoder bCryptPasswordEncoder() { return new BCryptPasswordEncoder(); }
+//    @Override
+//    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+//        return builder.sources(OpenDaysBackendApplication.class);
+//    }
 
-	@Bean
-	public SpringApplicationContext springApplicationContext() { return new SpringApplicationContext(); }
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-	@Bean(name = "ApplicationProperties")
-	public ApplicationProperties getApplicationProperties() {
-		return new ApplicationProperties();
-	}
+    @Bean
+    public SpringApplicationContext springApplicationContext() {
+        return new SpringApplicationContext();
+    }
+
+    @Bean(name = "ApplicationProperties")
+    public ApplicationProperties getApplicationProperties() {
+        return new ApplicationProperties();
+    }
 }

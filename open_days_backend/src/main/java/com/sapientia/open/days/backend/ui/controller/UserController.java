@@ -90,4 +90,23 @@ public class UserController {
         result.setOperationResult(RequestOperationStatus.SUCCESS.name());
         return result;
     }
+
+    /*
+     * http://localhost:8080/mobile-app-ws/users/email-verification?token=<token>
+     **/
+    @GetMapping(path = "/email-verification")
+    public OperationStatusModel verifyEmailToken(@RequestParam(value = "token") String emailVerificationToken) {
+        OperationStatusModel returnValue = new OperationStatusModel();
+        returnValue.setOperationName(RequestOperationName.VERIFY_EMAIL.name());
+
+        boolean isVerified = userService.verifyEmailVerificationToken(emailVerificationToken);
+
+        if (isVerified) {
+            returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
+        } else {
+            returnValue.setOperationResult(RequestOperationStatus.ERROR.name());
+        }
+
+        return returnValue;
+    }
 }

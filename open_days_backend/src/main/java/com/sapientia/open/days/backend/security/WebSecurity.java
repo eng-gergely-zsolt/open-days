@@ -19,24 +19,27 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
+    // An encryption method to protect password. Spring security framework.
+    @Override
+    public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+        authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
+    }
+
     // Needed to set some endpoints public and others protected.
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf().disable().authorizeHttpRequests()
-                .antMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL).permitAll()
+                .antMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL)
+                .permitAll()
+                .antMatchers(HttpMethod.GET, SecurityConstants.EMAIL_VERIFICATION_URL)
+                .permitAll()
                 .anyRequest().authenticated().and()
                 .addFilter(getAuthenticationFilter())
                 .addFilter(new AuthorizationFilter(authenticationManager()))
                 // Makes Spring to not create sessions -> Our REST API is stateless.
                 // Prevents authorization headers to be cached.
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);;
-    }
-
-    // An encryption method to protect password. Spring security framework.
-    @Override
-    public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-        authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
     // This function will change the endpoint name.
