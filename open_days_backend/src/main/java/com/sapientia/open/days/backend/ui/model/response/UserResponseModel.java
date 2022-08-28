@@ -1,6 +1,6 @@
 package com.sapientia.open.days.backend.ui.model.response;
 
-public class UserRest {
+public class UserResponseModel {
     private String email;
     private String objectId;
     private String username;

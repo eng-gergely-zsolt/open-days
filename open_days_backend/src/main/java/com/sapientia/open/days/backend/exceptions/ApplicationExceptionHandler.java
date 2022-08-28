@@ -1,6 +1,6 @@
 package com.sapientia.open.days.backend.exceptions;
 
-import com.sapientia.open.days.backend.ui.model.response.ErrorMessage;
+import com.sapientia.open.days.backend.ui.model.response.ErrorMessageModel;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +17,7 @@ public class ApplicationExceptionHandler {
     @ExceptionHandler(value = {UserServiceException.class})
     public ResponseEntity<Object> handleUserServiceException(UserServiceException exception, WebRequest request) {
 
-        ErrorMessage errorMessages = new ErrorMessage(new Date(), exception.getMessage());
+        ErrorMessageModel errorMessages = new ErrorMessageModel(new Date(), exception.getMessage());
 
         return new ResponseEntity<>(errorMessages, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -26,7 +26,7 @@ public class ApplicationExceptionHandler {
     @ExceptionHandler(value = {Exception.class})
     public ResponseEntity<Object> handleOtherException(Exception exception, WebRequest request) {
 
-        ErrorMessage errorMessages = new ErrorMessage(new Date(), exception.getMessage());
+        ErrorMessageModel errorMessages = new ErrorMessageModel(new Date(), exception.getMessage());
 
         return new ResponseEntity<>(errorMessages, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }

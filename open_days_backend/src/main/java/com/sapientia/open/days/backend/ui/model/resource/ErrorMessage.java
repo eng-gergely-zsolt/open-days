@@ -1,6 +1,6 @@
-package com.sapientia.open.days.backend.ui.model.response;
+package com.sapientia.open.days.backend.ui.model.resource;
 
-public enum ErrorMessages {
+public enum ErrorMessage {
     MISSING_REQUIRED_FIELD("Missing required field. Please check documentation for required fields"),
     RECORD_ALREADY_EXISTS("Record already exists"),
     INTERNAL_SERVER_ERROR("Internal server error"),
@@ -12,7 +12,7 @@ public enum ErrorMessages {
 
     private String errorMessage;
 
-    ErrorMessages(String errorMessage) {
+    ErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
     }
 

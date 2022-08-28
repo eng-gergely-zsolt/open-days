@@ -2,13 +2,13 @@ package com.sapientia.open.days.backend.ui.model.response;
 
 import java.util.Date;
 
-public class ErrorMessage {
+public class ErrorMessageModel {
     private Date timestamp;
     private String message;
 
-    public ErrorMessage() {}
+    public ErrorMessageModel() {}
 
-    public ErrorMessage(Date timestamp, String message) {
+    public ErrorMessageModel(Date timestamp, String message) {
         this.timestamp = timestamp;
         this.message = message;
     }

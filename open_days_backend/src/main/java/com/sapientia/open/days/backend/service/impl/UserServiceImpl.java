@@ -1,13 +1,15 @@
 package com.sapientia.open.days.backend.service.impl;
 
 import com.sapientia.open.days.backend.exceptions.UserServiceException;
+import com.sapientia.open.days.backend.io.entity.PasswordResetTokenEntity;
 import com.sapientia.open.days.backend.io.entity.UserEntity;
+import com.sapientia.open.days.backend.io.repository.PasswordResetTokenRepository;
 import com.sapientia.open.days.backend.io.repository.UserRepository;
 import com.sapientia.open.days.backend.service.UserService;
 import com.sapientia.open.days.backend.shared.EmailVerificationService;
 import com.sapientia.open.days.backend.shared.Utils;
 import com.sapientia.open.days.backend.shared.dto.UserDto;
-import com.sapientia.open.days.backend.ui.model.response.ErrorMessages;
+import com.sapientia.open.days.backend.ui.model.resource.ErrorMessage;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,6 +31,9 @@ public class UserServiceImpl implements UserService {
     Utils utils;
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    PasswordResetTokenRepository passwordResetTokenRepository;
 
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -110,7 +115,7 @@ public class UserServiceImpl implements UserService {
         UserDto result = new UserDto();
         UserEntity userEntity = userRepository.findByObjectId(objectId);
 
-        if (userEntity == null) throw new UserServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+        if (userEntity == null) throw new UserServiceException(ErrorMessage.NO_RECORD_FOUND.getErrorMessage());
 
         userEntity.setFirstName(user.getFirstName());
         userEntity.setLastName(user.getLastName());
@@ -126,7 +131,7 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(String objectId) {
         UserEntity userEntity = userRepository.findByObjectId(objectId);
 
-        if (userEntity == null) throw new UserServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+        if (userEntity == null) throw new UserServiceException(ErrorMessage.NO_RECORD_FOUND.getErrorMessage());
 
         userRepository.delete(userEntity);
     }
@@ -153,12 +158,70 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean requestPasswordReset(String emailAddress) {
+        boolean returnValue = false;
+
+        UserEntity userEntity = userRepository.findByEmail(emailAddress);
+
+        if (userEntity == null) {
+            return returnValue;
+        }
+
+        String token = new Utils().generatePasswordResetToken(userEntity.getObjectId());
+
+        PasswordResetTokenEntity passwordResetTokenEntity = new PasswordResetTokenEntity();
+        passwordResetTokenEntity.setToken(token);
+        passwordResetTokenEntity.setUserDetails(userEntity);
+        passwordResetTokenRepository.save(passwordResetTokenEntity);
+
+        returnValue = new EmailVerificationService().sendPasswordResetRequest(
+                userEntity.getFirstName(),
+                userEntity.getEmail(),
+                token);
+
+        return returnValue;
+    }
+
+    @Override
+    public boolean resetPassword(String token, String password) {
+        boolean returnValue = false;
+
+        if (Utils.hasTokenExpired(token)) {
+            return returnValue;
+        }
+
+        PasswordResetTokenEntity passwordResetTokenEntity = passwordResetTokenRepository.findByToken(token);
+
+        if (passwordResetTokenEntity == null) {
+            return returnValue;
+        }
+
+        // Prepare new password
+        String encodedPassword = bCryptPasswordEncoder.encode(password);
+
+        // Update User password in database
+        UserEntity userEntity = passwordResetTokenEntity.getUserDetails();
+        userEntity.setEncryptedPassword(encodedPassword);
+        UserEntity savedUserEntity = userRepository.save(userEntity);
+
+        // Verify if password was saved successfully
+        if (savedUserEntity != null && savedUserEntity.getEncryptedPassword().equalsIgnoreCase(encodedPassword)) {
+            returnValue = true;
+        }
+
+        // Remove Password Reset token from database;
+        passwordResetTokenRepository.delete(passwordResetTokenEntity);
+
+        return returnValue;
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         UserEntity userEntity = userRepository.findByEmail(email);
 
         if (userEntity == null) throw new UsernameNotFoundException(email);
 
-        return new User(userEntity.getUsername(), userEntity.getEncryptedPassword(),
+        return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(),
                 userEntity.getEmailVerificationStatus(),
                 true, true,
                 true, new ArrayList<>());

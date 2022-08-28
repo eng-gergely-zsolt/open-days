@@ -19,4 +19,8 @@ public interface UserService extends UserDetailsService {
     void deleteUser(String objectId);
 
     boolean verifyEmailVerificationToken(String emailVerificationToken);
+
+    boolean requestPasswordReset(String emailAddress);
+
+    boolean resetPassword(String token, String password);
 }

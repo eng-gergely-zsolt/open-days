@@ -43,4 +43,14 @@ public class Utils {
                 .signWith(SignatureAlgorithm.HS512, SecurityConstants.getJwtSecretKey())
                 .compact();
     }
+
+    public String generatePasswordResetToken(String userId) {
+        String token = Jwts.builder()
+                .setSubject(userId)
+                .setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.PASSWORD_RESET_EXPIRATION_TIME))
+                .signWith(SignatureAlgorithm.HS512, SecurityConstants.getJwtSecretKey())
+                .compact();
+
+        return token;
+    }
 }
