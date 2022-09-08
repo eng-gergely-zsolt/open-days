@@ -37,7 +37,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
             UserLoginRequestModel credentials = new ObjectMapper().readValue(req.getInputStream(), UserLoginRequestModel.class);
 
             return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                    credentials.getEmail(), credentials.getPassword(), new ArrayList<>()));
+                    credentials.getUsername(), credentials.getPassword(), new ArrayList<>()));
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -61,7 +61,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                 .compact();
 
         UserService userService = (UserService) SpringApplicationContext.getBean("userServiceImpl");
-        UserDto userDto = userService.getUser(username);
+        UserDto userDto = userService.getUserByUsername(username);
 
         res.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
 

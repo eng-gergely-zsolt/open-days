@@ -9,6 +9,8 @@ public interface UserRepository extends PagingAndSortingRepository<UserEntity, L
     // The names here are strictly generated. findBy+column name.
     UserEntity findByEmail(String email);
 
+    UserEntity findByUsername(String username);
+
     UserEntity findByObjectId(String objectId);
 
     UserEntity findUserByEmailVerificationToken(String emailVerificationToken);
