@@ -1,11 +1,9 @@
 package com.sapientia.open.days.backend.io.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Collection;
 
 @Entity(name="users")
 public class UserEntity implements Serializable {
@@ -38,6 +36,13 @@ public class UserEntity implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 232383759086741088L;
+
+    // This creates a new table in cases of ManyToManyRelationships.
+    @ManyToMany(cascade = { CascadeType.PERSIST }, fetch = FetchType.EAGER)
+    @JoinTable(name = "users_roles",
+            joinColumns = @JoinColumn(name = "users_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "roles_id", referencedColumnName = "id"))
+    private Collection<RoleEntity> roles;
 
     public String getEmailVerificationToken() {
         return emailVerificationToken;
@@ -108,5 +113,13 @@ public class UserEntity implements Serializable {
 
     public void setEmailVerificationStatus(Boolean emailVerificationStatus) {
         this.emailVerificationStatus = emailVerificationStatus;
+    }
+
+    public Collection<RoleEntity> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Collection<RoleEntity> roles) {
+        this.roles = roles;
     }
 }

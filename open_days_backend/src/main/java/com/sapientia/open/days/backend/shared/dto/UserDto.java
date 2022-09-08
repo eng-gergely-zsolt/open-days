@@ -2,6 +2,7 @@ package com.sapientia.open.days.backend.shared.dto;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Collection;
 
 public class UserDto implements Serializable {
     private long id;
@@ -14,6 +15,7 @@ public class UserDto implements Serializable {
     private String encryptedPassword;
     private String emailVerificationToken;
     private Boolean emailVerificationStatus = false;
+    private Collection<String> roles;
 
     @Serial
     private static final long serialVersionUID = 6932311355757395934L;
@@ -96,5 +98,13 @@ public class UserDto implements Serializable {
 
     public void setEmailVerificationStatus(Boolean emailVerificationStatus) {
         this.emailVerificationStatus = emailVerificationStatus;
+    }
+
+    public Collection<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Collection<String> roles) {
+        this.roles = roles;
     }
 }

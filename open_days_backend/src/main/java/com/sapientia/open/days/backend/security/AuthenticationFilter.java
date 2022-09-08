@@ -48,7 +48,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     // Otherwise, this will not be called.
     @Override
     protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain, Authentication auth) {
-        String username = ((User) auth.getPrincipal()).getUsername();
+        String username = ((UserPrincipal) auth.getPrincipal()).getUsername();
 
         // This is the jason web token
         // Once the token is generated, it will be included into the header. The client have to extract this web token,
