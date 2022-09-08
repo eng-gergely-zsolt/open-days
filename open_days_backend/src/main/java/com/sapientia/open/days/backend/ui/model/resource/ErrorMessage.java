@@ -2,13 +2,17 @@ package com.sapientia.open.days.backend.ui.model.resource;
 
 public enum ErrorMessage {
     MISSING_REQUIRED_FIELD("Missing required field. Please check documentation for required fields"),
-    RECORD_ALREADY_EXISTS("Record already exists"),
-    INTERNAL_SERVER_ERROR("Internal server error"),
     NO_RECORD_FOUND("Record with provided id is not found"),
-    AUTHENTICATION_FAILED("Authentication failed"),
-    COULD_NOT_UPDATE_RECORD("Could not update record"),
-    COULD_NOT_DELETE_RECORD("Could not delete record"),
-    EMAIL_ADDRESS_NOT_VERIFIED("Email address could not verified");
+
+    EMAIL_ALREADY_REGISTERED("Email address already registered"),
+
+    INSTITUTION_NOT_EXISTS("Institution does not exist"),
+    MISSING_LAST_NAME("Missing last name"),
+    MISSING_FIRST_NAME("Missing first name"),
+    MISSING_EMAIL("Missing email"),
+    MISSING_PASSWORD("Missing password"),
+    MISSING_INSTITUTION("Missing institution"),
+    MISSING_USERNAME("Missing username");
 
     private String errorMessage;
 

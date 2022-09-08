@@ -1,9 +1,11 @@
 package com.sapientia.open.days.backend.service.impl;
 
 import com.sapientia.open.days.backend.exceptions.UserServiceException;
+import com.sapientia.open.days.backend.io.entity.InstitutionEntity;
 import com.sapientia.open.days.backend.io.entity.PasswordResetTokenEntity;
 import com.sapientia.open.days.backend.io.entity.RoleEntity;
 import com.sapientia.open.days.backend.io.entity.UserEntity;
+import com.sapientia.open.days.backend.io.repository.InstitutionRepository;
 import com.sapientia.open.days.backend.io.repository.PasswordResetTokenRepository;
 import com.sapientia.open.days.backend.io.repository.RoleRepository;
 import com.sapientia.open.days.backend.io.repository.UserRepository;
@@ -11,14 +13,14 @@ import com.sapientia.open.days.backend.security.UserPrincipal;
 import com.sapientia.open.days.backend.service.UserService;
 import com.sapientia.open.days.backend.shared.EmailVerificationService;
 import com.sapientia.open.days.backend.shared.Utils;
-import com.sapientia.open.days.backend.shared.dto.UserDto;
+import com.sapientia.open.days.backend.shared.dto.UserDTO;
+import com.sapientia.open.days.backend.ui.model.resource.ErrorCode;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorMessage;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -46,20 +48,23 @@ public class UserServiceImpl implements UserService {
     @Autowired
     RoleRepository roleRepository;
 
+    @Autowired
+    InstitutionRepository institutionRepository;
+
     @Override
-    public UserDto getUserByUsername(String username) {
+    public UserDTO getUserByUsername(String username) {
         UserEntity userEntity = userRepository.findByUsername(username);
 
         if (userEntity == null) throw new UsernameNotFoundException(username);
 
-        UserDto returnValue = new UserDto();
+        UserDTO returnValue = new UserDTO();
         BeanUtils.copyProperties(userEntity, returnValue);
         return returnValue;
     }
 
     @Override
-    public UserDto getUserByObjectId(String objectId) {
-        UserDto result = new UserDto();
+    public UserDTO getUserByObjectId(String objectId) {
+        UserDTO result = new UserDTO();
         UserEntity userEntity = userRepository.findByObjectId(objectId);
 
         if (userEntity == null) throw new UsernameNotFoundException("User with ID: " + objectId + "not found");
@@ -70,8 +75,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> getUsers(int pageNumber, int recordPerPage) {
-        List<UserDto> result = new ArrayList<>();
+    public List<UserDTO> getUsers(int pageNumber, int recordPerPage) {
+        List<UserDTO> result = new ArrayList<>();
 
         if (pageNumber < 0) pageNumber = 1;
         if (pageNumber > 0) pageNumber -= 1;
@@ -82,7 +87,7 @@ public class UserServiceImpl implements UserService {
         List<UserEntity> users = userPage.getContent();
 
         for (UserEntity user : users) {
-            UserDto userDto = new UserDto();
+            UserDTO userDto = new UserDTO();
             BeanUtils.copyProperties(user, userDto);
             result.add(userDto);
         }
@@ -91,10 +96,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto createUser(UserDto user) {
+    public UserDTO createUser(UserDTO user) {
+
+        InstitutionEntity institution = institutionRepository.findByName(user.getInstitution());
+
+        if (institution == null) {
+            throw new UserServiceException(ErrorCode.INSTITUTION_NOT_EXISTS.getErrorCode(),
+                    ErrorMessage.INSTITUTION_NOT_EXISTS.getErrorMessage());
+        }
 
         if (userRepository.findByEmail(user.getEmail()) != null) {
-            throw new RuntimeException("This email already used");
+            throw new UserServiceException(ErrorCode.EMAIL_ALREADY_REGISTERED.getErrorCode(),
+                    ErrorMessage.EMAIL_ALREADY_REGISTERED.getErrorMessage());
         }
 
         UserEntity userEntity = new UserEntity();
@@ -102,38 +115,37 @@ public class UserServiceImpl implements UserService {
 
         String objectId = utils.generateObjectId(15);
 
-        userEntity.setObjectId(objectId);
-        userEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        userEntity.setEmailVerificationToken(utils.generateEmailVerificationToken(objectId));
-        userEntity.setEmailVerificationStatus(false);
-
-        Collection<RoleEntity> roleEntities = new HashSet<>();
-        for (String role: user.getRoles()) {
+        HashSet<RoleEntity> roleEntities = new HashSet<>();
+        for (String role : user.getRoles()) {
             RoleEntity roleEntity = roleRepository.findByName(role);
             if (roleEntity != null) {
                 roleEntities.add(roleEntity);
             }
         }
 
+        userEntity.setObjectId(objectId);
         userEntity.setRoles(roleEntities);
+        userEntity.setInstitution(institution);
+        userEntity.setEmailVerificationStatus(false);
+        userEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        userEntity.setEmailVerificationToken(utils.generateEmailVerificationToken(objectId));
 
         UserEntity storedUserDetails = userRepository.save(userEntity);
 
-        UserDto result = new UserDto();
+        UserDTO result = new UserDTO();
         BeanUtils.copyProperties(storedUserDetails, result);
 
-        // Send an email message to user to verify their email address
         new EmailVerificationService().verifyEmail(result);
 
         return result;
     }
 
     @Override
-    public UserDto updateUser(UserDto user, String objectId) {
-        UserDto result = new UserDto();
+    public UserDTO updateUser(UserDTO user, String objectId) {
+        UserDTO result = new UserDTO();
         UserEntity userEntity = userRepository.findByObjectId(objectId);
 
-        if (userEntity == null) throw new UserServiceException(ErrorMessage.NO_RECORD_FOUND.getErrorMessage());
+        if (userEntity == null) throw new UserServiceException(0, ErrorMessage.NO_RECORD_FOUND.getErrorMessage());
 
         userEntity.setFirstName(user.getFirstName());
         userEntity.setLastName(user.getLastName());
@@ -149,7 +161,7 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(String objectId) {
         UserEntity userEntity = userRepository.findByObjectId(objectId);
 
-        if (userEntity == null) throw new UserServiceException(ErrorMessage.NO_RECORD_FOUND.getErrorMessage());
+        if (userEntity == null) throw new UserServiceException(0, ErrorMessage.NO_RECORD_FOUND.getErrorMessage());
 
         userRepository.delete(userEntity);
     }

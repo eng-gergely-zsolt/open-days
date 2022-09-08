@@ -3,10 +3,11 @@ package com.sapientia.open.days.backend.ui.controller;
 import com.sapientia.open.days.backend.exceptions.UserServiceException;
 import com.sapientia.open.days.backend.service.UserService;
 import com.sapientia.open.days.backend.shared.Roles;
-import com.sapientia.open.days.backend.shared.dto.UserDto;
+import com.sapientia.open.days.backend.shared.dto.UserDTO;
 import com.sapientia.open.days.backend.ui.model.request.PasswordResetModel;
 import com.sapientia.open.days.backend.ui.model.request.PasswordResetRequestModel;
-import com.sapientia.open.days.backend.ui.model.request.UserDetailsRequestModel;
+import com.sapientia.open.days.backend.ui.model.request.CreateUserRequestModel;
+import com.sapientia.open.days.backend.ui.model.resource.ErrorCode;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorMessage;
 import com.sapientia.open.days.backend.ui.model.resource.OperationStatus;
 import com.sapientia.open.days.backend.ui.model.response.OperationStatusModel;
@@ -21,7 +22,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
@@ -37,7 +37,7 @@ public class UserController {
 	public UserResponseModel getUser(@PathVariable String objectId) {
 		UserResponseModel result = new UserResponseModel();
 
-		UserDto userDto = userService.getUserByObjectId(objectId);
+		UserDTO userDto = userService.getUserByObjectId(objectId);
 		BeanUtils.copyProperties(userDto, result);
 
 		return result;
@@ -48,9 +48,9 @@ public class UserController {
 	                                        @RequestParam(value = "limit", defaultValue = "25") int limit) {
 		List<UserResponseModel> result = new ArrayList<>();
 
-		List<UserDto> users = userService.getUsers(page, limit);
+		List<UserDTO> users = userService.getUsers(page, limit);
 
-		for (UserDto user : users) {
+		for (UserDTO user : users) {
 			UserResponseModel userModel = new UserResponseModel();
 			BeanUtils.copyProperties(user, userModel);
 			result.add(userModel);
@@ -60,33 +60,62 @@ public class UserController {
 	}
 
 	@PostMapping
-	public UserResponseModel createUser(@RequestBody UserDetailsRequestModel userDetails) throws Exception {
-		UserResponseModel response = new UserResponseModel();
+	public OperationStatusModel createUser(@RequestBody CreateUserRequestModel createUserRequest) {
 
-		if (userDetails.getFirstName().isEmpty())
-			throw new UserServiceException(ErrorMessage.MISSING_REQUIRED_FIELD.getErrorMessage());
+		if (createUserRequest.getEmail().isEmpty()) {
+			throw new UserServiceException(ErrorCode.MISSING_EMAIL.getErrorCode(),
+					ErrorMessage.MISSING_EMAIL.getErrorMessage());
+		}
 
-		UserDto userDto = new UserDto();
-		BeanUtils.copyProperties(userDetails, userDto);
-		userDto.setRoles(new HashSet<>(Arrays.asList(Roles.ROLE_USER.name())));
+		if (createUserRequest.getPassword().isEmpty()) {
+			throw new UserServiceException(ErrorCode.MISSING_PASSWORD.getErrorCode(),
+					ErrorMessage.MISSING_PASSWORD.getErrorMessage());
+		}
 
-		UserDto createdUser = userService.createUser(userDto);
-		BeanUtils.copyProperties(createdUser, response);
+		if (createUserRequest.getUsername().isEmpty()) {
+			throw new UserServiceException(ErrorCode.MISSING_USERNAME.getErrorCode(),
+					ErrorMessage.MISSING_USERNAME.getErrorMessage());
+		}
 
-		return response;
+		if (createUserRequest.getLastName().isEmpty()) {
+			throw new UserServiceException(ErrorCode.MISSING_LAST_NAME.getErrorCode(),
+					ErrorMessage.MISSING_LAST_NAME.getErrorMessage());
+		}
+
+		if (createUserRequest.getFirstName().isEmpty()) {
+			throw new UserServiceException(ErrorCode.MISSING_FIRST_NAME.getErrorCode(),
+					ErrorMessage.MISSING_FIRST_NAME.getErrorMessage());
+		}
+
+		if (createUserRequest.getInstitution().isEmpty()) {
+			throw new UserServiceException(ErrorCode.MISSING_INSTITUTION.getErrorCode(),
+					ErrorMessage.MISSING_INSTITUTION.getErrorMessage());
+		}
+
+		UserDTO userDTO = new UserDTO();
+		userDTO.setRoles(new HashSet<>(List.of(Roles.ROLE_USER.name())));
+
+		BeanUtils.copyProperties(createUserRequest, userDTO);
+
+		userService.createUser(userDTO);
+
+		OperationStatusModel createUserResponse = new OperationStatusModel();
+		createUserResponse.setOperationResult(OperationStatus.SUCCESS.name());
+
+		return createUserResponse;
 	}
 
 	@PutMapping(path = "/{objectId}")
-	public UserResponseModel updateUser(@PathVariable String objectId, @RequestBody UserDetailsRequestModel userDetails) {
+	public UserResponseModel updateUser(@PathVariable String objectId, @RequestBody CreateUserRequestModel userDetails) {
 		UserResponseModel result = new UserResponseModel();
 
 		if (userDetails.getFirstName().isEmpty())
-			throw new UserServiceException(ErrorMessage.MISSING_REQUIRED_FIELD.getErrorMessage());
+			throw new UserServiceException(0, ErrorMessage.MISSING_REQUIRED_FIELD.getErrorMessage());
 
-		UserDto userDto = new UserDto();
+		UserDTO userDto = new UserDTO();
 		BeanUtils.copyProperties(userDetails, userDto);
 
-		UserDto updatedUser = userService.updateUser(userDto, objectId);
+		UserDTO updatedUser = userService.updateUser(userDto, objectId);
 		BeanUtils.copyProperties(updatedUser, result);
 
 		return result;

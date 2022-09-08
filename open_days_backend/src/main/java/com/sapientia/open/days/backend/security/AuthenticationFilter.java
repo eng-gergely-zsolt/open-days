@@ -3,7 +3,7 @@ package com.sapientia.open.days.backend.security;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sapientia.open.days.backend.SpringApplicationContext;
 import com.sapientia.open.days.backend.service.UserService;
-import com.sapientia.open.days.backend.shared.dto.UserDto;
+import com.sapientia.open.days.backend.shared.dto.UserDTO;
 import com.sapientia.open.days.backend.ui.model.request.UserLoginRequestModel;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -11,7 +11,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -61,7 +60,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                 .compact();
 
         UserService userService = (UserService) SpringApplicationContext.getBean("userServiceImpl");
-        UserDto userDto = userService.getUserByUsername(username);
+        UserDTO userDto = userService.getUserByUsername(username);
 
         res.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
 

@@ -37,6 +37,10 @@ public class UserEntity implements Serializable {
     @Serial
     private static final long serialVersionUID = 232383759086741088L;
 
+    @ManyToOne
+    @JoinColumn(name = "institution_id", nullable = false)
+    private InstitutionEntity institution;
+
     // This creates a new table in cases of ManyToManyRelationships.
     @ManyToMany(cascade = { CascadeType.PERSIST }, fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",
@@ -121,5 +125,13 @@ public class UserEntity implements Serializable {
 
     public void setRoles(Collection<RoleEntity> roles) {
         this.roles = roles;
+    }
+
+    public InstitutionEntity getInstitution() {
+        return institution;
+    }
+
+    public void setInstitution(InstitutionEntity institution) {
+        this.institution = institution;
     }
 }

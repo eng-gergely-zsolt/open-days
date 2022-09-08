@@ -4,7 +4,7 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClientBuilder;
 import com.amazonaws.services.simpleemail.model.*;
-import com.sapientia.open.days.backend.shared.dto.UserDto;
+import com.sapientia.open.days.backend.shared.dto.UserDTO;
 
 public class EmailVerificationService {
     String senderEmail = "geergely.zsolt@gmail.com";
@@ -20,7 +20,7 @@ public class EmailVerificationService {
             + " Thank you for your registration! To be able to log in, please complete the process by opening the following link in you browser: "
             + " http://localhost:8080/open-days-email-service/email-verification.html?token=$tokenValue";
 
-    public void verifyEmail(UserDto userDto) {
+    public void verifyEmail(UserDTO userDto) {
         AmazonSimpleEmailService client = AmazonSimpleEmailServiceClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1)
                 .build();
 

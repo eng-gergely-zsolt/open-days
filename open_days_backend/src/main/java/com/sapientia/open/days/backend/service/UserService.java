@@ -1,20 +1,20 @@
 package com.sapientia.open.days.backend.service;
 
-import com.sapientia.open.days.backend.shared.dto.UserDto;
+import com.sapientia.open.days.backend.shared.dto.UserDTO;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 
 public interface UserService extends UserDetailsService {
-    UserDto getUserByUsername(String email);
+    UserDTO getUserByUsername(String email);
 
-    UserDto createUser(UserDto user);
+    UserDTO createUser(UserDTO user);
 
-    UserDto getUserByObjectId(String objectId);
+    UserDTO getUserByObjectId(String objectId);
 
-    UserDto updateUser(UserDto user, String objectId);
+    UserDTO updateUser(UserDTO user, String objectId);
 
-    List<UserDto> getUsers(int pageNumber, int recordPerPage);
+    List<UserDTO> getUsers(int pageNumber, int recordPerPage);
 
     void deleteUser(String objectId);
 
