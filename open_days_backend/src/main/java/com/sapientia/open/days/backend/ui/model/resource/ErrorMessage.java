@@ -13,7 +13,10 @@ public enum ErrorMessage {
     MISSING_PASSWORD("Missing password"),
     MISSING_INSTITUTION("Missing institution"),
     MISSING_USERNAME("Missing username"),
-    INVALID_PUBLIC_ID("Invalid public id");
+    INVALID_PUBLIC_ID("Invalid public id"),
+    USER_NOT_FOUND_WITH_USERNAME("No user found with given username"),
+    USER_NOT_FOUND_WITH_ID("No user found with given id"),
+    USER_NOT_FOUND_WITH_EMAIL("No user found with given email");
 
     private String errorMessage;
 
