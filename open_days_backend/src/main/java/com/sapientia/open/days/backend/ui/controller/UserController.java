@@ -4,9 +4,10 @@ import com.sapientia.open.days.backend.exceptions.UserServiceException;
 import com.sapientia.open.days.backend.service.UserService;
 import com.sapientia.open.days.backend.shared.Roles;
 import com.sapientia.open.days.backend.shared.dto.UserDTO;
+import com.sapientia.open.days.backend.ui.model.request.CreateUserRequestModel;
 import com.sapientia.open.days.backend.ui.model.request.PasswordResetModel;
 import com.sapientia.open.days.backend.ui.model.request.PasswordResetRequestModel;
-import com.sapientia.open.days.backend.ui.model.request.CreateUserRequestModel;
+import com.sapientia.open.days.backend.ui.model.request.UpdateUserRequestModel;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorCode;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorMessage;
 import com.sapientia.open.days.backend.ui.model.resource.OperationStatus;
@@ -35,6 +36,12 @@ public class UserController {
 	@PostAuthorize("hasRole('ADMIN') or returnObject.publicId == principal.publicId")
 	@GetMapping(path = "/{publicId}")
 	public UserResponseModel getUser(@PathVariable String publicId) {
+
+		if (publicId.length() != 15) {
+			throw new UserServiceException(ErrorCode.INVALID_PUBLIC_ID.getErrorCode(),
+					ErrorMessage.INVALID_PUBLIC_ID.getErrorMessage());
+		}
+
 		UserResponseModel response = new UserResponseModel();
 
 		UserDTO userDTO = userService.getUserByPublicId(publicId);
@@ -44,19 +51,20 @@ public class UserController {
 	}
 
 	@GetMapping
-	public List<UserResponseModel> getUsers(@RequestParam(value = "page", defaultValue = "0") int page,
-	                                        @RequestParam(value = "limit", defaultValue = "25") int limit) {
-		List<UserResponseModel> result = new ArrayList<>();
+	public List<UserResponseModel> getUsers(
+			@RequestParam(value = "page", defaultValue = "0") int page,
+			@RequestParam(value = "limit", defaultValue = "25") int limit) {
 
+		List<UserResponseModel> response = new ArrayList<>();
 		List<UserDTO> users = userService.getUsers(page, limit);
 
 		for (UserDTO user : users) {
 			UserResponseModel userModel = new UserResponseModel();
 			BeanUtils.copyProperties(user, userModel);
-			result.add(userModel);
+			response.add(userModel);
 		}
 
-		return result;
+		return response;
 	}
 
 	@PostMapping
@@ -106,19 +114,22 @@ public class UserController {
 	}
 
 	@PutMapping(path = "/{publicId}")
-	public UserResponseModel updateUser(@PathVariable String publicId, @RequestBody CreateUserRequestModel userDetails) {
-		UserResponseModel result = new UserResponseModel();
+	public UserResponseModel updateUser(@PathVariable String publicId, @RequestBody UpdateUserRequestModel updateUserRequest) {
 
-		if (userDetails.getFirstName().isEmpty())
-			throw new UserServiceException(0, ErrorMessage.MISSING_REQUIRED_FIELD.getErrorMessage());
+		if (publicId.length() != 15) {
+			throw new UserServiceException(ErrorCode.INVALID_PUBLIC_ID.getErrorCode(),
+					ErrorMessage.INVALID_PUBLIC_ID.getErrorMessage());
+		}
 
-		UserDTO userDto = new UserDTO();
-		BeanUtils.copyProperties(userDetails, userDto);
+		UserResponseModel response = new UserResponseModel();
 
-		UserDTO updatedUser = userService.updateUser(userDto, publicId);
-		BeanUtils.copyProperties(updatedUser, result);
+		UserDTO userDTO = new UserDTO();
+		BeanUtils.copyProperties(updateUserRequest, userDTO);
 
-		return result;
+		UserDTO updatedUser = userService.updateUser(userDTO, publicId);
+		BeanUtils.copyProperties(updatedUser, response);
+
+		return response;
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN') or #publicId == principal.publicId")
@@ -126,11 +137,18 @@ public class UserController {
 //    @PreAuthorize("hasAuthority('DELETE_AUTHORITY')")
 	@DeleteMapping(path = "/{publicId}")
 	public OperationStatusModel deleteUser(@PathVariable String publicId) {
+
+		if (publicId.length() != 15) {
+			throw new UserServiceException(ErrorCode.INVALID_PUBLIC_ID.getErrorCode(),
+					ErrorMessage.INVALID_PUBLIC_ID.getErrorMessage());
+		}
+
 		OperationStatusModel result = new OperationStatusModel();
 
 		userService.deleteUser(publicId);
 
 		result.setOperationResult(OperationStatus.SUCCESS.name());
+
 		return result;
 	}
 
@@ -160,10 +178,10 @@ public class UserController {
 	 * http://localhost:8080/open-days/users/password-reset-request
 	 **/
 	@PostMapping(path = "/password-reset-request")
-	public OperationStatusModel requestPasswordReset(@RequestBody PasswordResetRequestModel passwordResetRequestModel) {
+	public OperationStatusModel requestPasswordReset(@RequestBody PasswordResetRequestModel passwordResetRequestPayload) {
 
 		OperationStatusModel response = new OperationStatusModel();
-		boolean operationResult = userService.requestPasswordReset(passwordResetRequestModel.getEmail());
+		boolean operationResult = userService.requestPasswordReset(passwordResetRequestPayload.getEmail());
 
 		response.setOperationResult(OperationStatus.ERROR.name());
 
@@ -178,20 +196,20 @@ public class UserController {
 	 * http://localhost:8080/open-days/users/password-reset
 	 **/
 	@PostMapping(path = "/password-reset")
-	public OperationStatusModel resetPassword(@RequestBody PasswordResetModel passwordResetModel) {
+	public OperationStatusModel resetPassword(@RequestBody PasswordResetModel passwordResetPayload) {
 
-		OperationStatusModel responseBody = new OperationStatusModel();
+		OperationStatusModel response = new OperationStatusModel();
 
 		boolean operationResult = userService.resetPassword(
-				passwordResetModel.getToken(),
-				passwordResetModel.getPassword());
+				passwordResetPayload.getToken(),
+				passwordResetPayload.getPassword());
 
-		responseBody.setOperationResult(OperationStatus.ERROR.name());
+		response.setOperationResult(OperationStatus.ERROR.name());
 
 		if (operationResult) {
-			responseBody.setOperationResult(OperationStatus.SUCCESS.name());
+			response.setOperationResult(OperationStatus.SUCCESS.name());
 		}
 
-		return responseBody;
+		return response;
 	}
 }

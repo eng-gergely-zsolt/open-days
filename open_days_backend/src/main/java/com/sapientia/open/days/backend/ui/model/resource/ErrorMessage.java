@@ -12,7 +12,8 @@ public enum ErrorMessage {
     MISSING_EMAIL("Missing email"),
     MISSING_PASSWORD("Missing password"),
     MISSING_INSTITUTION("Missing institution"),
-    MISSING_USERNAME("Missing username");
+    MISSING_USERNAME("Missing username"),
+    INVALID_PUBLIC_ID("Invalid public id");
 
     private String errorMessage;
 

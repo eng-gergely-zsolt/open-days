@@ -1,5 +1,6 @@
 package com.sapientia.open.days.backend.ui.model.request;
 
+@SuppressWarnings("unused")
 public class CreateUserRequestModel {
 
     private String email;
