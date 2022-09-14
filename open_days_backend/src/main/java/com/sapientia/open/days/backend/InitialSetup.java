@@ -21,7 +21,7 @@ import java.util.Set;
 
 @Component
 @SuppressWarnings("unused")
-public class InitialUserSetup {
+public class InitialSetup {
 
 	@Autowired
 	Utils utils;

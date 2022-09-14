@@ -1,7 +1,8 @@
 package com.sapientia.open.days.backend.ui.model.request;
 
-// The request to login has to match this model. The user has to provide the correct email and password.
+@SuppressWarnings("unused")
 public class UserLoginRequestModel {
+
     private String username;
     private String password;
 

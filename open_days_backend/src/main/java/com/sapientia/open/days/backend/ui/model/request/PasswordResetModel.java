@@ -1,6 +1,8 @@
 package com.sapientia.open.days.backend.ui.model.request;
 
+@SuppressWarnings("unused")
 public class PasswordResetModel {
+
     private String token;
     private String password;
 
@@ -8,12 +10,12 @@ public class PasswordResetModel {
         return token;
     }
 
-    public void setToken(String token) {
-        this.token = token;
-    }
-
     public String getPassword() {
         return password;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public void setPassword(String password) {

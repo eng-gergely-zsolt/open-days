@@ -1,5 +1,6 @@
 package com.sapientia.open.days.backend.ui.model.resource;
 
+
 public enum ErrorCode {
 
 	UNSPECIFIED_ERROR(1000),
