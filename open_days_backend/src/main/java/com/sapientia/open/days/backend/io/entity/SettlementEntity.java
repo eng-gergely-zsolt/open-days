@@ -7,6 +7,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "settlements")
+@SuppressWarnings("unused")
 public class SettlementEntity implements Serializable {
 
 	@Id

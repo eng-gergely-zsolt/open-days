@@ -11,23 +11,27 @@ import org.springframework.web.context.request.WebRequest;
 import java.util.Date;
 
 @ControllerAdvice
+@SuppressWarnings("unused")
 public class ApplicationExceptionHandler {
-    // This method is responsible for only one UserServiceException exception.
-    // A custom error message.
-    @ExceptionHandler(value = {UserServiceException.class})
-    public ResponseEntity<Object> handleUserServiceException(UserServiceException exception, WebRequest request) {
 
-        ErrorMessageModel errorMessages = new ErrorMessageModel(new Date(), exception.getMessage());
+	/*
+	 * A custom error message.
+	 * This method is responsible for only one UserServiceException exception.
+	 */
+	@ExceptionHandler(value = {UserServiceException.class})
+	public ResponseEntity<Object> handleUserServiceException(UserServiceException exception, WebRequest request) {
 
-        return new ResponseEntity<>(errorMessages, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+		ErrorMessageModel errorMessages = new ErrorMessageModel(new Date(), exception.getMessage());
 
-    // This method handles all the other, non-specified exceptions.
-    @ExceptionHandler(value = {Exception.class})
-    public ResponseEntity<Object> handleOtherException(Exception exception, WebRequest request) {
+		return new ResponseEntity<>(errorMessages, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 
-        ErrorMessageModel errorMessages = new ErrorMessageModel(new Date(), exception.getMessage());
+	// This method handles all the other, non-specified exceptions.
+	@ExceptionHandler(value = {Exception.class})
+	public ResponseEntity<Object> handleOtherException(Exception exception, WebRequest request) {
 
-        return new ResponseEntity<>(errorMessages, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+		ErrorMessageModel errorMessages = new ErrorMessageModel(new Date(), exception.getMessage());
+
+		return new ResponseEntity<>(errorMessages, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 }

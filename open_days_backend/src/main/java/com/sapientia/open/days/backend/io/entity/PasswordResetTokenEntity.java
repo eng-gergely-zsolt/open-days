@@ -1,44 +1,44 @@
 package com.sapientia.open.days.backend.io.entity;
 
 import javax.persistence.*;
-import java.io.Serial;
 
+@SuppressWarnings("unused")
 @Entity(name = "password_reset_tokens")
 public class PasswordResetTokenEntity {
-    @Serial
-    private static final long serialVersionUID = 1872855450348605762L;
 
-    @Id
-    @GeneratedValue
-    private long id;
+	@Id
+	@GeneratedValue
+	private long id;
 
-    private String token;
+	private String token;
 
-    @OneToOne()
-    @JoinColumn(name = "users_id")
-    private UserEntity userDetails;
+	@OneToOne()
+	@JoinColumn(name = "users_id")
+	private UserEntity userDetails;
 
-    public long getId() {
-        return id;
-    }
+	private static final long serialVersionUID = 1872855450348605762L;
 
-    public void setId(long id) {
-        this.id = id;
-    }
+	public long getId() {
+		return id;
+	}
 
-    public String getToken() {
-        return token;
-    }
+	public String getToken() {
+		return token;
+	}
 
-    public void setToken(String token) {
-        this.token = token;
-    }
+	public UserEntity getUserDetails() {
+		return userDetails;
+	}
 
-    public UserEntity getUserDetails() {
-        return userDetails;
-    }
+	public void setId(long id) {
+		this.id = id;
+	}
 
-    public void setUserDetails(UserEntity userDetails) {
-        this.userDetails = userDetails;
-    }
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	public void setUserDetails(UserEntity userDetails) {
+		this.userDetails = userDetails;
+	}
 }

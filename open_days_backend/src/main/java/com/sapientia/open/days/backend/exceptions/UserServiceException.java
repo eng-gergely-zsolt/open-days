@@ -4,17 +4,17 @@ import java.io.Serial;
 
 public class UserServiceException extends RuntimeException {
 
-    private final Integer errorCode;
+	private final Integer errorCode;
 
-    @Serial
-    private static final long serialVersionUID = 4460366926602512635L;
+	@Serial
+	private static final long serialVersionUID = 4460366926602512635L;
 
-    public UserServiceException(int errorCode, String message) {
-        super(message);
-        this.errorCode = errorCode;
-    }
+	public UserServiceException(int errorCode, String message) {
+		super(message);
+		this.errorCode = errorCode;
+	}
 
-    public int getErrorCode() {
-        return errorCode;
-    }
+	public int getErrorCode() {
+		return errorCode;
+	}
 }

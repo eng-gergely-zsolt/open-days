@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.Set;
 
 @Entity
+@SuppressWarnings("unused")
 @Table(name = "institutions")
 public class InstitutionEntity implements Serializable {
 

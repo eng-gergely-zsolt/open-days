@@ -3,11 +3,13 @@ package com.sapientia.open.days.backend.io.entity;
 import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.Set;
 
 @Entity
+@SuppressWarnings("unused")
 @Table(name = "authorities")
 public class AuthorityEntity implements Serializable {
+
 	@Serial
 	private static final long serialVersionUID = 7226990133576874679L;
 
@@ -19,7 +21,7 @@ public class AuthorityEntity implements Serializable {
 	private String name;
 
 	@ManyToMany(mappedBy = "authorities")
-	private Collection<RoleEntity> roles;
+	private Set<RoleEntity> roles;
 
 	public AuthorityEntity() {
 	}
@@ -32,23 +34,23 @@ public class AuthorityEntity implements Serializable {
 		return id;
 	}
 
-	public void setId(long id) {
-		this.id = id;
-	}
-
 	public String getName() {
 		return name;
+	}
+
+	public Set<RoleEntity> getRoles() {
+		return roles;
+	}
+
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	public Collection<RoleEntity> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(Collection<RoleEntity> roles) {
+	public void setRoles(Set<RoleEntity> roles) {
 		this.roles = roles;
 	}
 }

@@ -7,6 +7,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "counties")
+@SuppressWarnings("unused")
 public class CountyEntity implements Serializable {
 
 	@Id

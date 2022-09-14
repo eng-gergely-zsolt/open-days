@@ -3,13 +3,11 @@ package com.sapientia.open.days.backend.io.entity;
 import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.Set;
 
 @Entity(name = "users")
 @SuppressWarnings("unused")
 public class UserEntity implements Serializable {
-
-	private String emailVerificationToken;
 
 	@Id
 	@GeneratedValue
@@ -33,6 +31,9 @@ public class UserEntity implements Serializable {
 	@Column(nullable = false)
 	private String encryptedPassword;
 
+	@Column(nullable = true)
+	private String emailVerificationToken;
+
 	@Column(nullable = false)
 	private Boolean emailVerificationStatus = false;
 
@@ -48,93 +49,93 @@ public class UserEntity implements Serializable {
 	@JoinTable(name = "users_roles",
 			joinColumns = @JoinColumn(name = "users_id", referencedColumnName = "id"),
 			inverseJoinColumns = @JoinColumn(name = "roles_id", referencedColumnName = "id"))
-	private Collection<RoleEntity> roles;
+	private Set<RoleEntity> roles;
 
 	public String getEmailVerificationToken() {
 		return emailVerificationToken;
-	}
-
-	public void setEmailVerificationToken(String emailVerificationToken) {
-		this.emailVerificationToken = emailVerificationToken;
 	}
 
 	public long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
-		this.id = id;
-	}
-
 	public String getEmail() {
 		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
 	}
 
 	public String getPublicId() {
 		return publicId;
 	}
 
-	public void setPublicId(String publicId) {
-		this.publicId = publicId;
-	}
-
 	public String getUsername() {
 		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
 	}
 
 	public String getLastName() {
 		return lastName;
 	}
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
 	public String getFirstName() {
 		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
 	}
 
 	public String getEncryptedPassword() {
 		return encryptedPassword;
 	}
 
-	public void setEncryptedPassword(String encryptedPassword) {
-		this.encryptedPassword = encryptedPassword;
-	}
-
 	public Boolean getEmailVerificationStatus() {
 		return emailVerificationStatus;
-	}
-
-	public void setEmailVerificationStatus(Boolean emailVerificationStatus) {
-		this.emailVerificationStatus = emailVerificationStatus;
 	}
 
 	public InstitutionEntity getInstitution() {
 		return institution;
 	}
 
+	public Set<RoleEntity> getRoles() {
+		return roles;
+	}
+
+	public void setEmailVerificationToken(String emailVerificationToken) {
+		this.emailVerificationToken = emailVerificationToken;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public void setPublicId(String publicId) {
+		this.publicId = publicId;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public void setEncryptedPassword(String encryptedPassword) {
+		this.encryptedPassword = encryptedPassword;
+	}
+
+	public void setEmailVerificationStatus(Boolean emailVerificationStatus) {
+		this.emailVerificationStatus = emailVerificationStatus;
+	}
+
 	public void setInstitution(InstitutionEntity institution) {
 		this.institution = institution;
 	}
 
-	public Collection<RoleEntity> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(Collection<RoleEntity> roles) {
+	public void setRoles(Set<RoleEntity> roles) {
 		this.roles = roles;
 	}
 }

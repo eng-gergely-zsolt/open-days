@@ -4,12 +4,12 @@ import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Set;
 
 @Entity
 @Table(name = "roles")
+@SuppressWarnings("unused")
 public class RoleEntity implements Serializable {
-	@Serial
-	private static final long serialVersionUID = -828798110242483676L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,6 +20,9 @@ public class RoleEntity implements Serializable {
 
 	@ManyToMany(mappedBy = "roles")
 	private Collection<UserEntity> users;
+
+	@Serial
+	private static final long serialVersionUID = 1773859640689567294L;
 
 	public RoleEntity() {
 	}
@@ -32,37 +35,37 @@ public class RoleEntity implements Serializable {
 	@JoinTable(name = "roles_authorities",
 			joinColumns = @JoinColumn(name = "roles_id", referencedColumnName = "id"),
 			inverseJoinColumns = @JoinColumn(name = "authorities_id", referencedColumnName = "id"))
-	private Collection<AuthorityEntity> authorities;
+	private Set<AuthorityEntity> authorities;
 
 	public long getId() {
 		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public Collection<UserEntity> getUsers() {
 		return users;
+	}
+
+	public Set<AuthorityEntity> getAuthorities() {
+		return authorities;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public void setUsers(Collection<UserEntity> users) {
 		this.users = users;
 	}
 
-	public Collection<AuthorityEntity> getAuthorities() {
-		return authorities;
-	}
-
-	public void setAuthorities(Collection<AuthorityEntity> authorities) {
+	public void setAuthorities(Set<AuthorityEntity> authorities) {
 		this.authorities = authorities;
 	}
 }

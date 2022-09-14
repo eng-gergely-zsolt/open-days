@@ -63,9 +63,9 @@ public class InitialSetup {
 		AuthorityEntity writeAuthority = createAuthority(Authorities.WRITE_AUTHORITY.name());
 		AuthorityEntity deleteAuthority = createAuthority(Authorities.DELETE_AUTHORITY.name());
 
-		createRole(Roles.ROLE_USER.name(), Arrays.asList(readAuthority, writeAuthority));
-		createRole(Roles.ROLE_CREATOR.name(), Arrays.asList(readAuthority, writeAuthority));
-		RoleEntity roleAdmin = createRole(Roles.ROLE_ADMIN.name(), List.of(readAuthority, writeAuthority, deleteAuthority));
+		createRole(Roles.ROLE_USER.name(), new HashSet<>(Arrays.asList(readAuthority, writeAuthority)));
+		createRole(Roles.ROLE_CREATOR.name(), new HashSet<>(Arrays.asList(readAuthority, writeAuthority)));
+		RoleEntity roleAdmin = createRole(Roles.ROLE_ADMIN.name(), new HashSet<>(List.of(readAuthority, writeAuthority, deleteAuthority)));
 
 		UserEntity adminUser = userRepository.findByEmail("admin@mailinator.com");
 
@@ -87,7 +87,7 @@ public class InitialSetup {
 	}
 
 	@Transactional
-	private RoleEntity createRole(String name, List<AuthorityEntity> authorities) {
+	private RoleEntity createRole(String name, HashSet<AuthorityEntity> authorities) {
 		RoleEntity roleEntity = roleRepository.findByName(name);
 
 		if (roleEntity == null) {
