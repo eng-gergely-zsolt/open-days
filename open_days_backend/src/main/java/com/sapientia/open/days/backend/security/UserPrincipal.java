@@ -11,27 +11,26 @@ import java.io.Serial;
 import java.util.Collection;
 import java.util.HashSet;
 
+@SuppressWarnings("unused")
 public class UserPrincipal implements UserDetails {
 
 	@Serial
 	private static final long serialVersionUID = 1911049411012940256L;
 
-	private UserEntity userEntity;
-	private String  userId;
+	private String publicId;
+	private final UserEntity userEntity;
 
 	public UserPrincipal(UserEntity userEntity) {
 		this.userEntity = userEntity;
-		this.userId = userEntity.getObjectId();
+		this.publicId = userEntity.getPublicId();
 	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 
+		Collection<RoleEntity> roles = userEntity.getRoles();
 		Collection<GrantedAuthority> authorities = new HashSet<>();
 		Collection<AuthorityEntity> authorityEntities = new HashSet<>();
-
-		// Get user Roles
-		Collection<RoleEntity> roles = userEntity.getRoles();
 
 		if (roles == null) return authorities;
 
@@ -40,30 +39,27 @@ public class UserPrincipal implements UserDetails {
 			authorityEntities.addAll(role.getAuthorities());
 		});
 
-		authorityEntities.forEach((authorityEntity) -> {
-			authorities.add(new SimpleGrantedAuthority(authorityEntity.getName()));
-		});
+		authorityEntities.forEach((authorityEntity) -> authorities.add(
+				new SimpleGrantedAuthority(authorityEntity.getName())));
 
 		return authorities;
 	}
 
-	@Override
-	public String getPassword() {
-		return this.userEntity.getEncryptedPassword();
+	public String getPublicId() {
+		return publicId;
 	}
 
-	@Override
-	public String getUsername() {
-		return this.userEntity.getUsername();
-	}
-
-	@Override
-	public boolean isAccountNonExpired() {
-		return true;
+	public void setPublicId(String publicId) {
+		this.publicId = publicId;
 	}
 
 	@Override
 	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
 		return true;
 	}
 
@@ -73,15 +69,17 @@ public class UserPrincipal implements UserDetails {
 	}
 
 	@Override
+	public String getUsername() {
+		return this.userEntity.getUsername();
+	}
+
+	@Override
+	public String getPassword() {
+		return this.userEntity.getEncryptedPassword();
+	}
+
+	@Override
 	public boolean isEnabled() {
 		return this.userEntity.getEmailVerificationStatus();
-	}
-
-	public String getUserId() {
-		return userId;
-	}
-
-	public void setUserId(String userId) {
-		this.userId = userId;
 	}
 }

@@ -6,21 +6,22 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import java.util.List;
 
 public interface UserService extends UserDetailsService {
-    UserDTO getUserByUsername(String email);
 
-    UserDTO createUser(UserDTO user);
+	UserDTO createUser(UserDTO user);
 
-    UserDTO getUserByObjectId(String objectId);
+	UserDTO getUserByUsername(String email);
 
-    UserDTO updateUser(UserDTO user, String objectId);
+	UserDTO getUserByPublicId(String publicId);
 
-    List<UserDTO> getUsers(int pageNumber, int recordPerPage);
+	UserDTO updateUser(UserDTO user, String publicId);
 
-    void deleteUser(String objectId);
+	List<UserDTO> getUsers(int pageNumber, int recordPerPage);
 
-    boolean verifyEmailVerificationToken(String emailVerificationToken);
+	void deleteUser(String publicId);
 
-    boolean requestPasswordReset(String emailAddress);
+	boolean requestPasswordReset(String emailAddress);
 
-    boolean resetPassword(String token, String password);
+	boolean resetPassword(String token, String password);
+
+	boolean verifyEmailVerificationToken(String emailVerificationToken);
 }

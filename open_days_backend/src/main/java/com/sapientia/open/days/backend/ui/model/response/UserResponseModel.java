@@ -3,7 +3,7 @@ package com.sapientia.open.days.backend.ui.model.response;
 @SuppressWarnings("unused")
 public class UserResponseModel {
     private String email;
-    private String objectId;
+    private String publicId;
     private String username;
     private String lastName;
     private String firstName;
@@ -12,8 +12,8 @@ public class UserResponseModel {
         return email;
     }
 
-    public String getObjectId() {
-        return objectId;
+    public String getPublicId() {
+        return publicId;
     }
 
     public String getUsername() {
@@ -32,8 +32,8 @@ public class UserResponseModel {
         this.email = email;
     }
 
-    public void setObjectId(String objectId) {
-        this.objectId = objectId;
+    public void setPublicId(String publicId) {
+        this.publicId = publicId;
     }
 
     public void setUsername(String username) {

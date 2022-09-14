@@ -5,133 +5,136 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.Collection;
 
-@Entity(name="users")
+@Entity(name = "users")
+@SuppressWarnings("unused")
 public class UserEntity implements Serializable {
-    private String emailVerificationToken;
 
-    @Id
-    @GeneratedValue
-    private long id;
+	private String emailVerificationToken;
 
-    @Column(length = 100, unique = true, nullable = false)
-    private String email;
+	@Id
+	@GeneratedValue
+	private long id;
 
-    @Column(length = 15, unique = true, nullable = false)
-    private String objectId;
+	@Column(length = 100, unique = true, nullable = false)
+	private String email;
 
-    @Column(length = 50, unique = true, nullable = false)
-    private String username;
+	@Column(length = 15, unique = true, nullable = false)
+	private String publicId;
 
-    @Column(length = 50, nullable = false)
-    private String lastName;
+	@Column(length = 50, unique = true, nullable = false)
+	private String username;
 
-    @Column(length = 50, nullable = false)
-    private String firstName;
+	@Column(length = 50, nullable = false)
+	private String lastName;
 
-    @Column(nullable = false)
-    private String encryptedPassword;
+	@Column(length = 50, nullable = false)
+	private String firstName;
 
-    @Column(nullable = false)
-    private Boolean emailVerificationStatus = false;
+	@Column(nullable = false)
+	private String encryptedPassword;
 
-    @Serial
-    private static final long serialVersionUID = 232383759086741088L;
+	@Column(nullable = false)
+	private Boolean emailVerificationStatus = false;
 
-    @ManyToOne
-    @JoinColumn(name = "institution_id", nullable = false)
-    private InstitutionEntity institution;
+	@Serial
+	private static final long serialVersionUID = 232383759086741088L;
 
-    // This creates a new table in cases of ManyToManyRelationships.
-    @ManyToMany(cascade = { CascadeType.PERSIST }, fetch = FetchType.EAGER)
-    @JoinTable(name = "users_roles",
-            joinColumns = @JoinColumn(name = "users_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "roles_id", referencedColumnName = "id"))
-    private Collection<RoleEntity> roles;
+	@ManyToOne
+	@JoinColumn(name = "institution_id", nullable = false)
+	private InstitutionEntity institution;
 
-    public String getEmailVerificationToken() {
-        return emailVerificationToken;
-    }
+	// This creates a new table in cases of ManyToManyRelationships.
+	@ManyToMany(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
+	@JoinTable(name = "users_roles",
+			joinColumns = @JoinColumn(name = "users_id", referencedColumnName = "id"),
+			inverseJoinColumns = @JoinColumn(name = "roles_id", referencedColumnName = "id"))
+	private Collection<RoleEntity> roles;
 
-    public void setEmailVerificationToken(String emailVerificationToken) {
-        this.emailVerificationToken = emailVerificationToken;
-    }
+	public String getEmailVerificationToken() {
+		return emailVerificationToken;
+	}
 
-    public long getId() {
-        return id;
-    }
+	public void setEmailVerificationToken(String emailVerificationToken) {
+		this.emailVerificationToken = emailVerificationToken;
+	}
 
-    public void setId(long id) {
-        this.id = id;
-    }
+	public long getId() {
+		return id;
+	}
 
-    public String getEmail() {
-        return email;
-    }
+	public void setId(long id) {
+		this.id = id;
+	}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public String getObjectId() {
-        return objectId;
-    }
-    public void setObjectId(String objectId) {
-        this.objectId = objectId;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public String getUsername() {
-        return username;
-    }
+	public String getPublicId() {
+		return publicId;
+	}
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+	public void setPublicId(String publicId) {
+		this.publicId = publicId;
+	}
 
-    public String getLastName() {
-        return lastName;
-    }
+	public String getUsername() {
+		return username;
+	}
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
-    public String getFirstName() {
-        return firstName;
-    }
+	public String getLastName() {
+		return lastName;
+	}
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
 
-    public String getEncryptedPassword() {
-        return encryptedPassword;
-    }
+	public String getFirstName() {
+		return firstName;
+	}
 
-    public void setEncryptedPassword(String encryptedPassword) {
-        this.encryptedPassword = encryptedPassword;
-    }
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
 
-    public Boolean getEmailVerificationStatus() {
-        return emailVerificationStatus;
-    }
+	public String getEncryptedPassword() {
+		return encryptedPassword;
+	}
 
-    public void setEmailVerificationStatus(Boolean emailVerificationStatus) {
-        this.emailVerificationStatus = emailVerificationStatus;
-    }
+	public void setEncryptedPassword(String encryptedPassword) {
+		this.encryptedPassword = encryptedPassword;
+	}
 
-    public Collection<RoleEntity> getRoles() {
-        return roles;
-    }
+	public Boolean getEmailVerificationStatus() {
+		return emailVerificationStatus;
+	}
 
-    public void setRoles(Collection<RoleEntity> roles) {
-        this.roles = roles;
-    }
+	public void setEmailVerificationStatus(Boolean emailVerificationStatus) {
+		this.emailVerificationStatus = emailVerificationStatus;
+	}
 
-    public InstitutionEntity getInstitution() {
-        return institution;
-    }
+	public InstitutionEntity getInstitution() {
+		return institution;
+	}
 
-    public void setInstitution(InstitutionEntity institution) {
-        this.institution = institution;
-    }
+	public void setInstitution(InstitutionEntity institution) {
+		this.institution = institution;
+	}
+
+	public Collection<RoleEntity> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Collection<RoleEntity> roles) {
+		this.roles = roles;
+	}
 }

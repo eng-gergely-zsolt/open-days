@@ -6,12 +6,12 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserRepository extends PagingAndSortingRepository<UserEntity, Long> {
-    // The names here are strictly generated. findBy+column name.
-    UserEntity findByEmail(String email);
 
-    UserEntity findByUsername(String username);
+	UserEntity findByEmail(String email);
 
-    UserEntity findByObjectId(String objectId);
+	UserEntity findByUsername(String username);
 
-    UserEntity findUserByEmailVerificationToken(String emailVerificationToken);
+	UserEntity findByPublicId(String publicId);
+
+	UserEntity findUserByEmailVerificationToken(String emailVerificationToken);
 }

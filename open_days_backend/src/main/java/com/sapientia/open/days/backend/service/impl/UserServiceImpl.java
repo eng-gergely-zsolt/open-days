@@ -63,11 +63,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO getUserByObjectId(String objectId) {
+    public UserDTO getUserByPublicId(String publicId) {
         UserDTO result = new UserDTO();
-        UserEntity userEntity = userRepository.findByObjectId(objectId);
+        UserEntity userEntity = userRepository.findByPublicId(publicId);
 
-        if (userEntity == null) throw new UsernameNotFoundException("User with ID: " + objectId + "not found");
+        if (userEntity == null) throw new UsernameNotFoundException("User with ID: " + publicId + "not found");
 
         BeanUtils.copyProperties(userEntity, result);
 
@@ -113,7 +113,7 @@ public class UserServiceImpl implements UserService {
         UserEntity userEntity = new UserEntity();
         BeanUtils.copyProperties(user, userEntity);
 
-        String objectId = utils.generateObjectId(15);
+        String publicId = utils.generatePublicId(15);
 
         HashSet<RoleEntity> roleEntities = new HashSet<>();
         for (String role : user.getRoles()) {
@@ -123,12 +123,12 @@ public class UserServiceImpl implements UserService {
             }
         }
 
-        userEntity.setObjectId(objectId);
+        userEntity.setPublicId(publicId);
         userEntity.setRoles(roleEntities);
         userEntity.setInstitution(institution);
         userEntity.setEmailVerificationStatus(false);
         userEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        userEntity.setEmailVerificationToken(utils.generateEmailVerificationToken(objectId));
+        userEntity.setEmailVerificationToken(utils.generateEmailVerificationToken(publicId));
 
         UserEntity storedUserDetails = userRepository.save(userEntity);
 
@@ -141,9 +141,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO updateUser(UserDTO user, String objectId) {
+    public UserDTO updateUser(UserDTO user, String publicId) {
         UserDTO result = new UserDTO();
-        UserEntity userEntity = userRepository.findByObjectId(objectId);
+        UserEntity userEntity = userRepository.findByPublicId(publicId);
 
         if (userEntity == null) throw new UserServiceException(0, ErrorMessage.NO_RECORD_FOUND.getErrorMessage());
 
@@ -158,8 +158,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(String objectId) {
-        UserEntity userEntity = userRepository.findByObjectId(objectId);
+    public void deleteUser(String publicId) {
+        UserEntity userEntity = userRepository.findByPublicId(publicId);
 
         if (userEntity == null) throw new UserServiceException(0, ErrorMessage.NO_RECORD_FOUND.getErrorMessage());
 
@@ -197,7 +197,7 @@ public class UserServiceImpl implements UserService {
             return returnValue;
         }
 
-        String token = new Utils().generatePasswordResetToken(userEntity.getObjectId());
+        String token = new Utils().generatePasswordResetToken(userEntity.getPublicId());
 
         PasswordResetTokenEntity passwordResetTokenEntity = new PasswordResetTokenEntity();
         passwordResetTokenEntity.setToken(token);

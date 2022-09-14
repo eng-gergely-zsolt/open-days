@@ -79,7 +79,7 @@ public class InitialSetup {
 			adminUser.setInstitution(institution);
 			adminUser.setEmail("admin@mailinator.com");
 			adminUser.setEmailVerificationStatus(true);
-			adminUser.setObjectId(utils.generateObjectId(15));
+			adminUser.setPublicId(utils.generatePublicId(15));
 			adminUser.setEncryptedPassword(bCryptPasswordEncoder.encode("Pass1234"));
 			adminUser.setRoles(new HashSet<>(List.of(roleAdmin)));
 			userRepository.save(adminUser);

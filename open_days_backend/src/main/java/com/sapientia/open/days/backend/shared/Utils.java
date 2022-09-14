@@ -13,44 +13,42 @@ import java.util.Random;
 @Component
 public class Utils {
 
-    public static boolean hasTokenExpired(String token) {
-        Claims claims = Jwts.parser()
-                .setSigningKey(SecurityConstants.getJwtSecretKey())
-                .parseClaimsJws(token).getBody();
+	public static boolean hasTokenExpired(String token) {
+		Claims claims = Jwts.parser()
+				.setSigningKey(SecurityConstants.getJwtSecretKey())
+				.parseClaimsJws(token).getBody();
 
-        Date currentDate = new Date();
-        Date tokenExpirationDate = claims.getExpiration();
+		Date currentDate = new Date();
+		Date tokenExpirationDate = claims.getExpiration();
 
-        return tokenExpirationDate.before(currentDate);
-    }
+		return tokenExpirationDate.before(currentDate);
+	}
 
-    public String generateObjectId(int length) {
-        StringBuilder result = new StringBuilder(length);
-        final Random randomNumber = new SecureRandom();
+	public String generatePublicId(int length) {
+		StringBuilder result = new StringBuilder(length);
+		final Random randomNumber = new SecureRandom();
 
-        for (int i = 0; i < length; ++i) {
-            String CHARACTER_SET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            result.append(CHARACTER_SET.charAt(randomNumber.nextInt(CHARACTER_SET.length())));
-        }
+		for (int i = 0; i < length; ++i) {
+			String CHARACTER_SET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+			result.append(CHARACTER_SET.charAt(randomNumber.nextInt(CHARACTER_SET.length())));
+		}
 
-        return result.toString();
-    }
+		return result.toString();
+	}
 
-    public String generateEmailVerificationToken(String userId) {
-        return Jwts.builder()
-                .setSubject(userId)
-                .setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
-                .signWith(SignatureAlgorithm.HS512, SecurityConstants.getJwtSecretKey())
-                .compact();
-    }
+	public String generateEmailVerificationToken(String userId) {
+		return Jwts.builder()
+				.setSubject(userId)
+				.setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
+				.signWith(SignatureAlgorithm.HS512, SecurityConstants.getJwtSecretKey())
+				.compact();
+	}
 
-    public String generatePasswordResetToken(String userId) {
-        String token = Jwts.builder()
-                .setSubject(userId)
-                .setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.PASSWORD_RESET_EXPIRATION_TIME))
-                .signWith(SignatureAlgorithm.HS512, SecurityConstants.getJwtSecretKey())
-                .compact();
-
-        return token;
-    }
+	public String generatePasswordResetToken(String userId) {
+		return Jwts.builder()
+				.setSubject(userId)
+				.setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.PASSWORD_RESET_EXPIRATION_TIME))
+				.signWith(SignatureAlgorithm.HS512, SecurityConstants.getJwtSecretKey())
+				.compact();
+	}
 }

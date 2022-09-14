@@ -32,15 +32,15 @@ public class UserController {
 	@Autowired
 	UserService userService;
 
-	@PostAuthorize("hasRole('ADMIN') or returnObject.objectId == principal.userId")
-	@GetMapping(path = "/{objectId}")
-	public UserResponseModel getUser(@PathVariable String objectId) {
-		UserResponseModel result = new UserResponseModel();
+	@PostAuthorize("hasRole('ADMIN') or returnObject.publicId == principal.publicId")
+	@GetMapping(path = "/{publicId}")
+	public UserResponseModel getUser(@PathVariable String publicId) {
+		UserResponseModel response = new UserResponseModel();
 
-		UserDTO userDto = userService.getUserByObjectId(objectId);
-		BeanUtils.copyProperties(userDto, result);
+		UserDTO userDTO = userService.getUserByPublicId(publicId);
+		BeanUtils.copyProperties(userDTO, response);
 
-		return result;
+		return response;
 	}
 
 	@GetMapping
@@ -105,8 +105,8 @@ public class UserController {
 		return createUserResponse;
 	}
 
-	@PutMapping(path = "/{objectId}")
-	public UserResponseModel updateUser(@PathVariable String objectId, @RequestBody CreateUserRequestModel userDetails) {
+	@PutMapping(path = "/{publicId}")
+	public UserResponseModel updateUser(@PathVariable String publicId, @RequestBody CreateUserRequestModel userDetails) {
 		UserResponseModel result = new UserResponseModel();
 
 		if (userDetails.getFirstName().isEmpty())
@@ -115,20 +115,20 @@ public class UserController {
 		UserDTO userDto = new UserDTO();
 		BeanUtils.copyProperties(userDetails, userDto);
 
-		UserDTO updatedUser = userService.updateUser(userDto, objectId);
+		UserDTO updatedUser = userService.updateUser(userDto, publicId);
 		BeanUtils.copyProperties(updatedUser, result);
 
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_ADMIN') or #id == principal.userId")
+	@PreAuthorize("hasRole('ROLE_ADMIN') or #publicId == principal.publicId")
 //    @Secured("ROLE_ADMIN")
 //    @PreAuthorize("hasAuthority('DELETE_AUTHORITY')")
-	@DeleteMapping(path = "/{objectId}")
-	public OperationStatusModel deleteUser(@PathVariable String objectId) {
+	@DeleteMapping(path = "/{publicId}")
+	public OperationStatusModel deleteUser(@PathVariable String publicId) {
 		OperationStatusModel result = new OperationStatusModel();
 
-		userService.deleteUser(objectId);
+		userService.deleteUser(publicId);
 
 		result.setOperationResult(OperationStatus.SUCCESS.name());
 		return result;
