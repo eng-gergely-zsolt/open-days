@@ -5,11 +5,13 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 @Component
+@SuppressWarnings("unused")
 public class ApplicationProperties {
-    @Autowired
-    private Environment environment;
 
-    public String getJwtSecretKey() {
-        return environment.getProperty("jwtSecretKey");
-    }
+	@Autowired
+	private Environment environment;
+
+	public String getJwtSecretKey() {
+		return environment.getProperty("jwtSecretKey");
+	}
 }

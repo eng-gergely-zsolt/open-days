@@ -13,57 +13,56 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class AuthorizationFilter extends BasicAuthenticationFilter {
 
-    private final UserRepository userRepository;
+	private final UserRepository userRepository;
 
-    public AuthorizationFilter(AuthenticationManager authenticationManager, UserRepository userRepository) {
-        super(authenticationManager);
-        this.userRepository = userRepository;
-    }
+	public AuthorizationFilter(AuthenticationManager authenticationManager, UserRepository userRepository) {
+		super(authenticationManager);
+		this.userRepository = userRepository;
+	}
 
-    // This function comes from the Spring Framework.
-    @Override
-    protected void doFilterInternal(HttpServletRequest req,
-                                    HttpServletResponse res,
-                                    FilterChain chain) throws IOException, ServletException {
+	// This function comes from the Spring Framework.
+	@Override
+	protected void doFilterInternal(HttpServletRequest req,
+	                                HttpServletResponse res,
+	                                FilterChain chain) throws IOException, ServletException {
 
-        String header = req.getHeader(SecurityConstants.HEADER_STRING);
+		String header = req.getHeader(SecurityConstants.HEADER_STRING);
 
-        if (header == null || !header.startsWith(SecurityConstants.TOKEN_PREFIX)) {
-            chain.doFilter(req, res);
-            return;
-        }
+		if (header == null || !header.startsWith(SecurityConstants.TOKEN_PREFIX)) {
+			chain.doFilter(req, res);
+			return;
+		}
 
-        UsernamePasswordAuthenticationToken authentication = getAuthentication(req);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        chain.doFilter(req, res);
-    }
+		UsernamePasswordAuthenticationToken authentication = getAuthentication(req);
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+		chain.doFilter(req, res);
+	}
 
-    // Returns user password authentication token.
-    private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
-        String token = request.getHeader(SecurityConstants.HEADER_STRING);
+	// Returns user password authentication token.
+	private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
+		String token = request.getHeader(SecurityConstants.HEADER_STRING);
 
-        if (token != null) {
-            token = token.replace(SecurityConstants.TOKEN_PREFIX, "");
+		if (token != null) {
+			token = token.replace(SecurityConstants.TOKEN_PREFIX, "");
 
-            String user = Jwts.parser()
-                    .setSigningKey(SecurityConstants.getJwtSecretKey())
-                    .parseClaimsJws(token)
-                    .getBody()
-                    .getSubject();
+			String user = Jwts.parser()
+					.setSigningKey(SecurityConstants.getJwtSecretKey())
+					.parseClaimsJws(token)
+					.getBody()
+					.getSubject();
 
-            if (user != null) {
-                UserEntity userEntity = userRepository.findByUsername(user);
-                if (userEntity == null) return null;
+			if (user != null) {
+				UserEntity userEntity = userRepository.findByUsername(user);
+				if (userEntity == null) return null;
 
-                UserPrincipal userPrincipal = new UserPrincipal(userEntity);
-                return new UsernamePasswordAuthenticationToken(userPrincipal, null, userPrincipal.getAuthorities());
-            }
-            return null;
-        }
-        return null;
-    }
+				UserPrincipal userPrincipal = new UserPrincipal(userEntity);
+				return new UsernamePasswordAuthenticationToken(userPrincipal, null, userPrincipal.getAuthorities());
+			}
+			return null;
+		}
+		return null;
+	}
 }
