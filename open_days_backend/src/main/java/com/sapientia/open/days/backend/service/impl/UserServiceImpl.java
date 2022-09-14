@@ -11,7 +11,7 @@ import com.sapientia.open.days.backend.io.repository.RoleRepository;
 import com.sapientia.open.days.backend.io.repository.UserRepository;
 import com.sapientia.open.days.backend.security.UserPrincipal;
 import com.sapientia.open.days.backend.service.UserService;
-import com.sapientia.open.days.backend.shared.EmailVerificationService;
+import com.sapientia.open.days.backend.shared.EmailService;
 import com.sapientia.open.days.backend.shared.Utils;
 import com.sapientia.open.days.backend.shared.dto.UserDTO;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorCode;
@@ -27,7 +27,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
@@ -135,7 +134,7 @@ public class UserServiceImpl implements UserService {
         UserDTO result = new UserDTO();
         BeanUtils.copyProperties(storedUserDetails, result);
 
-        new EmailVerificationService().verifyEmail(result);
+        new EmailService().verifyEmail(result);
 
         return result;
     }
@@ -204,7 +203,7 @@ public class UserServiceImpl implements UserService {
         passwordResetTokenEntity.setUserDetails(userEntity);
         passwordResetTokenRepository.save(passwordResetTokenEntity);
 
-        returnValue = new EmailVerificationService().sendPasswordResetRequest(
+        returnValue = new EmailService().sendPasswordResetRequest(
                 userEntity.getFirstName(),
                 userEntity.getEmail(),
                 token);
