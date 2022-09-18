@@ -10,9 +10,6 @@ import java.util.Set;
 @Table(name = "authorities")
 public class AuthorityEntity implements Serializable {
 
-	@Serial
-	private static final long serialVersionUID = 7226990133576874679L;
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
@@ -22,6 +19,9 @@ public class AuthorityEntity implements Serializable {
 
 	@ManyToMany(mappedBy = "authorities")
 	private Set<RoleEntity> roles;
+
+	@Serial
+	private static final long serialVersionUID = 7226990133576874679L;
 
 	public AuthorityEntity() {
 	}

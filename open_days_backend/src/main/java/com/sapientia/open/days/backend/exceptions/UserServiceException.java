@@ -2,6 +2,7 @@ package com.sapientia.open.days.backend.exceptions;
 
 import java.io.Serial;
 
+@SuppressWarnings("unused")
 public class UserServiceException extends RuntimeException {
 
 	private final Integer errorCode;
