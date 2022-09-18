@@ -16,7 +16,10 @@ public enum ErrorMessage {
     INVALID_PUBLIC_ID("Invalid public id"),
     USER_NOT_FOUND_WITH_USERNAME("No user found with given username"),
     USER_NOT_FOUND_WITH_ID("No user found with given id"),
-    USER_NOT_FOUND_WITH_EMAIL("No user found with given email");
+
+    ACTIVITY_MISSING_NAME("Activity name is missing"),
+    ACTIVITY_MISSING_LOCATION("Activity location is missing"),
+    ACTIVITY_ALREADY_EXISTING_NAME("This activity name already exists");
 
     private String errorMessage;
 
