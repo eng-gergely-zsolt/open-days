@@ -1,6 +1,6 @@
 package com.sapientia.open.days.backend.service.impl;
 
-import com.sapientia.open.days.backend.exceptions.UserServiceException;
+import com.sapientia.open.days.backend.exceptions.GeneralServiceException;
 import com.sapientia.open.days.backend.io.entity.ActivityEntity;
 import com.sapientia.open.days.backend.io.repository.ActivityRepository;
 import com.sapientia.open.days.backend.service.ActivityService;
@@ -22,7 +22,7 @@ public class ActivityServiceImpl implements ActivityService {
 	public void createActivity(ActivityDto activity) {
 
 		if (activityRepository.findByName(activity.getName()) != null) {
-			throw new UserServiceException(ErrorCode.ACTIVITY_ALREADY_EXISTING_NAME.getErrorCode(),
+			throw new GeneralServiceException(ErrorCode.ACTIVITY_ALREADY_EXISTING_NAME.getErrorCode(),
 					ErrorMessage.ACTIVITY_ALREADY_EXISTING_NAME.getErrorMessage());
 		}
 

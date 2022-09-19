@@ -1,9 +1,9 @@
 package com.sapientia.open.days.backend.io.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
-import java.io.Serial;
 import java.util.Set;
 
 @Entity
@@ -16,10 +16,13 @@ public class EventEntity {
 	private long id;
 
 	@Column(nullable = false)
-	Boolean isOnline;
+	private boolean isOnline;
 
 	@Column(nullable = false)
-	DateTime dateTime;
+	private String dateTime;
+
+	@Column(nullable = true)
+	private String meetingLink;
 
 	@ManyToOne
 	@JoinColumn(name = "organizer_id", nullable = false)
@@ -35,6 +38,67 @@ public class EventEntity {
 			inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
 	private Set<UserEntity> events;
 
-	@Serial
-	private static final long serialVersionUID = 4254624445277314819L;
+	public long getId() {
+		return id;
+	}
+
+	public boolean isOnline() {
+		return isOnline;
+	}
+
+	public Boolean getOnline() {
+		return isOnline;
+	}
+
+	public String getDateTime() {
+		return dateTime;
+	}
+
+	public String getMeetingLink() {
+		return meetingLink;
+	}
+
+	public UserEntity getOrganizer() {
+		return organizer;
+	}
+
+	public ActivityEntity getActivity() {
+		return activity;
+	}
+
+	public Set<UserEntity> getEvents() {
+		return events;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public void setOnline(boolean online) {
+		isOnline = online;
+	}
+
+	public void setOnline(Boolean online) {
+		isOnline = online;
+	}
+
+	public void setDateTime(String dateTime) {
+		this.dateTime = dateTime;
+	}
+
+	public void setMeetingLink(String meetingLink) {
+		this.meetingLink = meetingLink;
+	}
+
+	public void setOrganizer(UserEntity organizer) {
+		this.organizer = organizer;
+	}
+
+	public void setActivity(ActivityEntity activity) {
+		this.activity = activity;
+	}
+
+	public void setEvents(Set<UserEntity> events) {
+		this.events = events;
+	}
 }

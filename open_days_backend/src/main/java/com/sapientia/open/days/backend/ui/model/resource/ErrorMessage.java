@@ -19,7 +19,15 @@ public enum ErrorMessage {
 
     ACTIVITY_MISSING_NAME("Activity name is missing"),
     ACTIVITY_MISSING_LOCATION("Activity location is missing"),
-    ACTIVITY_ALREADY_EXISTING_NAME("This activity name already exists");
+    ACTIVITY_ALREADY_EXISTING_NAME("This activity name already exists"),
+
+    EVENT_INVALID_ACTIVITY("The given activity is invalid"),
+    EVENT_MISSING_DATE_TIME("The datetime parameter is missing"),
+    EVENT_MISSING_ORGANIZER_ID("The organizer id is missing"),
+    EVENT_INVALID_DATE_TIME("The datetime parameter is invalid"),
+    EVENT_MISSING_MEETING_LINK("The meeting link is missing"),
+    EVENT_INVALID_ORGANIZER_ID("The organizer id is invalid"),
+    EVENT_MISSING_ACTIVITY_NAME("The activity name is missing");
 
     private String errorMessage;
 

@@ -1,6 +1,6 @@
 package com.sapientia.open.days.backend.ui.controller;
 
-import com.sapientia.open.days.backend.exceptions.UserServiceException;
+import com.sapientia.open.days.backend.exceptions.GeneralServiceException;
 import com.sapientia.open.days.backend.service.ActivityService;
 import com.sapientia.open.days.backend.shared.dto.ActivityDto;
 import com.sapientia.open.days.backend.ui.model.request.ActivityModel;
@@ -26,12 +26,12 @@ public class ActivityController {
 	OperationStatusModel createActivity(@RequestBody ActivityModel activity) {
 
 		if (activity.getName().isEmpty()) {
-			throw new UserServiceException(ErrorCode.ACTIVITY_MISSING_NAME.getErrorCode(),
+			throw new GeneralServiceException(ErrorCode.ACTIVITY_MISSING_NAME.getErrorCode(),
 					ErrorMessage.ACTIVITY_MISSING_NAME.getErrorMessage());
 		}
 
 		if (activity.getLocation().isEmpty()) {
-			throw new UserServiceException(ErrorCode.ACTIVITY_MISSING_LOCATION.getErrorCode(),
+			throw new GeneralServiceException(ErrorCode.ACTIVITY_MISSING_LOCATION.getErrorCode(),
 					ErrorMessage.ACTIVITY_MISSING_LOCATION.getErrorMessage());
 		}
 

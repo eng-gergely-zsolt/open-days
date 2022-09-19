@@ -1,6 +1,6 @@
 package com.sapientia.open.days.backend.service.impl;
 
-import com.sapientia.open.days.backend.exceptions.UserServiceException;
+import com.sapientia.open.days.backend.exceptions.GeneralServiceException;
 import com.sapientia.open.days.backend.io.entity.InstitutionEntity;
 import com.sapientia.open.days.backend.io.entity.PasswordResetTokenEntity;
 import com.sapientia.open.days.backend.io.entity.RoleEntity;
@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
 		UserEntity userEntity = userRepository.findByUsername(username);
 
 		if (userEntity == null) {
-			throw new UserServiceException(ErrorCode.USER_NOT_FOUND_WITH_USERNAME.getErrorCode(),
+			throw new GeneralServiceException(ErrorCode.USER_NOT_FOUND_WITH_USERNAME.getErrorCode(),
 					ErrorMessage.USER_NOT_FOUND_WITH_USERNAME.getErrorMessage());
 		}
 
@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
 		UserEntity userEntity = userRepository.findByPublicId(publicId);
 
 		if (userEntity == null) {
-			throw new UserServiceException(ErrorCode.USER_NOT_FOUND_WITH_ID.getErrorCode(),
+			throw new GeneralServiceException(ErrorCode.USER_NOT_FOUND_WITH_ID.getErrorCode(),
 					ErrorMessage.USER_NOT_FOUND_WITH_ID.getErrorMessage());
 		}
 
@@ -109,12 +109,12 @@ public class UserServiceImpl implements UserService {
 		InstitutionEntity institution = institutionRepository.findByName(user.getInstitution());
 
 		if (institution == null) {
-			throw new UserServiceException(ErrorCode.INSTITUTION_NOT_EXISTS.getErrorCode(),
+			throw new GeneralServiceException(ErrorCode.INSTITUTION_NOT_EXISTS.getErrorCode(),
 					ErrorMessage.INSTITUTION_NOT_EXISTS.getErrorMessage());
 		}
 
 		if (userRepository.findByEmail(user.getEmail()) != null) {
-			throw new UserServiceException(ErrorCode.EMAIL_ALREADY_REGISTERED.getErrorCode(),
+			throw new GeneralServiceException(ErrorCode.EMAIL_ALREADY_REGISTERED.getErrorCode(),
 					ErrorMessage.EMAIL_ALREADY_REGISTERED.getErrorMessage());
 		}
 
@@ -151,7 +151,7 @@ public class UserServiceImpl implements UserService {
 		UserEntity userEntity = userRepository.findByPublicId(publicId);
 
 		if (userEntity == null) {
-			throw new UserServiceException(ErrorCode.USER_NOT_FOUND_WITH_ID.getErrorCode(),
+			throw new GeneralServiceException(ErrorCode.USER_NOT_FOUND_WITH_ID.getErrorCode(),
 					ErrorMessage.USER_NOT_FOUND_WITH_ID.getErrorMessage());
 		}
 
@@ -177,7 +177,7 @@ public class UserServiceImpl implements UserService {
 		UserEntity userEntity = userRepository.findByPublicId(publicId);
 
 		if (userEntity == null) {
-			throw new UserServiceException(ErrorCode.USER_NOT_FOUND_WITH_ID.getErrorCode(),
+			throw new GeneralServiceException(ErrorCode.USER_NOT_FOUND_WITH_ID.getErrorCode(),
 					ErrorMessage.USER_NOT_FOUND_WITH_ID.getErrorMessage());
 		}
 

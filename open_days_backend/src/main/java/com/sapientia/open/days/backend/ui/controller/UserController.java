@@ -1,6 +1,6 @@
 package com.sapientia.open.days.backend.ui.controller;
 
-import com.sapientia.open.days.backend.exceptions.UserServiceException;
+import com.sapientia.open.days.backend.exceptions.GeneralServiceException;
 import com.sapientia.open.days.backend.service.UserService;
 import com.sapientia.open.days.backend.shared.Roles;
 import com.sapientia.open.days.backend.shared.dto.UserDTO;
@@ -38,7 +38,7 @@ public class UserController {
 	public UserResponseModel getUser(@PathVariable String publicId) {
 
 		if (publicId.length() != 15) {
-			throw new UserServiceException(ErrorCode.INVALID_PUBLIC_ID.getErrorCode(),
+			throw new GeneralServiceException(ErrorCode.INVALID_PUBLIC_ID.getErrorCode(),
 					ErrorMessage.INVALID_PUBLIC_ID.getErrorMessage());
 		}
 
@@ -71,32 +71,32 @@ public class UserController {
 	public OperationStatusModel createUser(@RequestBody CreateUserRequestModel createUserRequest) {
 
 		if (createUserRequest.getEmail().isEmpty()) {
-			throw new UserServiceException(ErrorCode.MISSING_EMAIL.getErrorCode(),
+			throw new GeneralServiceException(ErrorCode.MISSING_EMAIL.getErrorCode(),
 					ErrorMessage.MISSING_EMAIL.getErrorMessage());
 		}
 
 		if (createUserRequest.getPassword().isEmpty()) {
-			throw new UserServiceException(ErrorCode.MISSING_PASSWORD.getErrorCode(),
+			throw new GeneralServiceException(ErrorCode.MISSING_PASSWORD.getErrorCode(),
 					ErrorMessage.MISSING_PASSWORD.getErrorMessage());
 		}
 
 		if (createUserRequest.getUsername().isEmpty()) {
-			throw new UserServiceException(ErrorCode.MISSING_USERNAME.getErrorCode(),
+			throw new GeneralServiceException(ErrorCode.MISSING_USERNAME.getErrorCode(),
 					ErrorMessage.MISSING_USERNAME.getErrorMessage());
 		}
 
 		if (createUserRequest.getLastName().isEmpty()) {
-			throw new UserServiceException(ErrorCode.MISSING_LAST_NAME.getErrorCode(),
+			throw new GeneralServiceException(ErrorCode.MISSING_LAST_NAME.getErrorCode(),
 					ErrorMessage.MISSING_LAST_NAME.getErrorMessage());
 		}
 
 		if (createUserRequest.getFirstName().isEmpty()) {
-			throw new UserServiceException(ErrorCode.MISSING_FIRST_NAME.getErrorCode(),
+			throw new GeneralServiceException(ErrorCode.MISSING_FIRST_NAME.getErrorCode(),
 					ErrorMessage.MISSING_FIRST_NAME.getErrorMessage());
 		}
 
 		if (createUserRequest.getInstitution().isEmpty()) {
-			throw new UserServiceException(ErrorCode.MISSING_INSTITUTION.getErrorCode(),
+			throw new GeneralServiceException(ErrorCode.MISSING_INSTITUTION.getErrorCode(),
 					ErrorMessage.MISSING_INSTITUTION.getErrorMessage());
 		}
 
@@ -117,7 +117,7 @@ public class UserController {
 	public UserResponseModel updateUser(@PathVariable String publicId, @RequestBody UpdateUserRequestModel updateUserRequest) {
 
 		if (publicId.length() != 15) {
-			throw new UserServiceException(ErrorCode.INVALID_PUBLIC_ID.getErrorCode(),
+			throw new GeneralServiceException(ErrorCode.INVALID_PUBLIC_ID.getErrorCode(),
 					ErrorMessage.INVALID_PUBLIC_ID.getErrorMessage());
 		}
 
@@ -139,7 +139,7 @@ public class UserController {
 	public OperationStatusModel deleteUser(@PathVariable String publicId) {
 
 		if (publicId.length() != 15) {
-			throw new UserServiceException(ErrorCode.INVALID_PUBLIC_ID.getErrorCode(),
+			throw new GeneralServiceException(ErrorCode.INVALID_PUBLIC_ID.getErrorCode(),
 					ErrorMessage.INVALID_PUBLIC_ID.getErrorMessage());
 		}
 

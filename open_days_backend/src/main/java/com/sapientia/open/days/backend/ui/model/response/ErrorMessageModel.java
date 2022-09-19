@@ -1,32 +1,31 @@
 package com.sapientia.open.days.backend.ui.model.response;
 
-import java.util.Date;
-
 @SuppressWarnings("unused")
 public class ErrorMessageModel {
-    private Date timestamp;
-    private String message;
+	private int code;
+	private String message;
 
-    public ErrorMessageModel() {}
+	public ErrorMessageModel() {
+	}
 
-    public ErrorMessageModel(Date timestamp, String message) {
-        this.message = message;
-        this.timestamp = timestamp;
-    }
+	public ErrorMessageModel(int code, String message) {
+		this.code = code;
+		this.message = message;
+	}
 
-    public Date getTimestamp() {
-        return timestamp;
-    }
+	public int getCode() {
+		return code;
+	}
 
-    public String getMessage() {
-        return message;
-    }
+	public String getMessage() {
+		return message;
+	}
 
-    public void setTimestamp(Date timestamp) {
-        this.timestamp = timestamp;
-    }
+	public void setCode(int code) {
+		this.code = code;
+	}
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
+	public void setMessage(String message) {
+		this.message = message;
+	}
 }
