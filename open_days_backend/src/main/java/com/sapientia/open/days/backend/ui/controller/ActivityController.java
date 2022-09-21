@@ -3,7 +3,7 @@ package com.sapientia.open.days.backend.ui.controller;
 import com.sapientia.open.days.backend.exceptions.GeneralServiceException;
 import com.sapientia.open.days.backend.service.ActivityService;
 import com.sapientia.open.days.backend.shared.dto.ActivityDto;
-import com.sapientia.open.days.backend.ui.model.request.ActivityModel;
+import com.sapientia.open.days.backend.ui.model.request.ActivityRequestModel;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorCode;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorMessage;
 import com.sapientia.open.days.backend.ui.model.resource.OperationStatus;
@@ -23,7 +23,7 @@ public class ActivityController {
 	ActivityService activityService;
 
 	@PostMapping
-	OperationStatusModel createActivity(@RequestBody ActivityModel activity) {
+	OperationStatusModel createActivity(@RequestBody ActivityRequestModel activity) {
 
 		if (activity.getName().isEmpty()) {
 			throw new GeneralServiceException(ErrorCode.ACTIVITY_MISSING_NAME.getErrorCode(),

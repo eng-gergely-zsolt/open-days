@@ -1,13 +1,14 @@
 package com.sapientia.open.days.backend.ui.controller;
 
 import com.sapientia.open.days.backend.exceptions.GeneralServiceException;
+import com.sapientia.open.days.backend.io.repository.OrganizerEmailRepository;
 import com.sapientia.open.days.backend.service.UserService;
 import com.sapientia.open.days.backend.shared.Roles;
 import com.sapientia.open.days.backend.shared.dto.UserDTO;
-import com.sapientia.open.days.backend.ui.model.request.CreateUserRequestModel;
+import com.sapientia.open.days.backend.ui.model.request.UserCreateRequestModel;
 import com.sapientia.open.days.backend.ui.model.request.PasswordResetModel;
 import com.sapientia.open.days.backend.ui.model.request.PasswordResetRequestModel;
-import com.sapientia.open.days.backend.ui.model.request.UpdateUserRequestModel;
+import com.sapientia.open.days.backend.ui.model.request.UserUpdateRequestModel;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorCode;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorMessage;
 import com.sapientia.open.days.backend.ui.model.resource.OperationStatus;
@@ -32,6 +33,9 @@ public class UserController {
 
 	@Autowired
 	UserService userService;
+
+	@Autowired
+	OrganizerEmailRepository organizerEmailRepository;
 
 	@PostAuthorize("hasRole('ADMIN') or returnObject.publicId == principal.publicId")
 	@GetMapping(path = "/{publicId}")
@@ -68,7 +72,7 @@ public class UserController {
 	}
 
 	@PostMapping
-	public OperationStatusModel createUser(@RequestBody CreateUserRequestModel createUserRequest) {
+	public OperationStatusModel createUser(@RequestBody UserCreateRequestModel createUserRequest) {
 
 		if (createUserRequest.getEmail().isEmpty()) {
 			throw new GeneralServiceException(ErrorCode.MISSING_EMAIL.getErrorCode(),
@@ -101,10 +105,16 @@ public class UserController {
 		}
 
 		UserDTO userDTO = new UserDTO();
-		userDTO.setRoles(new HashSet<>(List.of(Roles.ROLE_USER.name())));
-
 		BeanUtils.copyProperties(createUserRequest, userDTO);
 
+
+		HashSet<String> roles = new HashSet<>(List.of(Roles.ROLE_USER.name()));
+
+		if (organizerEmailRepository.findByEmail(createUserRequest.getEmail()) != null) {
+			roles.add(Roles.ROLE_ORGANIZER.name());
+		}
+
+		userDTO.setRoles(roles);
 		userService.createUser(userDTO);
 
 		OperationStatusModel createUserResponse = new OperationStatusModel();
@@ -114,7 +124,7 @@ public class UserController {
 	}
 
 	@PutMapping(path = "/{publicId}")
-	public UserResponseModel updateUser(@PathVariable String publicId, @RequestBody UpdateUserRequestModel updateUserRequest) {
+	public UserResponseModel updateUser(@PathVariable String publicId, @RequestBody UserUpdateRequestModel updateUserRequest) {
 
 		if (publicId.length() != 15) {
 			throw new GeneralServiceException(ErrorCode.INVALID_PUBLIC_ID.getErrorCode(),

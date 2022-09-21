@@ -3,7 +3,7 @@ package com.sapientia.open.days.backend.ui.controller;
 import com.sapientia.open.days.backend.exceptions.GeneralServiceException;
 import com.sapientia.open.days.backend.service.EventService;
 import com.sapientia.open.days.backend.shared.dto.EventDto;
-import com.sapientia.open.days.backend.ui.model.request.EventModel;
+import com.sapientia.open.days.backend.ui.model.request.EventRequestModel;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorCode;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorMessage;
 import com.sapientia.open.days.backend.ui.model.resource.OperationStatus;
@@ -26,7 +26,7 @@ public class EventController {
 	EventService eventService;
 
 	@PostMapping
-	OperationStatusModel createEvent(@RequestBody EventModel event) {
+	OperationStatusModel createEvent(@RequestBody EventRequestModel event) {
 
 		if (event.getDateTime().isEmpty()) {
 			throw new GeneralServiceException(ErrorCode.EVENT_MISSING_DATE_TIME.getErrorCode(),

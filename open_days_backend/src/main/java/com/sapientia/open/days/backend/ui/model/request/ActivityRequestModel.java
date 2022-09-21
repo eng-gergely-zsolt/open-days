@@ -1,7 +1,7 @@
 package com.sapientia.open.days.backend.ui.model.request;
 
 @SuppressWarnings("unused")
-public class ActivityModel {
+public class ActivityRequestModel {
 
 	private String name;
 	private String location;

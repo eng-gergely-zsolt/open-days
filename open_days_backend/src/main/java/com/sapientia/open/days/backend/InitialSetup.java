@@ -57,7 +57,8 @@ public class InitialSetup {
 		createCounties();
 		createSettlements();
 		createInstitutions();
-		createOrganizerEmailEntities();
+		createOrganizerEmails();
+		createRolesAndAuthorities();
 		createAdminUser();
 	}
 
@@ -67,12 +68,12 @@ public class InitialSetup {
 				"Harghita", "Maros"
 		));
 
-		for (String countyName : counties) {
-			CountyEntity county = countyRepository.findByName(countyName);
+		for (String county : counties) {
+			CountyEntity countyEntity = countyRepository.findByName(county);
 
-			if (county == null) {
-				county = new CountyEntity(countyName);
-				countyRepository.save(county);
+			if (countyEntity == null) {
+				countyEntity = new CountyEntity(county);
+				countyRepository.save(countyEntity);
 			}
 		}
 	}
@@ -84,17 +85,17 @@ public class InitialSetup {
 				new SettlementModel("Maros", "Marosvásárhely")
 		));
 
-		for (SettlementModel settlementModel : settlements) {
-			CountyEntity county = countyRepository.findByName(settlementModel.county());
+		for (SettlementModel settlement : settlements) {
+			CountyEntity county = countyRepository.findByName(settlement.county());
 
 			if (county != null) {
-				SettlementEntity settlement = settlementRepository.findByName(settlementModel.settlement());
+				SettlementEntity settlementEntity = settlementRepository.findByName(settlement.settlement());
 
-				if (settlement == null) {
-					settlement = new SettlementEntity();
-					settlement.setCounty(county);
-					settlement.setName(settlementModel.settlement());
-					settlementRepository.save(settlement);
+				if (settlementEntity == null) {
+					settlementEntity = new SettlementEntity();
+					settlementEntity.setCounty(county);
+					settlementEntity.setName(settlement.settlement());
+					settlementRepository.save(settlementEntity);
 				}
 			}
 		}
@@ -107,25 +108,26 @@ public class InitialSetup {
 				new InstitutionModel("Marosvásárhely", "Bolyai Farkas Líceum")
 		));
 
-		for (InstitutionModel institutionModel : institutions) {
-			SettlementEntity settlement = settlementRepository.findByName(institutionModel.settlement());
+		for (InstitutionModel institution : institutions) {
+			SettlementEntity settlement = settlementRepository.findByName(institution.settlement());
 
 			if (settlement != null) {
-				InstitutionEntity institution = institutionRepository.findByName(institutionModel.institution());
+				InstitutionEntity institutionEntity = institutionRepository.findByName(institution.institution());
 
-				if (institution == null) {
-					institution = new InstitutionEntity();
-					institution.setSettlement(settlement);
-					institution.setName(institutionModel.institution());
-					institutionRepository.save(institution);
+				if (institutionEntity == null) {
+					institutionEntity = new InstitutionEntity();
+					institutionEntity.setSettlement(settlement);
+					institutionEntity.setName(institution.institution());
+					institutionRepository.save(institutionEntity);
 				}
 			}
 		}
 	}
 
 	@Transactional
-	private void createOrganizerEmailEntities() {
+	private void createOrganizerEmails() {
 		HashSet<String> organizerEmails = new HashSet<>(List.of(
+				"anomakyr@gmail.com",
 				"organizer1@gmail.com",
 				"organizer2@gmail.com"
 		));
@@ -134,25 +136,52 @@ public class InitialSetup {
 			OrganizerEmailEntity organizerEmailEntity = organizerEmailRepository.findByEmail(organizerEmail);
 
 			if (organizerEmailEntity == null) {
-				OrganizerEmailEntity newOrganizerEmailEntity = new OrganizerEmailEntity(organizerEmail);
-				organizerEmailRepository.save(newOrganizerEmailEntity);
+				organizerEmailEntity = new OrganizerEmailEntity(organizerEmail);
+				organizerEmailRepository.save(organizerEmailEntity);
 			}
 		}
 	}
 
-	@Transactional
-	private void createAdminUser() {
+	private void createRolesAndAuthorities() {
 		AuthorityEntity readAuthority = createAuthority(Authorities.READ_AUTHORITY.name());
 		AuthorityEntity writeAuthority = createAuthority(Authorities.WRITE_AUTHORITY.name());
 		AuthorityEntity deleteAuthority = createAuthority(Authorities.DELETE_AUTHORITY.name());
 
 		createRole(Roles.ROLE_USER.name(), new HashSet<>(Arrays.asList(readAuthority, writeAuthority)));
 		createRole(Roles.ROLE_ORGANIZER.name(), new HashSet<>(Arrays.asList(readAuthority, writeAuthority)));
-		RoleEntity roleAdmin = createRole(Roles.ROLE_ADMIN.name(), new HashSet<>(List.of(readAuthority, writeAuthority, deleteAuthority)));
+		createRole(Roles.ROLE_ADMIN.name(), new HashSet<>(List.of(readAuthority, writeAuthority, deleteAuthority)));
+	}
 
+	@Transactional
+	private AuthorityEntity createAuthority(String name) {
+
+		AuthorityEntity authorityEntity = authorityRepository.findByName(name);
+
+		if (authorityEntity == null) {
+			authorityEntity = new AuthorityEntity(name);
+			authorityRepository.save(authorityEntity);
+		}
+		return authorityEntity;
+	}
+
+	@Transactional
+	private void createRole(String name, HashSet<AuthorityEntity> authorities) {
+		RoleEntity roleEntity = roleRepository.findByName(name);
+
+		if (roleEntity == null) {
+			roleEntity = new RoleEntity(name);
+			roleEntity.setAuthorities(authorities);
+			roleRepository.save(roleEntity);
+		}
+	}
+
+	@Transactional
+	private void createAdminUser() {
+
+		RoleEntity roleAdmin = roleRepository.findByName(Roles.ROLE_USER.name());
 		UserEntity adminUser = userRepository.findByEmail("admin@mailinator.com");
 
-		if (adminUser == null) {
+		if (adminUser == null && roleAdmin != null) {
 			adminUser = new UserEntity();
 			InstitutionEntity institution = institutionRepository.findByName("Márton Áron Főgimnázium");
 
@@ -167,28 +196,5 @@ public class InitialSetup {
 			adminUser.setRoles(new HashSet<>(List.of(roleAdmin)));
 			userRepository.save(adminUser);
 		}
-	}
-
-	@Transactional
-	private AuthorityEntity createAuthority(String name) {
-		AuthorityEntity authorityEntity = authorityRepository.findByName(name);
-
-		if (authorityEntity == null) {
-			authorityEntity = new AuthorityEntity(name);
-			authorityRepository.save(authorityEntity);
-		}
-		return authorityEntity;
-	}
-
-	@Transactional
-	private RoleEntity createRole(String name, HashSet<AuthorityEntity> authorities) {
-		RoleEntity roleEntity = roleRepository.findByName(name);
-
-		if (roleEntity == null) {
-			roleEntity = new RoleEntity(name);
-			roleEntity.setAuthorities(authorities);
-			roleRepository.save(roleEntity);
-		}
-		return roleEntity;
 	}
 }

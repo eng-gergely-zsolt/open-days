@@ -124,6 +124,7 @@ public class UserServiceImpl implements UserService {
 		String publicId = utils.generatePublicId(15);
 
 		HashSet<RoleEntity> roleEntities = new HashSet<>();
+
 		for (String role : user.getRoles()) {
 			RoleEntity roleEntity = roleRepository.findByName(role);
 			if (roleEntity != null) {

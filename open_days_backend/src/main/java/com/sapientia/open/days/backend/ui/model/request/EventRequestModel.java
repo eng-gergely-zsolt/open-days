@@ -3,7 +3,7 @@ package com.sapientia.open.days.backend.ui.model.request;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @SuppressWarnings("unused")
-public class EventModel {
+public class EventRequestModel {
 
 	private boolean isOnline;
 
