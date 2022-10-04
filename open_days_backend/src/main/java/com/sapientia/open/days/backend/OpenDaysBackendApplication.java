@@ -11,14 +11,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @SpringBootApplication
 public class OpenDaysBackendApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(OpenDaysBackendApplication.class, args);
-    }
-
 //    @Override
 //    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
 //        return builder.sources(OpenDaysBackendApplication.class);
 //    }
+
+    public static void main(String[] args) {
+        SpringApplication.run(OpenDaysBackendApplication.class, args);
+    }
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {

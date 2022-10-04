@@ -10,7 +10,7 @@ import java.util.Set;
 public class ActivityEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue
 	private long id;
 
 	@Column(nullable = false, length = 50)

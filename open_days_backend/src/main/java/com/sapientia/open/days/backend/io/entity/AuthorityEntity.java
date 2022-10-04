@@ -11,7 +11,7 @@ import java.util.Set;
 public class AuthorityEntity implements Serializable {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue
 	private long id;
 
 	@Column(nullable = false, length = 20)

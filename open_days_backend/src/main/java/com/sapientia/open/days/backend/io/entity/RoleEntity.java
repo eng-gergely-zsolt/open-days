@@ -12,7 +12,7 @@ import java.util.Set;
 public class RoleEntity implements Serializable {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue
 	private long id;
 
 	@Column(nullable = false, length = 20)

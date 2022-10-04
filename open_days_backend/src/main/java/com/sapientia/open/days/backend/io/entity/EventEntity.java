@@ -1,8 +1,5 @@
 package com.sapientia.open.days.backend.io.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import org.joda.time.DateTime;
-
 import javax.persistence.*;
 import java.util.Set;
 
