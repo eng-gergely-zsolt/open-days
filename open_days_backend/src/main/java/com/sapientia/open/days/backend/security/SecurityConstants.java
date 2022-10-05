@@ -20,6 +20,12 @@ public class SecurityConstants {
 
 	public static final String PASSWORD_RESET_REQUEST_URL = "/users/password-reset-request";
 
+	// County controller
+	public static final String COUNTY_ALL_NAME = "/county/all-name";
+
+	// Institution controller
+	public static final String INSTITUTION_ALL_NAME_WITH_COUNTY = "/institution//all-name-with-county";
+
 	public static String getJwtSecretKey() {
 		ApplicationProperties applicationProperties = (ApplicationProperties) SpringApplicationContext.getBean("ApplicationProperties");
 		return applicationProperties.getJwtSecretKey();

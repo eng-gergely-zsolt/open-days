@@ -42,6 +42,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 				.permitAll()
 				.antMatchers(HttpMethod.POST, SecurityConstants.PASSWORD_RESET_URL)
 				.permitAll()
+				.antMatchers(HttpMethod.GET, SecurityConstants.INSTITUTION_ALL_NAME_WITH_COUNTY)
+				.permitAll()
 				.anyRequest().authenticated().and()
 				.addFilter(getAuthenticationFilter())
 				.addFilter(new AuthorizationFilter(authenticationManager(), userRepository))

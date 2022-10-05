@@ -14,7 +14,7 @@ public class CountyEntity implements Serializable {
 	@GeneratedValue
 	private long id;
 
-	@Column(length = 100, nullable = false)
+	@Column(length = 100, unique = true, nullable = false)
 	private String name;
 
 	@OneToMany(mappedBy = "county")
