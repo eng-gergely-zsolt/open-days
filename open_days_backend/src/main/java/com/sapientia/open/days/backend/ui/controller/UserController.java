@@ -84,7 +84,7 @@ public class UserController {
 					ErrorMessage.MISSING_PASSWORD.getErrorMessage());
 		}
 
-		if (createUserRequest.getUsername().isEmpty()) {
+		if (createUserRequest.getUsername() == null || createUserRequest.getUsername().isEmpty()) {
 			throw new GeneralServiceException(ErrorCode.MISSING_USERNAME.getErrorCode(),
 					ErrorMessage.MISSING_USERNAME.getErrorMessage());
 		}

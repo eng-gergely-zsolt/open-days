@@ -1,21 +1,28 @@
 package com.sapientia.open.days.backend.exceptions;
 
+import com.sapientia.open.days.backend.ui.model.resource.OperationStatus;
+
 import java.io.Serial;
 
 @SuppressWarnings("unused")
 public class GeneralServiceException extends RuntimeException {
 
-	private final Integer errorCode;
+	private final Integer code;
+	private final String operationResult = OperationStatus.ERROR.name();
 
 	@Serial
 	private static final long serialVersionUID = 4460366926602512635L;
 
-	public GeneralServiceException(int errorCode, String message) {
+	public GeneralServiceException(int code, String message) {
 		super(message);
-		this.errorCode = errorCode;
+		this.code = code;
 	}
 
-	public int getErrorCode() {
-		return errorCode;
+	public int getCode() {
+		return code;
+	}
+
+	public String getOperationResult() {
+		return operationResult;
 	}
 }

@@ -81,29 +81,29 @@ public class InitialSetup {
 	@Transactional
 	private void createSettlements() {
 		Set<SettlementModel> settlements = new HashSet<>(List.of(
-				new SettlementModel("Maros", "Marosvásárhely"),
-				new SettlementModel("Harghita", "Balánbánya"),
-				new SettlementModel("Harghita", "Borszék"),
-				new SettlementModel("Harghita", "Csíkszentmárton"),
-				new SettlementModel("Harghita", "Csíkszereda"),
-				new SettlementModel("Harghita", "Dánfalva"),
-				new SettlementModel("Harghita", "Ditró"),
-				new SettlementModel("Harghita", "Gyergyóalfalu"),
-				new SettlementModel("Harghita", "Gyergyóholló"),
-				new SettlementModel("Harghita", "Gyergyószentmiklós"),
-				new SettlementModel("Harghita", "Gyergyóvárhegy"),
-				new SettlementModel("Harghita", "Gyimesfelsőlok"),
+				new SettlementModel("Maros", "Marosvasarhely"),
+				new SettlementModel("Harghita", "Balanbanya"),
+				new SettlementModel("Harghita", "Borszek"),
+				new SettlementModel("Harghita", "Csikszentmarton"),
+				new SettlementModel("Harghita", "Csikszereda"),
+				new SettlementModel("Harghita", "Danfalva"),
+				new SettlementModel("Harghita", "Ditro"),
+				new SettlementModel("Harghita", "Gyergyoalfalu"),
+				new SettlementModel("Harghita", "Gyergyohollo"),
+				new SettlementModel("Harghita", "Gyergyoszentmiklos"),
+				new SettlementModel("Harghita", "Gyergyovarhegy"),
+				new SettlementModel("Harghita", "Gyimesfelsolok"),
 				new SettlementModel("Harghita", "Korond"),
-				new SettlementModel("Harghita", "Maroshévíz"),
-				new SettlementModel("Harghita", "Székelykeresztúr"),
-				new SettlementModel("Harghita", "Székelyudvarhely"),
-				new SettlementModel("Harghita", "Szentegyháza"),
+				new SettlementModel("Harghita", "Marosheviz"),
+				new SettlementModel("Harghita", "Szekelykeresztur"),
+				new SettlementModel("Harghita", "Szekelyudvarhely"),
+				new SettlementModel("Harghita", "Szentegyhaza"),
 				new SettlementModel("Harghita", "Zetelaka")
 		));
 
 //		Set<SettlementModel> settlements = new HashSet<>(List.of(
-//				new SettlementModel("Maros", "Marosvásárhely"),
-//				new SettlementModel("Harghita", "Csíkszereda")
+//				new SettlementModel("Maros", "Marosvasarhely"),
+//				new SettlementModel("Harghita", "Csikszereda")
 //		));
 
 		for (SettlementModel settlement : settlements) {
@@ -125,47 +125,47 @@ public class InitialSetup {
 	@Transactional
 	private void createInstitutions() {
 		Set<InstitutionModel> institutions = new HashSet<>(List.of(
-				new InstitutionModel("Marosvásárhely", "Bolyai Farkas Líceum"),
-				new InstitutionModel("Balánbánya", "Liviu Rebreanu Szakközépiskola"),
-				new InstitutionModel("Borszék", "Zimmethausen Szaklíceum"),
-				new InstitutionModel("Csíkszentmárton", "Tivai Nagy Imre Szakközépiskola"),
-				new InstitutionModel("Csíkszereda", "Márton Áron Főgimnázium"),
-				new InstitutionModel("Csíkszereda", "Segítő Mária Római Katolikus Gimnázium"),
-				new InstitutionModel("Csíkszereda", "Joannes Kájoni Szakközépiskola"),
-				new InstitutionModel("Csíkszereda", "Octavian Goga Főgimnázium"),
-				new InstitutionModel("Csíkszereda", "Kós Károly Szakközépiskola"),
-				new InstitutionModel("Csíkszereda", "Venczel József Szakközépiskola"),
-				new InstitutionModel("Csíkszereda", "Székely Károly Szakközépiskola"),
-				new InstitutionModel("Dánfalva", "Petőfi Sándor Iskolaközpont"),
-				new InstitutionModel("Ditró", "Puskás Tivadar Szakközépiskola"),
-				new InstitutionModel("Gyergyóalfalu", "Sövér Elek Szakközépiskola"),
-				new InstitutionModel("Gyergyóholló", "Gyergyóhollói Szakközépiskola"),
-				new InstitutionModel("Gyergyószentmiklós", "Salamon Ernő Gimnázium"),
-				new InstitutionModel("Gyergyószentmiklós", "Batthyány Ignác Technikai Kollégium"),
-				new InstitutionModel("Gyergyószentmiklós", "Sfantu Nicolae Gimnázium"),
-				new InstitutionModel("Gyergyószentmiklós", "Fogarasy Mihály Szakközépiskola"),
-				new InstitutionModel("Gyergyóvárhegy", "Miron Cristea Líceum"),
-				new InstitutionModel("Gyimesfelsőlok", "Árpád-házi Szent Erzsébet Római Katolikus Teológiai Líceum"),
-				new InstitutionModel("Korond", "Korondi Szakközépiskola"),
-				new InstitutionModel("Maroshévíz", "O.C. Taslauanu Gimnázium"),
-				new InstitutionModel("Maroshévíz", "Kemény János Elméleti Líceum"),
-				new InstitutionModel("Maroshévíz", "Mihai Eminescu Főgimnázium"),
-				new InstitutionModel("Székelykeresztúr", "Berde Mózes Unitárius Gimnázium"),
-				new InstitutionModel("Székelykeresztúr", "Orbán Balázs Gimnázium"),
-				new InstitutionModel("Székelyudvarhely", "Tamási Áron Gimnázium"),
-				new InstitutionModel("Székelyudvarhely", "Benedek Elek Pedagógiai Líceum"),
-				new InstitutionModel("Székelyudvarhely", "Baczkamadarasi Kis Gergely Református Kollégium"),
-				new InstitutionModel("Székelyudvarhely", "Kós Károly Szakközépiskola"),
-				new InstitutionModel("Székelyudvarhely", "Eötvös József Szakközépiskola"),
-				new InstitutionModel("Székelyudvarhely", "Marin Preda Líceum"),
-				new InstitutionModel("Székelyudvarhely", "Bányai János Műszaki Szakközépiskola"),
-				new InstitutionModel("Szentegyháza", "Gábor Áron Szakközépiskola"),
-				new InstitutionModel("Zetelaka", "Dr. P. Boros Fortunát Elméleti Középiskola")
+				new InstitutionModel("Marosvasarhely", "Bolyai Farkas Liceum"),
+				new InstitutionModel("Balanbanya", "Liviu Rebreanu Szakkozepiskola"),
+				new InstitutionModel("Borszek", "Zimmethausen Szakliceum"),
+				new InstitutionModel("Csikszentmarton", "Tivai Nagy Imre Szakkozepiskola"),
+				new InstitutionModel("Csikszereda", "Marton Aron Fogimnazium"),
+				new InstitutionModel("Csikszereda", "Segito Maria Romai Katolikus Gimnazium"),
+				new InstitutionModel("Csikszereda", "Joannes Kajoni Szakkozepiskola"),
+				new InstitutionModel("Csikszereda", "Octavian Goga Fogimnazium"),
+				new InstitutionModel("Csikszereda", "Kos Karoly Szakkozepiskola"),
+				new InstitutionModel("Csikszereda", "Venczel Jozsef Szakkozepiskola"),
+				new InstitutionModel("Csikszereda", "Szekely Karoly Szakkozepiskola"),
+				new InstitutionModel("Danfalva", "Petofi Sandor Iskolakozpont"),
+				new InstitutionModel("Ditro", "Puskas Tivadar Szakkozepiskola"),
+				new InstitutionModel("Gyergyoalfalu", "Sover Elek Szakkozepiskola"),
+				new InstitutionModel("Gyergyohollo", "Gyergyoholloi Szakkozepiskola"),
+				new InstitutionModel("Gyergyoszentmiklos", "Salamon Erno Gimnazium"),
+				new InstitutionModel("Gyergyoszentmiklos", "Batthyany Ignac Technikai Kollegium"),
+				new InstitutionModel("Gyergyoszentmiklos", "Sfantu Nicolae Gimnazium"),
+				new InstitutionModel("Gyergyoszentmiklos", "Fogarasy Mihaly Szakkozepiskola"),
+				new InstitutionModel("Gyergyovarhegy", "Miron Cristea Liceum"),
+				new InstitutionModel("Gyimesfelsolok", "Arpad-hazi Szent Erzsebet Romai Katolikus Teologiai Liceum"),
+				new InstitutionModel("Korond", "Korondi Szakkozepiskola"),
+				new InstitutionModel("Marosheviz", "O.C. Taslauanu Gimnazium"),
+				new InstitutionModel("Marosheviz", "Kemeny Janos Elmeleti Liceum"),
+				new InstitutionModel("Marosheviz", "Mihai Eminescu Fogimnazium"),
+				new InstitutionModel("Szekelykeresztur", "Berde Mozes Unitarius Gimnazium"),
+				new InstitutionModel("Szekelykeresztur", "Orban Balazs Gimnazium"),
+				new InstitutionModel("Szekelyudvarhely", "Tamasi Aron Gimnazium"),
+				new InstitutionModel("Szekelyudvarhely", "Benedek Elek Pedagogiai Liceum"),
+				new InstitutionModel("Szekelyudvarhely", "Baczkamadarasi Kis Gergely Reformatus Kollegium"),
+				new InstitutionModel("Szekelyudvarhely", "Kos Karoly Szakkozepiskola"),
+				new InstitutionModel("Szekelyudvarhely", "Eotvos Jozsef Szakkozepiskola"),
+				new InstitutionModel("Szekelyudvarhely", "Marin Preda Liceum"),
+				new InstitutionModel("Szekelyudvarhely", "Banyai Janos Muszaki Szakkozepiskola"),
+				new InstitutionModel("Szentegyhaza", "Gabor Aron Szakkozepiskola"),
+				new InstitutionModel("Zetelaka", "Dr. P. Boros Fortunat Elmeleti Kozepiskola")
 		));
 
 //		Set<InstitutionModel> institutions = new HashSet<>(List.of(
-//				new InstitutionModel("Marosvásárhely", "Bolyai Farkas Líceum"),
-//				new InstitutionModel("Csíkszereda", "Márton Áron Főgimnázium")
+//				new InstitutionModel("Marosvasarhely", "Bolyai Farkas Liceum"),
+//				new InstitutionModel("Csikszereda", "Marton Aron Fogimnazium")
 //		));
 
 		for (InstitutionModel institution : institutions) {
@@ -243,7 +243,7 @@ public class InitialSetup {
 
 		if (adminUser == null && roleAdmin != null) {
 			adminUser = new UserEntity();
-			InstitutionEntity institution = institutionRepository.findByName("Márton Áron Főgimnázium");
+			InstitutionEntity institution = institutionRepository.findByName("Marton Aron Fogimnazium");
 
 			adminUser.setUsername("admin");
 			adminUser.setLastName("Zsolt");
