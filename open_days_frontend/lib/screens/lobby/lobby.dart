@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:open_days_frontend/screens/login/login.dart';
-import 'package:open_days_frontend/screens/registration/registration.dart';
+import 'package:open_days_frontend/registration/registration.dart';
 
 class Lobby extends StatelessWidget {
   const Lobby({Key? key}) : super(key: key);
@@ -33,7 +33,7 @@ class Lobby extends StatelessWidget {
               child: Container(
                 width: screenWidth,
                 height: screenHeight * 0.45,
-                color: const Color.fromRGBO(174, 148, 116, 0.4),
+                color: Colors.white,
               ),
             ),
           ),
@@ -45,7 +45,7 @@ class Lobby extends StatelessWidget {
               children: [
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    minimumSize: Size(screenWidth * 0.7, 40),
+                    minimumSize: Size(screenWidth * 0.6, 45),
                   ),
                   onPressed: () {
                     Navigator.push(
@@ -57,6 +57,7 @@ class Lobby extends StatelessWidget {
                   },
                   child: const Text('Sign in'),
                 ),
+                SizedBox(height: screenHeight * 0.03),
                 OutlinedButton(
                   onPressed: () {
                     Navigator.push(
@@ -69,15 +70,12 @@ class Lobby extends StatelessWidget {
                   child: const Text(
                     'Sign Up',
                     style: TextStyle(
-                      color: Colors.brown,
+                      color: Color.fromRGBO(1, 30, 65, 1),
                     ),
                   ),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: const Color.fromRGBO(254, 251, 236, 1),
-                    minimumSize: Size(screenWidth * 0.7, 40),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18),
-                    ),
+                    minimumSize: Size(screenWidth * 0.6, 45),
                   ),
                 ),
               ],

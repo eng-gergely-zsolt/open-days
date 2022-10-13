@@ -1,24 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:open_days_frontend/theme/custom_material_color.dart';
 
 class CustomTheme {
   static ThemeData get lightTheme {
     return ThemeData(
-      primarySwatch: Colors.brown,
       scaffoldBackgroundColor: Colors.white,
-      primaryColor: const Color.fromRGBO(236, 201, 173, 1),
+      primarySwatch: CustomMaterialColor(1, 30, 65).getColor,
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(25),
           ),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(25),
           ),
-          side: const BorderSide(width: 2.0, color: Colors.brown),
+          side: const BorderSide(
+            width: 2.0,
+            color: Colors.blueGrey,
+          ),
         ),
       ),
     );
