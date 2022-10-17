@@ -1,12 +1,10 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:open_days_frontend/models/response_model.dart';
-import 'package:open_days_frontend/registration/registration_controller.dart';
-import 'package:open_days_frontend/registration/models/institution.dart';
-import 'package:open_days_frontend/screens/error_page.dart';
-import 'package:open_days_frontend/screens/lobby/lobby.dart';
+import 'package:open_days_frontend/modules/registration/registration_controller.dart';
+import 'package:open_days_frontend/modules/registration/models/institution.dart';
+import 'package:open_days_frontend/modules/error_page.dart';
 
 final selectedCountyProvider = StateProvider<String?>((ref) => null);
 final selectedInstitutionProvider = StateProvider<String?>((ref) => null);

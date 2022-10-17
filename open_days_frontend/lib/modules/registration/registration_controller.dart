@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:open_days_frontend/models/response_model.dart';
-import 'package:open_days_frontend/registration/models/user.dart';
+import 'package:open_days_frontend/modules/registration/models/user.dart';
 import 'package:open_days_frontend/repositories/registration_repository.dart';
-import 'package:open_days_frontend/registration/models/institution.dart';
+import 'package:open_days_frontend/modules/registration/models/institution.dart';
 
 final isLoadingProvider = StateProvider<bool>((ref) => false);
 

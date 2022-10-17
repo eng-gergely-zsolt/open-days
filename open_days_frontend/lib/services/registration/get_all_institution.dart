@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:open_days_frontend/registration/models/institution.dart';
+import 'package:open_days_frontend/modules/registration/models/institution.dart';
 
 Future<List<Institution>> getAllInstitutionSvc() async {
   String uri =

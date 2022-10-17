@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:open_days_frontend/registration/models/user.dart';
-import 'package:open_days_frontend/registration/registration_controller.dart';
-import 'package:open_days_frontend/screens/lobby/lobby.dart';
+import 'package:open_days_frontend/modules/registration/models/user.dart';
+import 'package:open_days_frontend/modules/registration/registration_controller.dart';
+import 'package:open_days_frontend/modules/lobby/lobby.dart';
 
 class ErrorPage extends ConsumerWidget {
   final User user;

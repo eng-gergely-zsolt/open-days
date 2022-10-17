@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:open_days_frontend/registration/models/user.dart';
+import 'package:open_days_frontend/modules/registration/models/user.dart';
 
 import '../../models/response_model.dart';
 

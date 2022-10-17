@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:open_days_frontend/screens/login/login.dart';
-import 'package:open_days_frontend/registration/registration.dart';
+import 'package:open_days_frontend/modules/registration/registration.dart';
+
+import '../login/login.dart';
 
 class Lobby extends StatelessWidget {
   const Lobby({Key? key}) : super(key: key);
