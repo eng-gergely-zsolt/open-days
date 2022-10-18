@@ -1,80 +1,88 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:open_days_frontend/models/response_model.dart';
+import 'package:open_days_frontend/models/user_response_model.dart';
 import 'package:open_days_frontend/modules/registration/models/user.dart';
 import 'package:open_days_frontend/repositories/registration_repository.dart';
 import 'package:open_days_frontend/modules/registration/models/institution.dart';
 
-final isLoadingProvider = StateProvider<bool>((ref) => false);
-
-final institutionProvider = FutureProvider((ref) async {
-  final registrationRepository = ref.watch(registrationRepositoryProvider);
-  return registrationRepository.getAllInstitutionRepo();
-});
-
-final createUserProvider =
-    FutureProvider.family<ResponseModel, User>((ref, user) async {
-  return ref.watch(registrationRepositoryProvider).createUserRepo(user);
-});
-
-final registrationControllerProvider = Provider((ref) {
-  final registrationRepository = ref.watch(registrationRepositoryProvider);
-  return RegistrationController(
-      ref: ref, registrationRepository: registrationRepository);
-});
-
 class RegistrationController {
+  UserResponseModel? _registrationResponse;
+
   final ProviderRef ref;
-  final User user = User();
   final RegistrationRepository registrationRepository;
 
-  ResponseModel? response;
+  final User _user = User();
+  final _isLoadingProvider = StateProvider<bool>((ref) => false);
+  final _selectedCountyProvider = StateProvider<String?>((ref) => null);
+  final _selectedInstitutionProvider = StateProvider<String?>((ref) => null);
 
-  RegistrationController(
-      {required this.ref, required this.registrationRepository});
+  final _institutionProvider = FutureProvider((ref) async {
+    final registrationRepository = ref.watch(registrationRepositoryProvider);
+    return registrationRepository.getAllInstitutionRepo();
+  });
 
-  refreshInstitutionListByCountyName(String countyName) {
-    ref.refresh(institutionProvider);
-  }
-
-  ResponseModel? getResponse() {
-    return response;
-  }
+  RegistrationController({
+    required this.ref,
+    required this.registrationRepository,
+  });
 
   User getUser() {
-    return user;
+    return _user;
+  }
+
+  UserResponseModel? getRegistrationResponse() {
+    return _registrationResponse;
+  }
+
+  StateProvider<bool> getIsLoadingProvider() {
+    return _isLoadingProvider;
+  }
+
+  StateProvider<String?> getSelectedCountyProvider() {
+    return _selectedCountyProvider;
+  }
+
+  StateProvider<String?> getSelectedInstitutionProvider() {
+    return _selectedInstitutionProvider;
+  }
+
+  FutureProvider<List<Institution>> getInstitutionProvider() {
+    return _institutionProvider;
   }
 
   void setEmail(String email) {
-    user.email = email;
+    _user.email = email;
   }
 
   void setPassword(String password) {
-    user.password = password;
+    _user.password = password;
   }
 
   void setUsername(String username) {
-    user.username = username;
+    _user.username = username;
   }
 
   void setLastName(String lastName) {
-    user.lastName = lastName;
+    _user.lastName = lastName;
   }
 
   void setFirstName(String firstName) {
-    user.firstName = firstName;
+    _user.firstName = firstName;
   }
 
   void setInstitution(String? institution) {
     if (institution != null) {
-      user.institution = institution;
+      _user.institution = institution;
     }
   }
 
+  void deleteRegistrationResponse() {
+    _registrationResponse = null;
+  }
+
   createUser() async {
-    response = null;
-    ref.read(isLoadingProvider.notifier).state = true;
-    response = await registrationRepository.createUserRepo(user);
-    ref.read(isLoadingProvider.notifier).state = false;
+    ref.read(_isLoadingProvider.notifier).state = true;
+    _registrationResponse = await registrationRepository.createUserRepo(_user);
+    ref.read(_isLoadingProvider.notifier).state = false;
   }
 
   String? validateName(String? value) {
@@ -135,7 +143,7 @@ class RegistrationController {
     return countyNames.isNotEmpty ? countyNames[0] : "";
   }
 
-  List<String> getInstituions(
+  List<String> getInstitutions(
       String? selectedCounty, List<Institution> institutions) {
     List<String> institutionNames = [];
 
@@ -165,3 +173,9 @@ class RegistrationController {
     return institutionNames.isNotEmpty ? institutionNames[0] : "";
   }
 }
+
+final registrationControllerProvider = Provider((ref) {
+  final registrationRepository = ref.watch(registrationRepositoryProvider);
+  return RegistrationController(
+      ref: ref, registrationRepository: registrationRepository);
+});

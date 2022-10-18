@@ -1,22 +1,24 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:open_days_frontend/models/response_model.dart';
-import 'package:open_days_frontend/models/user.dart';
+import 'package:open_days_frontend/constants/constants.dart';
+import 'package:open_days_frontend/models/user_response_model.dart';
+import 'package:open_days_frontend/models/user_request_model.dart';
+import 'package:open_days_frontend/shared/secure_storage.dart';
 
 import '../../repositories/login_repository.dart';
 
 class LoginController {
+  UserResponseModel? _loginResponse;
+
   final ProviderRef ref;
-  final User user = User();
   final LoginRepository loginRepository;
+
+  final UserRequestModel user = UserRequestModel();
   final _isLoadingProvider = StateProvider<bool>((ref) => false);
 
-  ResponseModel? _loginResponse;
-
-  StateProvider<bool> getIsLoadinProvider() {
-    return _isLoadingProvider;
-  }
-
-  LoginController({required this.ref, required this.loginRepository});
+  LoginController({
+    required this.ref,
+    required this.loginRepository,
+  });
 
   String getUsername() {
     return user.username;
@@ -26,12 +28,12 @@ class LoginController {
     return user.password;
   }
 
-  ResponseModel? getLoginResponse() {
+  UserResponseModel? getLoginResponse() {
     return _loginResponse;
   }
 
-  void deleteResponse() {
-    _loginResponse = null;
+  StateProvider<bool> getIsLoadinProvider() {
+    return _isLoadingProvider;
   }
 
   void setUsername(String username) {
@@ -42,10 +44,22 @@ class LoginController {
     user.password = password;
   }
 
+  void deleteResponse() {
+    _loginResponse = null;
+  }
+
   void loginUser() async {
     ref.read(_isLoadingProvider.notifier).state = true;
     _loginResponse = null;
     _loginResponse = await loginRepository.loginUserRepo(user);
+
+    if (_loginResponse != null &&
+        _loginResponse?.operationResult == operationResultSuccess) {
+      await SecureStorage.setUserId(_loginResponse?.id as String);
+      await SecureStorage.setAuthorizationToken(
+          _loginResponse?.bearer as String);
+    }
+
     ref.read(_isLoadingProvider.notifier).state = false;
   }
 

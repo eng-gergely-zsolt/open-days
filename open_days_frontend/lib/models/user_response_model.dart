@@ -1,18 +1,20 @@
-class ResponseModel {
+class UserResponseModel {
   int code;
+  String id;
   String message;
   String bearer;
   String operationResult;
 
-  ResponseModel({
+  UserResponseModel({
     this.code = -1,
+    this.id = '',
     this.bearer = '',
     this.message = '',
     this.operationResult = '',
   });
 
-  factory ResponseModel.fromJson(Map<String, dynamic> json) {
-    return ResponseModel(
+  factory UserResponseModel.fromJson(Map<String, dynamic> json) {
+    return UserResponseModel(
       code: json['code'] ?? -1,
       message: json['message'] ?? '',
       operationResult: json['operationResult'] ?? '',
