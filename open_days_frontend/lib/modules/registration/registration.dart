@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:open_days_frontend/constants/constants.dart';
 import 'package:open_days_frontend/modules/login/login.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:open_days_frontend/modules/registration/registration_controller.dart';
 
 class Registration extends ConsumerWidget {
@@ -12,6 +13,8 @@ class Registration extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    var appLocale = AppLocalizations.of(context);
+
     final appWidth = MediaQuery.of(context).size.width;
     final appHeight = MediaQuery.of(context).size.height -
         MediaQueryData.fromWindow(window).padding.top;
@@ -50,39 +53,37 @@ class Registration extends ConsumerWidget {
 
     _registrationController.deleteRegistrationResponse();
 
-    return _institutions.when(
-      loading: () => Scaffold(
-        body: Center(
-          child: LoadingAnimationWidget.staggeredDotsWave(
-            size: appHeight * 0.1,
-            color: const Color.fromRGBO(1, 30, 65, 1),
-          ),
+    return GestureDetector(
+      onTap: (() => FocusScope.of(context).requestFocus(FocusNode())),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(appLocale?.sign_up as String),
         ),
-      ),
-      error: (error, stackTrace) => Center(
-        child: Text(error.toString()),
-      ),
-      data: (institutions) {
-        _selectedCounty ??=
-            _registrationController.getFirstCounty(institutions);
-
-        if (_selectedInstitution == null ||
-            !_registrationController
-                .getInstitutions(_selectedCounty, institutions)
-                .contains(_selectedInstitution)) {
-          _selectedInstitution = _registrationController.getFirstInstitution(
-              _selectedCounty, institutions);
-        }
-
-        _registrationController.setInstitution(_selectedInstitution);
-
-        return GestureDetector(
-          onTap: (() => FocusScope.of(context).requestFocus(FocusNode())),
-          child: Scaffold(
-            appBar: AppBar(
-              title: const Text('Registration'),
+        body: _institutions.when(
+          loading: () => Center(
+            child: LoadingAnimationWidget.staggeredDotsWave(
+              size: appHeight * 0.1,
+              color: const Color.fromRGBO(1, 30, 65, 1),
             ),
-            body: _isLoading == true
+          ),
+          error: (error, stackTrace) => Center(
+            child: Text(error.toString()),
+          ),
+          data: (institutions) {
+            _selectedCounty ??=
+                _registrationController.getFirstCounty(institutions);
+
+            if (_selectedInstitution == null ||
+                !_registrationController
+                    .getInstitutions(_selectedCounty, institutions)
+                    .contains(_selectedInstitution)) {
+              _selectedInstitution = _registrationController
+                  .getFirstInstitution(_selectedCounty, institutions);
+            }
+
+            _registrationController.setInstitution(_selectedInstitution);
+
+            return _isLoading == true
                 ? Center(
                     child: LoadingAnimationWidget.staggeredDotsWave(
                       size: appHeight * 0.1,
@@ -101,10 +102,10 @@ class Registration extends ConsumerWidget {
                             SizedBox(height: appHeight * 0.05),
                             TextFormField(
                                 maxLength: 50,
-                                decoration: const InputDecoration(
-                                  labelText: 'Fist name',
+                                decoration: InputDecoration(
+                                  labelText: appLocale?.first_name,
                                   prefixIcon:
-                                      Icon(Icons.person_add_alt_outlined),
+                                      const Icon(Icons.person_add_alt_outlined),
                                 ),
                                 initialValue:
                                     _registrationController.getUser().firstName,
@@ -116,9 +117,10 @@ class Registration extends ConsumerWidget {
                                 }),
                             TextFormField(
                               maxLength: 50,
-                              decoration: const InputDecoration(
-                                labelText: 'Last name',
-                                prefixIcon: Icon(Icons.person_add_alt_outlined),
+                              decoration: InputDecoration(
+                                labelText: appLocale?.last_name,
+                                prefixIcon:
+                                    const Icon(Icons.person_add_alt_outlined),
                               ),
                               initialValue:
                                   _registrationController.getUser().lastName,
@@ -130,9 +132,9 @@ class Registration extends ConsumerWidget {
                             ),
                             TextFormField(
                               maxLength: 50,
-                              decoration: const InputDecoration(
-                                labelText: 'Username',
-                                prefixIcon: Icon(Icons.person_outline),
+                              decoration: InputDecoration(
+                                labelText: appLocale?.username,
+                                prefixIcon: const Icon(Icons.person_outline),
                               ),
                               initialValue:
                                   _registrationController.getUser().username,
@@ -144,9 +146,9 @@ class Registration extends ConsumerWidget {
                             ),
                             TextFormField(
                               maxLength: 100,
-                              decoration: const InputDecoration(
-                                labelText: 'Email',
-                                prefixIcon: Icon(Icons.alternate_email),
+                              decoration: InputDecoration(
+                                labelText: appLocale?.email,
+                                prefixIcon: const Icon(Icons.alternate_email),
                               ),
                               initialValue:
                                   _registrationController.getUser().email,
@@ -159,9 +161,9 @@ class Registration extends ConsumerWidget {
                             TextFormField(
                               maxLength: 30,
                               obscureText: true,
-                              decoration: const InputDecoration(
-                                labelText: 'Password',
-                                prefixIcon: Icon(Icons.password),
+                              decoration: InputDecoration(
+                                labelText: appLocale?.password,
+                                prefixIcon: const Icon(Icons.password),
                               ),
                               initialValue:
                                   _registrationController.getUser().password,
@@ -256,16 +258,16 @@ class Registration extends ConsumerWidget {
                               style: ElevatedButton.styleFrom(
                                 minimumSize: Size(appWidth * 0.6, 40),
                               ),
-                              child: const Text('Register'),
+                              child: Text(appLocale?.sign_up as String),
                             ),
                           ],
                         ),
                       ),
                     ),
-                  ),
-          ),
-        );
-      },
+                  );
+          },
+        ),
+      ),
     );
   }
 }

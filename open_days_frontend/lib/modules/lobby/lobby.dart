@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:open_days_frontend/modules/registration/registration.dart';
 
 import '../login/login.dart';
@@ -56,7 +57,8 @@ class Lobby extends StatelessWidget {
                       ),
                     );
                   },
-                  child: const Text('Sign in'),
+                  child: Text(AppLocalizations.of(context)?.login.toUpperCase()
+                      as String),
                 ),
                 SizedBox(height: screenHeight * 0.03),
                 OutlinedButton(
@@ -68,9 +70,10 @@ class Lobby extends StatelessWidget {
                       ),
                     );
                   },
-                  child: const Text(
-                    'Sign Up',
-                    style: TextStyle(
+                  child: Text(
+                    AppLocalizations.of(context)?.sign_up.toUpperCase()
+                        as String,
+                    style: const TextStyle(
                       color: Color.fromRGBO(1, 30, 65, 1),
                     ),
                   ),

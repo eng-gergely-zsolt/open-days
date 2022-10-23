@@ -1,0 +1,10 @@
+{
+    "language": "Magyar",
+    "login": "Bejelentkezés",
+    "sign_up": "Regisztráció",
+    "username": "Felhasználónév",
+    "password": "Jelszó",
+    "first_name": "Keresztnév",
+    "last_name": "Vezetéknév",
+    "email": "E-mail"
+}

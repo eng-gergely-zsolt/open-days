@@ -6,6 +6,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:open_days_frontend/constants/constants.dart';
 import 'package:open_days_frontend/modules/home/home.dart';
 import 'package:open_days_frontend/modules/login/login_controller.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Login extends ConsumerWidget {
   const Login({Key? key}) : super(key: key);
@@ -13,6 +14,8 @@ class Login extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    var appLocale = AppLocalizations.of(context);
+
     final appWidth = MediaQuery.of(context).size.width;
     final appHeight = MediaQuery.of(context).size.height -
         MediaQueryData.fromWindow(window).padding.top;
@@ -43,7 +46,7 @@ class Login extends ConsumerWidget {
       onTap: (() => FocusScope.of(context).requestFocus(FocusNode())),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Login'),
+          title: Text(AppLocalizations.of(context)?.login as String),
         ),
         body: isLoading == true
             ? Center(
@@ -62,9 +65,9 @@ class Login extends ConsumerWidget {
                       TextFormField(
                         maxLength: 50,
                         initialValue: loginController.getUsername(),
-                        decoration: const InputDecoration(
-                          labelText: 'Username',
-                          prefixIcon: Icon(Icons.person),
+                        decoration: InputDecoration(
+                          labelText: appLocale?.username,
+                          prefixIcon: const Icon(Icons.person),
                         ),
                         onChanged: ((value) =>
                             loginController.setUsername(value)),
@@ -76,9 +79,9 @@ class Login extends ConsumerWidget {
                         maxLength: 50,
                         obscureText: true,
                         initialValue: loginController.getPassword(),
-                        decoration: const InputDecoration(
-                          labelText: 'Password',
-                          prefixIcon: Icon(Icons.password),
+                        decoration: InputDecoration(
+                          labelText: appLocale?.password,
+                          prefixIcon: const Icon(Icons.password),
                         ),
                         onChanged: ((value) =>
                             loginController.setPassword(value)),
@@ -88,7 +91,7 @@ class Login extends ConsumerWidget {
                       ),
                       SizedBox(height: appHeight * 0.05),
                       ElevatedButton(
-                        child: const Text('Login'),
+                        child: Text(appLocale?.login.toUpperCase() as String),
                         style: ElevatedButton.styleFrom(
                           minimumSize: Size(appWidth * 0.6, 40),
                         ),
