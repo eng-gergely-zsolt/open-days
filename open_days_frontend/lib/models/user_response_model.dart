@@ -1,22 +1,26 @@
 class UserResponseModel {
-  int code;
+  int operationResultCode;
+
   String id;
-  String message;
-  String bearer;
+  String roleName;
   String operationResult;
+  String authorizationToken;
+  String operationResultMessage;
 
   UserResponseModel({
-    this.code = -1,
+    this.operationResultCode = -1,
     this.id = '',
-    this.bearer = '',
-    this.message = '',
+    this.roleName = '',
     this.operationResult = '',
+    this.authorizationToken = '',
+    this.operationResultMessage = '',
   });
 
   factory UserResponseModel.fromJson(Map<String, dynamic> json) {
     return UserResponseModel(
-      code: json['code'] ?? -1,
-      message: json['message'] ?? '',
+      roleName: json['roleName'] ?? '',
+      operationResultCode: json['code'] ?? -1,
+      operationResultMessage: json['message'] ?? '',
       operationResult: json['operationResult'] ?? '',
     );
   }

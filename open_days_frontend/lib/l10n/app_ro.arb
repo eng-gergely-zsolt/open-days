@@ -6,5 +6,8 @@
     "password": "Parolă",
     "first_name": "Prenume",
     "last_name": "Nume de familie",
-    "email": "E-mail"
+    "email": "E-mail",
+    "home": "Acasă",
+    "profile": "Profil",
+    "settings": "Setări"
 }

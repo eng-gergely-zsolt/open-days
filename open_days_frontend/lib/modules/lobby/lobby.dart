@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:open_days_frontend/modules/home_base/home_base.dart';
 import 'package:open_days_frontend/modules/registration/registration.dart';
 
 import '../login/login.dart';
@@ -53,7 +54,7 @@ class Lobby extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const Login(),
+                        builder: (context) => const HomeBase(),
                       ),
                     );
                   },

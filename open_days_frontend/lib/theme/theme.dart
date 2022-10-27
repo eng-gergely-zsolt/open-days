@@ -24,6 +24,11 @@ class CustomTheme {
           ),
         ),
       ),
+      iconTheme: const IconThemeData(
+        color: Color.fromRGBO(1, 30, 65, 1),
+      ),
+      bottomNavigationBarTheme:
+          const BottomNavigationBarThemeData(backgroundColor: Colors.white),
     );
   }
 

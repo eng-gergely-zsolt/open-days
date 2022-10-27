@@ -6,5 +6,8 @@
     "password": "Jelszó",
     "first_name": "Keresztnév",
     "last_name": "Vezetéknév",
-    "email": "E-mail"
+    "email": "E-mail",
+    "home": "Főmenü",
+    "profile": "Profil",
+    "settings": "Beállítások"
 }

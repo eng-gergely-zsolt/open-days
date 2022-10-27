@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:open_days_frontend/constants/constants.dart';
-import 'package:open_days_frontend/modules/home/home.dart';
+import 'package:open_days_frontend/modules/home_base/home_base.dart';
 import 'package:open_days_frontend/modules/login/login_controller.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -28,7 +28,7 @@ class Login extends ConsumerWidget {
           operationResultSuccess) {
         Future.microtask(() => Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const Home()),
+              MaterialPageRoute(builder: (context) => const HomeBase()),
             ));
       } else {
         const snackBar = SnackBar(

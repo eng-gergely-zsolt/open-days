@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:open_days_frontend/constants/constants.dart';
 import 'package:open_days_frontend/models/user_request_model.dart';
@@ -21,6 +23,7 @@ Future<UserResponseModel> getUserByIdSvc(
   var result = UserResponseModel();
 
   if (response.statusCode == 200) {
+    result = UserResponseModel.fromJson(jsonDecode(response.body));
     result.operationResult = operationResultSuccess;
     return result;
   } else {

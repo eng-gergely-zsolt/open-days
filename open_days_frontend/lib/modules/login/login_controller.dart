@@ -57,7 +57,7 @@ class LoginController {
         _loginResponse?.operationResult == operationResultSuccess) {
       await SecureStorage.setUserId(_loginResponse?.id as String);
       await SecureStorage.setAuthorizationToken(
-          _loginResponse?.bearer as String);
+          _loginResponse?.authorizationToken as String);
     }
 
     ref.read(_isLoadingProvider.notifier).state = false;

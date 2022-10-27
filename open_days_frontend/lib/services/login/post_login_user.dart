@@ -16,8 +16,8 @@ Future<UserResponseModel> loginUserSvc(UserRequestModel user) async {
     body: body,
   );
 
-  final responseTemp =
-      UserResponseModel(code: -1, message: '', operationResult: '');
+  final responseTemp = UserResponseModel(
+      operationResultCode: -1, operationResultMessage: '', operationResult: '');
 
   if (response.statusCode == 200) {
     responseTemp.operationResult = operationResultSuccess;
@@ -27,7 +27,7 @@ Future<UserResponseModel> loginUserSvc(UserRequestModel user) async {
         responseTemp.id = it.value;
       }
       if (it.key == 'authorization') {
-        responseTemp.bearer = it.value;
+        responseTemp.authorizationToken = it.value;
       }
     }
   }
