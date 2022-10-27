@@ -16,11 +16,14 @@ public class ActivityEntity {
 	@Column(nullable = false, length = 50)
 	private String name;
 
-	@Column(nullable = false, length = 50)
-	private String location;
-
 	@OneToMany(mappedBy = "activity")
 	private Set<EventEntity> events;
+
+	public ActivityEntity() {}
+
+	public ActivityEntity(String name) {
+		this.name = name;
+	}
 
 	@Serial
 	private static final long serialVersionUID = 6204558143681775472L;
@@ -33,19 +36,11 @@ public class ActivityEntity {
 		return name;
 	}
 
-	public String getLocation() {
-		return location;
-	}
-
 	public void setId(long id) {
 		this.id = id;
 	}
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public void setLocation(String location) {
-		this.location = location;
 	}
 }

@@ -12,11 +12,14 @@ public class EventEntity {
 	@GeneratedValue
 	private long id;
 
-	@Column(nullable = false)
-	private boolean isOnline;
+	@Column(nullable = false, length = 50)
+	private String location;
 
 	@Column(nullable = false)
 	private String dateTime;
+
+	@Column(nullable = false)
+	private boolean isOnline;
 
 	@Column(nullable = true)
 	private String meetingLink;
@@ -35,20 +38,31 @@ public class EventEntity {
 			inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
 	private Set<UserEntity> events;
 
+	public EventEntity() {}
+
+	public EventEntity(boolean isOnline, String location, String dateTime, String meetingLink, UserEntity organizer, ActivityEntity activity) {
+		this.isOnline = isOnline;
+		this.location = location;
+		this.dateTime = dateTime;
+		this.meetingLink = meetingLink;
+		this.organizer = organizer;
+		this.activity = activity;
+	}
+
 	public long getId() {
 		return id;
 	}
 
-	public boolean isOnline() {
-		return isOnline;
-	}
-
-	public Boolean getOnline() {
-		return isOnline;
+	public String getLocation() {
+		return location;
 	}
 
 	public String getDateTime() {
 		return dateTime;
+	}
+
+	public boolean isOnline() {
+		return isOnline;
 	}
 
 	public String getMeetingLink() {
@@ -71,16 +85,16 @@ public class EventEntity {
 		this.id = id;
 	}
 
-	public void setOnline(boolean online) {
-		isOnline = online;
-	}
-
-	public void setOnline(Boolean online) {
-		isOnline = online;
+	public void setLocation(String location) {
+		this.location = location;
 	}
 
 	public void setDateTime(String dateTime) {
 		this.dateTime = dateTime;
+	}
+
+	public void setOnline(boolean online) {
+		isOnline = online;
 	}
 
 	public void setMeetingLink(String meetingLink) {

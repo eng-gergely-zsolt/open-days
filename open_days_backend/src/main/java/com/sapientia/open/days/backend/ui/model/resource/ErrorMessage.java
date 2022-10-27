@@ -4,6 +4,8 @@ public enum ErrorMessage {
     MISSING_REQUIRED_FIELD("Missing required field. Please check documentation for required fields"),
     NO_RECORD_FOUND("Record with provided id is not found"),
 
+    UNSPECIFIED_ERROR("Something went wrong"),
+
     EMAIL_ALREADY_REGISTERED("Email address already registered"),
 
     INSTITUTION_NOT_EXISTS("Institution does not exist"),

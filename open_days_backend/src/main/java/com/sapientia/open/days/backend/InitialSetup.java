@@ -14,10 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Component
 @SuppressWarnings("unused")
@@ -33,7 +30,13 @@ public class InitialSetup {
 	RoleRepository roleRepository;
 
 	@Autowired
+	EventRepository eventRepository;
+
+	@Autowired
 	CountyRepository countyRepository;
+
+	@Autowired
+	ActivityRepository activityRepository;
 
 	@Autowired
 	AuthorityRepository authorityRepository;
@@ -60,6 +63,8 @@ public class InitialSetup {
 		createOrganizerEmails();
 		createRolesAndAuthorities();
 		createAdminUser();
+		createActivities();
+		createEvents();
 	}
 
 	@Transactional
@@ -238,7 +243,7 @@ public class InitialSetup {
 	@Transactional
 	private void createAdminUser() {
 
-		RoleEntity roleAdmin = roleRepository.findByName(Roles.ROLE_USER.name());
+		RoleEntity roleAdmin = roleRepository.findByName(Roles.ROLE_ADMIN.name());
 		UserEntity adminUser = userRepository.findByEmail("admin@mailinator.com");
 
 		if (adminUser == null && roleAdmin != null) {
@@ -251,10 +256,92 @@ public class InitialSetup {
 			adminUser.setInstitution(institution);
 			adminUser.setEmail("admin@mailinator.com");
 			adminUser.setEmailVerificationStatus(true);
-			adminUser.setPublicId(utils.generatePublicId(15));
+			adminUser.setPublicId("qwertyuiopasdf1");
 			adminUser.setEncryptedPassword(bCryptPasswordEncoder.encode("Pass1234"));
 			adminUser.setRoles(new HashSet<>(List.of(roleAdmin)));
 			userRepository.save(adminUser);
+		}
+
+		RoleEntity roleCreator = roleRepository.findByName(Roles.ROLE_ORGANIZER.name());
+		UserEntity organizerUser = userRepository.findByEmail("organizer@mailinator.com");
+
+		if (organizerUser == null && roleCreator != null) {
+			organizerUser = new UserEntity();
+			InstitutionEntity institution = institutionRepository.findByName("Marton Aron Fogimnazium");
+
+			organizerUser.setUsername("organizer");
+			organizerUser.setLastName("User");
+			organizerUser.setFirstName("Organizer");
+			organizerUser.setInstitution(institution);
+			organizerUser.setEmail("organizer@mailinator.com");
+			organizerUser.setEmailVerificationStatus(true);
+			organizerUser.setPublicId("qwertyuiopasdf2");
+			organizerUser.setEncryptedPassword(bCryptPasswordEncoder.encode("Pass1234"));
+			organizerUser.setRoles(new HashSet<>(List.of(roleCreator)));
+			userRepository.save(organizerUser);
+		}
+
+		RoleEntity roleUser = roleRepository.findByName(Roles.ROLE_USER.name());
+		UserEntity userUser = userRepository.findByEmail("customer@mailinator.com");
+
+		if (userUser == null && roleUser != null) {
+			userUser = new UserEntity();
+			InstitutionEntity institution = institutionRepository.findByName("Marton Aron Fogimnazium");
+
+			userUser.setUsername("customer");
+			userUser.setLastName("Customer");
+			userUser.setFirstName("User");
+			userUser.setInstitution(institution);
+			userUser.setEmail("customer@mailinator.com");
+			userUser.setEmailVerificationStatus(true);
+			userUser.setPublicId("qwertyuiopasdf3");
+			userUser.setEncryptedPassword(bCryptPasswordEncoder.encode("Pass1234"));
+			userUser.setRoles(new HashSet<>(List.of(roleUser)));
+			userRepository.save(userUser);
+		}
+	}
+
+	@Transactional
+	private void createActivities() {
+		ArrayList<ActivityEntity> activities = new ArrayList<>();
+
+		activities.add(new ActivityEntity("Activity 1"));
+		activities.add(new ActivityEntity("Activity 2"));
+		activities.add(new ActivityEntity("Activity 3"));
+
+		for (ActivityEntity activity : activities) {
+			if (activityRepository.findByName(activity.getName()) == null) {
+				activityRepository.save(activity);
+			}
+		}
+	}
+
+	private void createEvents() {
+		ActivityEntity activity = activityRepository.findByName("Activity 1");
+		UserEntity organizer = userRepository.findByEmail("organizer@mailinator.com");
+
+		if (activity == null || organizer == null) {
+			return;
+		}
+
+		ArrayList<EventEntity> events = new ArrayList<>();
+
+		events.add(new EventEntity(false, "Sapientia",
+				"2023-09-15 10:15", null, organizer, activity));
+
+		events.add(new EventEntity(false, "312-es terem",
+				"2023-10-20 11:20", null, organizer, activity));
+
+		events.add(new EventEntity(false, "Sportpalya",
+				"2023-11-25 15:30", null, organizer, activity));
+
+		events.add(new EventEntity(false, "314-es terem",
+				"2021-08-02 09:30", null, organizer, activity));
+
+		for (EventEntity event : events) {
+			if (eventRepository.findByLocation(event.getLocation()) == null) {
+				eventRepository.save(event);
+			}
 		}
 	}
 }

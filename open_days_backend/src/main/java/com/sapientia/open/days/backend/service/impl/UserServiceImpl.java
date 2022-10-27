@@ -79,6 +79,8 @@ public class UserServiceImpl implements UserService {
 		UserDTO result = new UserDTO();
 		BeanUtils.copyProperties(userEntity, result);
 
+		result.setRoleName(userEntity.getRoles().iterator().next().getName());
+
 		return result;
 	}
 

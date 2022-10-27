@@ -12,9 +12,15 @@ import com.sapientia.open.days.backend.shared.dto.EventDto;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorCode;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorMessage;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @SuppressWarnings("unused")
@@ -28,6 +34,38 @@ public class EventServiceImpl implements EventService {
 
 	@Autowired
 	ActivityRepository activityRepository;
+
+	@Override
+	public List<EventDto> getAllEvent() {
+		ArrayList<EventDto> events = new ArrayList<>();
+		Iterable<EventEntity> rawEvents = eventRepository.findAll();
+
+		for (EventEntity event: rawEvents) {
+			DateTime eventDateTime;
+
+			try {
+				DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
+				eventDateTime =  DateTime.parse(event.getDateTime(), formatter);
+			} catch (Exception exception) {
+				throw new GeneralServiceException(ErrorCode.UNSPECIFIED_ERROR.getErrorCode(),
+						ErrorMessage.UNSPECIFIED_ERROR .getErrorMessage());
+			}
+
+			if (eventDateTime != null && eventDateTime.isAfterNow()) {
+				EventDto eventTemp = new EventDto();
+				BeanUtils.copyProperties(event, eventTemp);
+
+				eventTemp.setActivityName(event.getActivity().getName());
+				eventTemp.setOrganizerId(event.getOrganizer().getPublicId());
+				eventTemp.setOrganizerLastName(event.getOrganizer().getLastName());
+				eventTemp.setOrganizerFirstName(event.getOrganizer().getFirstName());
+
+				events.add(eventTemp);
+			}
+		}
+
+		return events;
+	}
 
 	@Override
 	public void createEvent(EventDto event) {

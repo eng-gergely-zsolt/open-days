@@ -7,16 +7,17 @@ import com.sapientia.open.days.backend.ui.model.request.EventRequestModel;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorCode;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorMessage;
 import com.sapientia.open.days.backend.ui.model.resource.OperationStatus;
+import com.sapientia.open.days.backend.ui.model.response.EventResponseModel;
 import com.sapientia.open.days.backend.ui.model.response.OperationStatusModel;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("event")
@@ -24,6 +25,21 @@ public class EventController {
 
 	@Autowired
 	EventService eventService;
+
+	@GetMapping(path = "/all-event")
+	public List<EventResponseModel> getAllEvent() {
+		List<EventResponseModel> response = new ArrayList<>();
+
+		List<EventDto> rawEvents = eventService.getAllEvent();
+
+		for (EventDto event : rawEvents) {
+			EventResponseModel eventTemp = new EventResponseModel();
+			BeanUtils.copyProperties(event, eventTemp);
+			response.add(eventTemp);
+		}
+
+		return response;
+	}
 
 	@PostMapping
 	OperationStatusModel createEvent(@RequestBody EventRequestModel event) {

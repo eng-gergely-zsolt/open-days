@@ -6,6 +6,7 @@ public class UserResponseModel {
     private String publicId;
     private String username;
     private String lastName;
+    private String roleName;
     private String firstName;
 
     public String getEmail() {
@@ -22,6 +23,10 @@ public class UserResponseModel {
 
     public String getLastName() {
         return lastName;
+    }
+
+    public String getRoleName() {
+        return roleName;
     }
 
     public String getFirstName() {
@@ -42,6 +47,10 @@ public class UserResponseModel {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
     }
 
     public void setFirstName(String firstName) {

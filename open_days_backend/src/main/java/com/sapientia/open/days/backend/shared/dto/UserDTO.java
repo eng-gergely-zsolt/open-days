@@ -14,10 +14,12 @@ public class UserDTO implements Serializable {
 	private String password;
 	private String username;
 	private String lastName;
+	private String roleName;
 	private String firstName;
 	private String institution;
 	private String encryptedPassword;
 	private String emailVerificationToken;
+
 
 	private HashSet<String> roles;
 	private Boolean emailVerificationStatus = false;
@@ -47,6 +49,10 @@ public class UserDTO implements Serializable {
 
 	public String getLastName() {
 		return lastName;
+	}
+
+	public String getRoleName() {
+		return roleName;
 	}
 
 	public String getFirstName() {
@@ -95,6 +101,10 @@ public class UserDTO implements Serializable {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
 	}
 
 	public void setFirstName(String firstName) {

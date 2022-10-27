@@ -1,11 +1,9 @@
-package com.sapientia.open.days.backend.shared.dto;
+package com.sapientia.open.days.backend.ui.model.response;
 
 import java.io.Serial;
-import java.io.Serializable;
 
 @SuppressWarnings("unused")
-public class EventDto implements Serializable {
-
+public class EventResponseModel {
 	private boolean isOnline;
 	private String location;
 	private String dateTime;
@@ -18,7 +16,7 @@ public class EventDto implements Serializable {
 	@Serial
 	private static final long serialVersionUID = 3667708176484458123L;
 
-	public boolean getIsOnline() {
+	public boolean isIsOnline() {
 		return isOnline;
 	}
 
