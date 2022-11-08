@@ -61,7 +61,7 @@ public class EventEntity {
 		return dateTime;
 	}
 
-	public boolean isOnline() {
+	public boolean getIsOnline() {
 		return isOnline;
 	}
 
@@ -93,8 +93,8 @@ public class EventEntity {
 		this.dateTime = dateTime;
 	}
 
-	public void setOnline(boolean online) {
-		isOnline = online;
+	public void setIsOnline(boolean isOnline) {
+		this.isOnline = isOnline;
 	}
 
 	public void setMeetingLink(String meetingLink) {

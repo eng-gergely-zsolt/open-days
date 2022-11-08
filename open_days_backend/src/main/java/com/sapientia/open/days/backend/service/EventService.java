@@ -1,5 +1,6 @@
 package com.sapientia.open.days.backend.service;
 
+import com.sapientia.open.days.backend.shared.dto.CreateEventDto;
 import com.sapientia.open.days.backend.shared.dto.EventDto;
 
 import java.util.List;
@@ -7,5 +8,5 @@ import java.util.List;
 public interface EventService {
 	List<EventDto> getAllEvent();
 
-	void createEvent(EventDto event);
+	void createEvent(CreateEventDto event);
 }

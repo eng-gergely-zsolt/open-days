@@ -8,6 +8,7 @@ import com.sapientia.open.days.backend.io.repository.ActivityRepository;
 import com.sapientia.open.days.backend.io.repository.EventRepository;
 import com.sapientia.open.days.backend.io.repository.UserRepository;
 import com.sapientia.open.days.backend.service.EventService;
+import com.sapientia.open.days.backend.shared.dto.CreateEventDto;
 import com.sapientia.open.days.backend.shared.dto.EventDto;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorCode;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorMessage;
@@ -68,7 +69,7 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public void createEvent(EventDto event) {
+	public void createEvent(CreateEventDto event) {
 
 		UserEntity organizer = userRepository.findByPublicId(event.getOrganizerId());
 		ActivityEntity activity = activityRepository.findByName(event.getActivityName());

@@ -317,26 +317,36 @@ public class InitialSetup {
 	}
 
 	private void createEvents() {
-		ActivityEntity activity = activityRepository.findByName("Activity 1");
+		ActivityEntity activity1 = activityRepository.findByName("Activity 1");
+		ActivityEntity activity2 = activityRepository.findByName("Activity 2");
 		UserEntity organizer = userRepository.findByEmail("organizer@mailinator.com");
 
-		if (activity == null || organizer == null) {
+		if (activity1 == null || activity2 == null || organizer == null) {
 			return;
 		}
 
 		ArrayList<EventEntity> events = new ArrayList<>();
 
 		events.add(new EventEntity(false, "Sapientia",
-				"2023-09-15 10:15", null, organizer, activity));
+				"2023-09-15 10:15", null, organizer, activity1));
 
 		events.add(new EventEntity(false, "312-es terem",
-				"2023-10-20 11:20", null, organizer, activity));
+				"2023-10-20 11:20", null, organizer, activity1));
 
 		events.add(new EventEntity(false, "Sportpalya",
-				"2023-11-25 15:30", null, organizer, activity));
+				"2023-11-25 15:30", null, organizer, activity1));
 
 		events.add(new EventEntity(false, "314-es terem",
-				"2021-08-02 09:30", null, organizer, activity));
+				"2021-08-02 09:30", null, organizer, activity1));
+
+		events.add(new EventEntity(false, "Udvar",
+				"2023-08-02 22:30", null, organizer, activity2));
+
+		events.add(new EventEntity(false, "Aula",
+				"2023-04-22 19:45", null, organizer, activity2));
+
+		events.add(new EventEntity(false, "1. emelet",
+				"2024-01-26 07:12", null, organizer, activity2));
 
 		for (EventEntity event : events) {
 			if (eventRepository.findByLocation(event.getLocation()) == null) {

@@ -11,12 +11,28 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @SuppressWarnings("unused")
 public class ActivityServiceImpl implements ActivityService {
 
 	@Autowired
 	ActivityRepository activityRepository;
+
+	@Override
+	public List<ActivityDto> getAllActivity() {
+		ArrayList<ActivityDto> activities = new ArrayList<>();
+		Iterable<ActivityEntity> rawActivities = activityRepository.findAll();
+
+		for (ActivityEntity activity: rawActivities) {
+			ActivityDto activityTemp = new ActivityDto();
+			BeanUtils.copyProperties(activity, activityTemp);
+			activities.add(activityTemp);
+		}
+		return activities;
+	}
 
 	@Override
 	public void createActivity(ActivityDto activity) {

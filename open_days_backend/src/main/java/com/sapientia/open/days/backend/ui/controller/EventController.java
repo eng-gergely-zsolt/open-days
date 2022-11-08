@@ -2,8 +2,9 @@ package com.sapientia.open.days.backend.ui.controller;
 
 import com.sapientia.open.days.backend.exceptions.GeneralServiceException;
 import com.sapientia.open.days.backend.service.EventService;
+import com.sapientia.open.days.backend.shared.dto.CreateEventDto;
 import com.sapientia.open.days.backend.shared.dto.EventDto;
-import com.sapientia.open.days.backend.ui.model.request.EventRequestModel;
+import com.sapientia.open.days.backend.ui.model.request.CreateEventModel;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorCode;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorMessage;
 import com.sapientia.open.days.backend.ui.model.resource.OperationStatus;
@@ -42,7 +43,12 @@ public class EventController {
 	}
 
 	@PostMapping
-	OperationStatusModel createEvent(@RequestBody EventRequestModel event) {
+	OperationStatusModel createEvent(@RequestBody CreateEventModel event) {
+
+		if (event.getLocation().isEmpty()) {
+			throw new GeneralServiceException(ErrorCode.EVENT_MISSING_LOCATION.getErrorCode(),
+					ErrorMessage.EVENT_MISSING_LOCATION.getErrorMessage());
+		}
 
 		if (event.getDateTime().isEmpty()) {
 			throw new GeneralServiceException(ErrorCode.EVENT_MISSING_DATE_TIME.getErrorCode(),
@@ -59,20 +65,20 @@ public class EventController {
 					ErrorMessage.EVENT_MISSING_ACTIVITY_NAME.getErrorMessage());
 		}
 
-		if (event.getOnline() && event.getMeetingLink().isEmpty()) {
+		if (event.getIsOnline() && event.getMeetingLink().isEmpty()) {
 			throw new GeneralServiceException(ErrorCode.EVENT_MISSING_MEETING_LINK.getErrorCode(),
 					ErrorMessage.EVENT_MISSING_MEETING_LINK.getErrorMessage());
 		}
 
 		try {
-			DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+			DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
 			DateTime.parse(event.getDateTime(), formatter);
 		} catch (Exception exception) {
 			throw new GeneralServiceException(ErrorCode.EVENT_INVALID_DATE_TIME.getErrorCode(),
 					ErrorMessage.EVENT_INVALID_DATE_TIME.getErrorMessage());
 		}
 
-		EventDto eventDto = new EventDto();
+		CreateEventDto eventDto = new CreateEventDto();
 		BeanUtils.copyProperties(event, eventDto);
 
 		eventService.createEvent(eventDto);

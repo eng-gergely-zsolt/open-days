@@ -29,7 +29,8 @@ public enum ErrorMessage {
     EVENT_INVALID_DATE_TIME("The datetime parameter is invalid"),
     EVENT_MISSING_MEETING_LINK("The meeting link is missing"),
     EVENT_INVALID_ORGANIZER_ID("The organizer id is invalid"),
-    EVENT_MISSING_ACTIVITY_NAME("The activity name is missing");
+    EVENT_MISSING_ACTIVITY_NAME("The activity name is missing"),
+    EVENT_MISSING_LOCATION("The location is missing");
 
     private String errorMessage;
 

@@ -1,20 +1,25 @@
-package com.sapientia.open.days.backend.ui.model.request;
+package com.sapientia.open.days.backend.shared.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.Serial;
 
 @SuppressWarnings("unused")
-public class EventRequestModel {
-
+public class CreateEventDto {
 	private boolean isOnline;
-
+	private String location;
 	private String dateTime;
 	private String meetingLink;
 	private String organizerId;
 	private String activityName;
 
-	@JsonProperty("isOnline")
-	public boolean getOnline() {
+	@Serial
+	private static final long serialVersionUID = 3667708176484458123L;
+
+	public boolean getIsOnline() {
 		return isOnline;
+	}
+
+	public String getLocation() {
+		return location;
 	}
 
 	public String getDateTime() {
@@ -33,8 +38,12 @@ public class EventRequestModel {
 		return activityName;
 	}
 
-	public void setOnline(boolean online) {
-		isOnline = online;
+	public void setIsOnline(boolean isOnline) {
+		this.isOnline = isOnline;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
 	}
 
 	public void setDateTime(String dateTime) {

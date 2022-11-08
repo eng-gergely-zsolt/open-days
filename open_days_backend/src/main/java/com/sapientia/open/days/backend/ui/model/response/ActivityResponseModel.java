@@ -1,17 +1,15 @@
-package com.sapientia.open.days.backend.shared.dto;
+package com.sapientia.open.days.backend.ui.model.response;
 
 import java.io.Serial;
-import java.io.Serializable;
 
-@SuppressWarnings("unused")
-public class ActivityDto implements Serializable {
+public class ActivityResponseModel {
 
 	private int id;
 
 	private String name;
 
 	@Serial
-	private static final long serialVersionUID = 2606074144175745196L;
+	private static final long serialVersionUID = 6558070281872949903L;
 
 	public int getId() {
 		return id;
