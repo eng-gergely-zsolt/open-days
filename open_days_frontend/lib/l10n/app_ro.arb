@@ -9,5 +9,14 @@
     "email": "E-mail",
     "home": "Acasă",
     "profile": "Profil",
-    "settings": "Setări"
+    "settings": "Setări",
+
+    "base_text_date": "Data",
+    "base_text_time": "Timp",
+    "base_text_link": "Link",
+    "base_text_change": "Schimbare",
+    "base_text_location": "Loc",
+
+    "event_creator_header": "Crearea evenimentelor",
+    "event_creator_online_event": "Eveniment online?"
 }

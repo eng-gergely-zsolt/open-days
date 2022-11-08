@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:open_days_frontend/modules/home_base/models/initial_data_model.dart';
 
 class Home extends ConsumerWidget {
-  InitialDataModel? _initialData;
+  final InitialDataModel? _initialData;
 
-  Home({Key? key, required InitialDataModel? initialDataModel})
+  const Home({Key? key, required InitialDataModel? initialDataModel})
       : _initialData = initialDataModel,
         super(key: key);
 
@@ -69,41 +69,5 @@ class Home extends ConsumerWidget {
             );
           }),
     );
-
-    // GridView.builder(
-    //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-    //     crossAxisCount: 3,
-    //   ),
-    //   itemCount: _initialData?.events?.events.length,
-    //   itemBuilder: (context, index) {
-    //     final event = _initialData?.events?.events[index];
-    //     return Card(
-    //       child: Column(
-    //         crossAxisAlignment: CrossAxisAlignment.center,
-    //         children: [
-    //           SizedBox(height: _appHeight * 0.03),
-    //           Text(
-    //             event?.activityName as String,
-    //             style: TextStyle(
-    //               fontSize: _appHeight * 0.04,
-    //             ),
-    //           ),
-    //           const Spacer(),
-    //           SizedBox(
-    //             width: _appWidth * 0.45,
-    //             height: _appHeight * 0.07,
-    //             child: ElevatedButton(
-    //               onPressed: (() {}),
-    //               child: Text('View Details'),
-    //             ),
-    //           ),
-    //           SizedBox(
-    //             height: _appHeight * 0.02,
-    //           )
-    //         ],
-    //       ),
-    //     );
-    //   },
-    // );
   }
 }

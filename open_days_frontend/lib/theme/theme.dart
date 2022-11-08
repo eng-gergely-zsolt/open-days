@@ -6,6 +6,18 @@ class CustomTheme {
     return ThemeData(
       scaffoldBackgroundColor: Colors.white,
       primarySwatch: CustomMaterialColor(1, 30, 65).getColor,
+      iconTheme: const IconThemeData(
+        color: Color.fromRGBO(1, 30, 65, 1),
+      ),
+      checkboxTheme: CheckboxThemeData(
+        fillColor: MaterialStateProperty.resolveWith(
+          (states) {
+            if (states.contains(MaterialState.selected)) {
+              return const Color.fromRGBO(1, 30, 65, 1);
+            }
+          },
+        ),
+      ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(
@@ -24,11 +36,13 @@ class CustomTheme {
           ),
         ),
       ),
-      iconTheme: const IconThemeData(
-        color: Color.fromRGBO(1, 30, 65, 1),
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        backgroundColor: Colors.white,
       ),
-      bottomNavigationBarTheme:
-          const BottomNavigationBarThemeData(backgroundColor: Colors.white),
+      floatingActionButtonTheme: const FloatingActionButtonThemeData(
+        foregroundColor: Colors.white,
+        backgroundColor: Color.fromRGBO(1, 30, 65, 1),
+      ),
     );
   }
 

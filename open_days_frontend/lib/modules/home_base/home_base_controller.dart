@@ -33,6 +33,11 @@ class HomeBaseController {
     return _initialDataProvider;
   }
 
+  Future<void> invalidateInitialDataProvider() async {
+    _ref.invalidate(_initialDataProvider);
+    return await Future<void>.delayed(const Duration(seconds: 3));
+  }
+
   void setNavigationBarIndexProvider(int navigationBarIndex) {
     _ref.read(_navigationBarIndexProvider.notifier).state = navigationBarIndex;
   }

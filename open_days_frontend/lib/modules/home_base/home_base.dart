@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:open_days_frontend/constants/constants.dart';
+import 'package:open_days_frontend/modules/event_creator/event.creator.dart';
 import 'package:open_days_frontend/modules/home/home.dart';
 import 'package:open_days_frontend/modules/home_base/home_base_controller.dart';
 import 'package:open_days_frontend/modules/profile/profile.dart';
@@ -51,8 +52,36 @@ class HomeBase extends ConsumerWidget {
         error: (error, stackTrace) => const Center(),
         data: (initialData) {
           return initialData.operationResult == operationResultSuccess
-              ? screens[curerrentIndex]
+              ? RefreshIndicator(
+                  child: screens[curerrentIndex],
+                  onRefresh: () =>
+                      _homeBaseController.invalidateInitialDataProvider(),
+                )
               : const Text('FAILURE');
+        },
+      ),
+      floatingActionButton: _initialData.when(
+        loading: () => null,
+        error: (error, stackTrace) => null,
+        data: (initialData) {
+          return initialData.operationResult == operationResultSuccess &&
+                      initialData.user?.roleName == roleAdmin ||
+                  initialData.user?.roleName == roleOrganizer
+              ? FloatingActionButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const EventCreator(),
+                      ),
+                    );
+                  },
+                  child: Icon(
+                    Icons.add,
+                    size: _appHeight * 0.06,
+                  ),
+                )
+              : null;
         },
       ),
       bottomNavigationBar: BottomNavigationBar(
