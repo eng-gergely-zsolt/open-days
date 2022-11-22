@@ -18,6 +18,7 @@
     "base_text_date": "Date",
     "base_text_time": "Time",
     "base_text_link": "Link",
+    "base_text_error": "Error",
     "base_text_change": "Change",
     "base_text_location": "Location",
 

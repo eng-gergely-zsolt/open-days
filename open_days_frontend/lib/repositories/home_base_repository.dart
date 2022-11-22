@@ -1,10 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:open_days_frontend/models/base_request_model.dart';
-import 'package:open_days_frontend/models/user_request_model.dart';
-import 'package:open_days_frontend/models/user_response_model.dart';
-import 'package:open_days_frontend/modules/home_base/models/get_all_event_model.dart';
-import 'package:open_days_frontend/services/home_base/get-all-event.dart';
-import 'package:open_days_frontend/services/home_base/get_user_by_id.dart';
+
+import '../models/base_request_model.dart';
+import '../models/user_request_model.dart';
+import '../models/user_response_model.dart';
+import '../services/home_base/get-all-event.dart';
+import '../services/home_base/get_user_by_id.dart';
+import '../modules/home_base/models/get_all_event_model.dart';
 
 final homeBaseRepositoryProvider = Provider((_) => HomeBaseRepository());
 

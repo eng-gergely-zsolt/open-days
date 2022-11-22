@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:open_days_frontend/theme/custom_material_color.dart';
 
 class CustomTheme {
+  // static lightDivider
+
   static ThemeData get lightTheme {
     return ThemeData(
+      hintColor: Colors.blueGrey,
+      dividerColor: const Color.fromRGBO(170, 170, 170, 0.4),
+      primaryColor: const Color.fromRGBO(1, 30, 65, 1),
       scaffoldBackgroundColor: Colors.white,
       primarySwatch: CustomMaterialColor(1, 30, 65).getColor,
       iconTheme: const IconThemeData(
@@ -45,6 +50,4 @@ class CustomTheme {
       ),
     );
   }
-
-  // static var v = ElevatedButton.styleFrom();
 }

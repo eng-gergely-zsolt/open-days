@@ -1,5 +1,5 @@
-import 'package:open_days_frontend/constants/constants.dart';
-import 'package:open_days_frontend/models/event_response_model.dart';
+import 'event_response_model.dart';
+import '../../../constants/constants.dart';
 
 class GetAllEventModel {
   String operationResult;

@@ -1,11 +1,10 @@
 import 'dart:convert';
-
-import 'package:open_days_frontend/constants/constants.dart';
-import 'package:open_days_frontend/models/base_request_model.dart';
-
 import 'package:http/http.dart' as http;
-import 'package:open_days_frontend/modules/home_base/models/get_all_event_model.dart';
-import '../../models/event_response_model.dart';
+
+import '../../constants/constants.dart';
+import '../../models/base_request_model.dart';
+import '../../modules/home_base/models/get_all_event_model.dart';
+import '../../modules/home_base/models/event_response_model.dart';
 
 Future<GetAllEventModel> getAllEventSvc(
     BaseRequestModel baseRequestData) async {

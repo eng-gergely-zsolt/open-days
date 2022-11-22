@@ -1,6 +1,7 @@
-import 'package:open_days_frontend/constants/constants.dart';
+import '../../../constants/constants.dart';
 
 class EventResponseModel {
+  int id;
   bool isOnline;
   String location;
   String dateTime;
@@ -12,6 +13,7 @@ class EventResponseModel {
   String operationResult = operationResultFailure;
 
   EventResponseModel({
+    this.id = -1,
     this.isOnline = false,
     this.location = '',
     this.dateTime = '',
@@ -24,6 +26,7 @@ class EventResponseModel {
 
   factory EventResponseModel.fromJson(Map<String, dynamic> json) {
     return EventResponseModel(
+      id: json['id'] ?? -1,
       isOnline: json['isOnline'] ?? false,
       location: json['location'] ?? '',
       dateTime: json['dateTime'] ?? '',

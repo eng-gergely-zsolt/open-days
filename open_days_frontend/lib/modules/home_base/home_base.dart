@@ -7,6 +7,7 @@ import 'package:open_days_frontend/modules/home/home.dart';
 import 'package:open_days_frontend/modules/home_base/home_base_controller.dart';
 import 'package:open_days_frontend/modules/profile/profile.dart';
 import 'package:open_days_frontend/modules/settings/settings.dart';
+import 'package:open_days_frontend/shared/secure_storage.dart';
 import 'package:open_days_frontend/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -15,8 +16,9 @@ class HomeBase extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var appLocale = AppLocalizations.of(context);
-    final _appWidth = MediaQuery.of(context).size.width;
+    SecureStorage.setUserId('qwertyuiopasdf3');
+
+    final appLocale = AppLocalizations.of(context);
     final _appHeight = MediaQuery.of(context).size.height;
 
     var _homeBaseController = ref.read(homeBaseControllerProvider);
