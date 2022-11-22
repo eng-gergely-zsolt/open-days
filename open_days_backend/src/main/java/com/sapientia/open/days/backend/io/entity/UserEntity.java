@@ -40,8 +40,8 @@ public class UserEntity implements Serializable {
 	@Serial
 	private static final long serialVersionUID = 232383759086741088L;
 
-	@ManyToMany(mappedBy = "events")
-	private Set<EventEntity> users;
+	@ManyToMany(mappedBy = "users")
+	private Set<EventEntity> userEvents;
 
 	@OneToMany(mappedBy = "organizer")
 	private Set<EventEntity> events;

@@ -27,6 +27,12 @@ public class EventController {
 	@Autowired
 	EventService eventService;
 
+	@ResponseBody
+	@GetMapping(path = "/is-user-applied-for-event/{eventId}/{userPublicId}")
+	public boolean getIsUserAppliedForEvent(@PathVariable long eventId, @PathVariable String userPublicId) {
+		return eventService.getIsUserAppliedForEvent(eventId, userPublicId);
+	}
+
 	@GetMapping(path = "/all-event")
 	public List<EventResponseModel> getAllEvent() {
 		List<EventResponseModel> response = new ArrayList<>();
@@ -40,6 +46,11 @@ public class EventController {
 		}
 
 		return response;
+	}
+
+	@PostMapping(path = "/apply_user_for_event/{eventId}/{userPublicId}")
+	public void applyUserForEvent(@PathVariable long eventId, @PathVariable String userPublicId) {
+		eventService.applyUserForEvent(eventId, userPublicId);
 	}
 
 	@PostMapping
@@ -87,5 +98,10 @@ public class EventController {
 		response.setOperationResult(OperationStatus.SUCCESS.name());
 
 		return response;
+	}
+
+	@DeleteMapping(path = "/delete_user_from_event/{eventId}/{userPublicId}")
+	public void deleteUserFromEvent(@PathVariable long eventId, @PathVariable String userPublicId) {
+		eventService.deleteUserFromEvent(eventId, userPublicId);
 	}
 }

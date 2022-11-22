@@ -9,4 +9,10 @@ public interface EventService {
 	List<EventDto> getAllEvent();
 
 	void createEvent(CreateEventDto event);
+
+	void applyUserForEvent(long eventId, String userPublicId);
+
+	void deleteUserFromEvent(long eventId, String userPublicId);
+
+	boolean getIsUserAppliedForEvent(long eventId, String userPublicId);
 }

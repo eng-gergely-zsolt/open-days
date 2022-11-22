@@ -6,6 +6,7 @@ import java.io.Serializable;
 @SuppressWarnings("unused")
 public class EventDto implements Serializable {
 
+	private long id;
 	private boolean isOnline;
 	private String location;
 	private String dateTime;
@@ -17,6 +18,10 @@ public class EventDto implements Serializable {
 
 	@Serial
 	private static final long serialVersionUID = 3667708176484458123L;
+
+	public long getId() {
+		return id;
+	}
 
 	public boolean getIsOnline() {
 		return isOnline;
@@ -48,6 +53,10 @@ public class EventDto implements Serializable {
 
 	public String getOrganizerFirstName() {
 		return organizerFirstName;
+	}
+
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	public void setIsOnline(boolean isOnline) {

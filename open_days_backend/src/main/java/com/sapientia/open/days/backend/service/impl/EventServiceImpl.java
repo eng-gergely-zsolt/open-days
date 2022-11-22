@@ -13,7 +13,6 @@ import com.sapientia.open.days.backend.shared.dto.EventDto;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorCode;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorMessage;
 import org.joda.time.DateTime;
-import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.springframework.beans.BeanUtils;
@@ -21,7 +20,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @SuppressWarnings("unused")
@@ -35,6 +36,63 @@ public class EventServiceImpl implements EventService {
 
 	@Autowired
 	ActivityRepository activityRepository;
+
+	@Override
+	public void applyUserForEvent(long eventId, String userPublicId) {
+		EventEntity event = eventRepository.findById(eventId);
+		UserEntity user = userRepository.findByPublicId(userPublicId);
+
+		if (user != null && event != null) {
+			try {
+				Set<UserEntity> users = event.getUsers();
+				users.add(user);
+				event.setUsers(users);
+				eventRepository.save(event);
+			} catch (Exception e) {
+				throw new GeneralServiceException(ErrorCode.UNSPECIFIED_ERROR.getErrorCode(),
+						ErrorMessage.UNSPECIFIED_ERROR.getErrorMessage());
+			}
+		} else {
+			throw new GeneralServiceException(ErrorCode.UNSPECIFIED_ERROR.getErrorCode(),
+					ErrorMessage.UNSPECIFIED_ERROR.getErrorMessage());
+		}
+	}
+
+	@Override
+	public void deleteUserFromEvent(long eventId, String userPublicId) {
+		EventEntity event = eventRepository.findById(eventId);
+		UserEntity user = userRepository.findByPublicId(userPublicId);
+
+		if (user != null && event != null) {
+			try {
+				Set<UserEntity> users = event.getUsers();
+				if (users.contains(user)) {
+					users.remove(user);
+				}
+				event.setUsers(users);
+				eventRepository.save(event);
+			} catch (Exception e) {
+				throw new GeneralServiceException(ErrorCode.UNSPECIFIED_ERROR.getErrorCode(),
+						ErrorMessage.UNSPECIFIED_ERROR.getErrorMessage());
+			}
+		} else {
+			throw new GeneralServiceException(ErrorCode.UNSPECIFIED_ERROR.getErrorCode(),
+					ErrorMessage.UNSPECIFIED_ERROR.getErrorMessage());
+		}
+	}
+
+	@Override
+	public boolean getIsUserAppliedForEvent(long eventId, String userPublicId) {
+		EventEntity event = eventRepository.findById(eventId);
+		Set<UserEntity> users = event.getUsers();
+		HashSet<String> publicIds = new HashSet<>();
+
+		for (UserEntity user: users) {
+			publicIds.add(user.getPublicId());
+		}
+
+		return publicIds.contains(userPublicId);
+	}
 
 	@Override
 	public List<EventDto> getAllEvent() {

@@ -36,7 +36,7 @@ public class EventEntity {
 	@JoinTable(name = "users_events",
 			joinColumns = @JoinColumn(name = "event_id", referencedColumnName = "id"),
 			inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
-	private Set<UserEntity> events;
+	private Set<UserEntity> users;
 
 	public EventEntity() {}
 
@@ -77,8 +77,8 @@ public class EventEntity {
 		return activity;
 	}
 
-	public Set<UserEntity> getEvents() {
-		return events;
+	public Set<UserEntity> getUsers() {
+		return users;
 	}
 
 	public void setId(long id) {
@@ -109,7 +109,7 @@ public class EventEntity {
 		this.activity = activity;
 	}
 
-	public void setEvents(Set<UserEntity> events) {
-		this.events = events;
+	public void setUsers(Set<UserEntity> users) {
+		this.users = users;
 	}
 }

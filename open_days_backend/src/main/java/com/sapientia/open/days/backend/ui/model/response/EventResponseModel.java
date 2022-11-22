@@ -4,6 +4,7 @@ import java.io.Serial;
 
 @SuppressWarnings("unused")
 public class EventResponseModel {
+	private long id;
 	private boolean isOnline;
 	private String location;
 	private String dateTime;
@@ -15,6 +16,10 @@ public class EventResponseModel {
 
 	@Serial
 	private static final long serialVersionUID = 3667708176484458123L;
+
+	public long getId() {
+		return id;
+	}
 
 	public boolean isIsOnline() {
 		return isOnline;
@@ -46,6 +51,10 @@ public class EventResponseModel {
 
 	public String getOrganizerFirstName() {
 		return organizerFirstName;
+	}
+
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	public void setIsOnline(boolean isOnline) {
