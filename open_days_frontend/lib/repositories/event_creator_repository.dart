@@ -4,8 +4,7 @@ import '../models/base_response_model.dart';
 import '../services/event_creator/create_event_service.dart';
 import '../modules/event_creator/models/create_event_model.dart';
 
-final eventCreatorRepositoryProvider =
-    Provider((_) => EventCreatorRepository());
+final eventCreatorRepositoryProvider = Provider((_) => EventCreatorRepository());
 
 class EventCreatorRepository {
   Future<BaseResponseModel> createEventRepo(CreateEventModel payload) async {

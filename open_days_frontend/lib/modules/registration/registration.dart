@@ -1,11 +1,11 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:open_days_frontend/constants/constants.dart';
-import 'package:open_days_frontend/modules/login/login.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:open_days_frontend/modules/registration/registration_controller.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+
+import '../login/login.dart';
+import './registration_controller.dart';
+import '../../constants/constants.dart';
 
 class Registration extends ConsumerWidget {
   const Registration({Key? key}) : super(key: key);
@@ -13,28 +13,19 @@ class Registration extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var appLocale = AppLocalizations.of(context);
-
+    final appLocale = AppLocalizations.of(context);
     final appWidth = MediaQuery.of(context).size.width;
-    final appHeight = MediaQuery.of(context).size.height -
-        MediaQueryData.fromWindow(window).padding.top;
+    final appHeight = MediaQuery.of(context).size.height;
 
-    var _registrationController = ref.read(registrationControllerProvider);
+    final registrationController = ref.read(registrationControllerProvider);
+    final isLoading = ref.watch(registrationController.getIsLoadingProvider());
+    final institutions = ref.watch(registrationController.getInstitutionProvider());
 
-    var _institutions =
-        ref.watch(_registrationController.getInstitutionProvider());
+    var selectedCounty = ref.watch(registrationController.getSelectedCountyProvider());
+    var selectedInstitution = ref.watch(registrationController.getSelectedInstitutionProvider());
 
-    var _selectedCounty =
-        ref.watch(_registrationController.getSelectedCountyProvider());
-
-    var _selectedInstitution =
-        ref.watch(_registrationController.getSelectedInstitutionProvider());
-
-    var _isLoading = ref.watch(_registrationController.getIsLoadingProvider());
-
-    if (_registrationController.getRegistrationResponse() != null) {
-      if (_registrationController.getRegistrationResponse()?.operationResult ==
-          operationResultSuccess) {
+    if (registrationController.getRegistrationResponse() != null) {
+      if (registrationController.getRegistrationResponse()?.operationResult == operationResultSuccess) {
         Future.microtask(
           () => Navigator.push(
             context,
@@ -46,12 +37,11 @@ class Registration extends ConsumerWidget {
           content: Text('Something went wrong. Please try again!'),
         );
 
-        Future.microtask(
-            () => ScaffoldMessenger.of(context).showSnackBar(snackBar));
+        Future.microtask(() => ScaffoldMessenger.of(context).showSnackBar(snackBar));
       }
     }
 
-    _registrationController.deleteRegistrationResponse();
+    registrationController.deleteRegistrationResponse();
 
     return GestureDetector(
       onTap: (() => FocusScope.of(context).requestFocus(FocusNode())),
@@ -59,7 +49,7 @@ class Registration extends ConsumerWidget {
         appBar: AppBar(
           title: Text(appLocale?.sign_up as String),
         ),
-        body: _institutions.when(
+        body: institutions.when(
           loading: () => Center(
             child: LoadingAnimationWidget.staggeredDotsWave(
               size: appHeight * 0.1,
@@ -70,20 +60,16 @@ class Registration extends ConsumerWidget {
             child: Text(error.toString()),
           ),
           data: (institutions) {
-            _selectedCounty ??=
-                _registrationController.getFirstCounty(institutions);
+            selectedCounty ??= registrationController.getFirstCounty(institutions);
 
-            if (_selectedInstitution == null ||
-                !_registrationController
-                    .getInstitutions(_selectedCounty, institutions)
-                    .contains(_selectedInstitution)) {
-              _selectedInstitution = _registrationController
-                  .getFirstInstitution(_selectedCounty, institutions);
+            if (selectedInstitution == null ||
+                !registrationController.getInstitutions(selectedCounty, institutions).contains(selectedInstitution)) {
+              selectedInstitution = registrationController.getFirstInstitution(selectedCounty, institutions);
             }
 
-            _registrationController.setInstitution(_selectedInstitution);
+            registrationController.setInstitution(selectedInstitution);
 
-            return _isLoading == true
+            return isLoading == true
                 ? Center(
                     child: LoadingAnimationWidget.staggeredDotsWave(
                       size: appHeight * 0.1,
@@ -104,31 +90,26 @@ class Registration extends ConsumerWidget {
                                 maxLength: 50,
                                 decoration: InputDecoration(
                                   labelText: appLocale?.first_name,
-                                  prefixIcon:
-                                      const Icon(Icons.person_add_alt_outlined),
+                                  prefixIcon: const Icon(Icons.person_add_alt_outlined),
                                 ),
-                                initialValue:
-                                    _registrationController.getUser().firstName,
+                                initialValue: registrationController.getUser().firstName,
                                 onChanged: ((value) {
-                                  _registrationController.setFirstName(value);
+                                  registrationController.setFirstName(value);
                                 }),
                                 validator: (value) {
-                                  _registrationController.validateName(value);
+                                  registrationController.validateName(value);
                                 }),
                             TextFormField(
                               maxLength: 50,
                               decoration: InputDecoration(
                                 labelText: appLocale?.last_name,
-                                prefixIcon:
-                                    const Icon(Icons.person_add_alt_outlined),
+                                prefixIcon: const Icon(Icons.person_add_alt_outlined),
                               ),
-                              initialValue:
-                                  _registrationController.getUser().lastName,
+                              initialValue: registrationController.getUser().lastName,
                               onChanged: ((value) {
-                                _registrationController.setLastName(value);
+                                registrationController.setLastName(value);
                               }),
-                              validator: ((value) =>
-                                  _registrationController.validateName(value)),
+                              validator: ((value) => registrationController.validateName(value)),
                             ),
                             TextFormField(
                               maxLength: 50,
@@ -136,13 +117,11 @@ class Registration extends ConsumerWidget {
                                 labelText: appLocale?.username,
                                 prefixIcon: const Icon(Icons.person_outline),
                               ),
-                              initialValue:
-                                  _registrationController.getUser().username,
+                              initialValue: registrationController.getUser().username,
                               onChanged: ((value) {
-                                _registrationController.setUsername(value);
+                                registrationController.setUsername(value);
                               }),
-                              validator: ((value) =>
-                                  _registrationController.validateName(value)),
+                              validator: ((value) => registrationController.validateName(value)),
                             ),
                             TextFormField(
                               maxLength: 100,
@@ -150,13 +129,11 @@ class Registration extends ConsumerWidget {
                                 labelText: appLocale?.email,
                                 prefixIcon: const Icon(Icons.alternate_email),
                               ),
-                              initialValue:
-                                  _registrationController.getUser().email,
+                              initialValue: registrationController.getUser().email,
                               onChanged: ((value) {
-                                _registrationController.setEmail(value);
+                                registrationController.setEmail(value);
                               }),
-                              validator: ((value) =>
-                                  _registrationController.validateEmail(value)),
+                              validator: ((value) => registrationController.validateEmail(value)),
                             ),
                             TextFormField(
                               maxLength: 30,
@@ -165,18 +142,15 @@ class Registration extends ConsumerWidget {
                                 labelText: appLocale?.password,
                                 prefixIcon: const Icon(Icons.password),
                               ),
-                              initialValue:
-                                  _registrationController.getUser().password,
+                              initialValue: registrationController.getUser().password,
                               onChanged: ((value) {
-                                _registrationController.setPassword(value);
+                                registrationController.setPassword(value);
                               }),
-                              validator: ((value) => _registrationController
-                                  .validatePassword(value)),
+                              validator: ((value) => registrationController.validatePassword(value)),
                             ),
                             SizedBox(height: appHeight * 0.03),
                             Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: appWidth * 0.02),
+                              padding: EdgeInsets.symmetric(horizontal: appWidth * 0.02),
                               decoration: BoxDecoration(
                                 border: Border.all(
                                   width: 2,
@@ -187,11 +161,9 @@ class Registration extends ConsumerWidget {
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton<String>(
                                   isExpanded: true,
-                                  value: _selectedCounty,
+                                  value: selectedCounty,
                                   icon: const Icon(Icons.arrow_downward),
-                                  items: _registrationController
-                                      .getCounties(institutions)
-                                      .map<DropdownMenuItem<String>>(
+                                  items: registrationController.getCounties(institutions).map<DropdownMenuItem<String>>(
                                     (String value) {
                                       return DropdownMenuItem<String>(
                                         value: value,
@@ -200,19 +172,14 @@ class Registration extends ConsumerWidget {
                                     },
                                   ).toList(),
                                   onChanged: (String? value) {
-                                    ref
-                                        .read(_registrationController
-                                            .getSelectedCountyProvider()
-                                            .notifier)
-                                        .state = value;
+                                    ref.read(registrationController.getSelectedCountyProvider().notifier).state = value;
                                   },
                                 ),
                               ),
                             ),
                             SizedBox(height: appHeight * 0.03),
                             Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: appWidth * 0.02),
+                              padding: EdgeInsets.symmetric(horizontal: appWidth * 0.02),
                               decoration: BoxDecoration(
                                 border: Border.all(
                                   width: 2,
@@ -223,11 +190,10 @@ class Registration extends ConsumerWidget {
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton<String>(
                                   isExpanded: true,
-                                  value: _selectedInstitution,
+                                  value: selectedInstitution,
                                   icon: const Icon(Icons.arrow_downward),
-                                  items: _registrationController
-                                      .getInstitutions(
-                                          _selectedCounty, institutions)
+                                  items: registrationController
+                                      .getInstitutions(selectedCounty, institutions)
                                       .map<DropdownMenuItem<String>>(
                                     (String value) {
                                       return DropdownMenuItem<String>(
@@ -237,13 +203,9 @@ class Registration extends ConsumerWidget {
                                     },
                                   ).toList(),
                                   onChanged: (String? value) {
-                                    ref
-                                        .read(_registrationController
-                                            .getSelectedInstitutionProvider()
-                                            .notifier)
-                                        .state = value;
-                                    _registrationController
-                                        .setInstitution(value);
+                                    ref.read(registrationController.getSelectedInstitutionProvider().notifier).state =
+                                        value;
+                                    registrationController.setInstitution(value);
                                   },
                                 ),
                               ),
@@ -252,7 +214,7 @@ class Registration extends ConsumerWidget {
                             ElevatedButton(
                               onPressed: (() {
                                 if (_formKey.currentState!.validate()) {
-                                  _registrationController.createUser();
+                                  registrationController.createUser();
                                 }
                               }),
                               style: ElevatedButton.styleFrom(

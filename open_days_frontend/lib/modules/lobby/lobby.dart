@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:open_days_frontend/modules/home_base/home_base.dart';
-import 'package:open_days_frontend/modules/registration/registration.dart';
 
-import '../login/login.dart';
+import '../home_base/home_base.dart';
+import '../registration/registration.dart';
 
 class Lobby extends StatelessWidget {
   const Lobby({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
+    final appWidth = MediaQuery.of(context).size.width;
+    final appHeight = MediaQuery.of(context).size.height;
 
     return SizedBox(
       width: double.infinity,
@@ -21,8 +20,8 @@ class Lobby extends StatelessWidget {
           ClipPath(
             clipper: LobbyTopCoverClipper(),
             child: SizedBox(
-              width: screenWidth,
-              height: screenHeight * 0.69,
+              width: appWidth,
+              height: appHeight * 0.69,
               child: Image.asset(
                 'lib/assets/images/books-cover3.jpg',
                 fit: BoxFit.fill,
@@ -30,25 +29,25 @@ class Lobby extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: screenHeight * 0.55,
+            top: appHeight * 0.55,
             child: ClipPath(
               clipper: LobbyBottomCoverClipper(),
               child: Container(
-                width: screenWidth,
-                height: screenHeight * 0.45,
+                width: appWidth,
+                height: appHeight * 0.45,
                 color: Colors.white,
               ),
             ),
           ),
           Positioned(
-            top: screenHeight * 0.75,
-            width: screenWidth,
+            top: appHeight * 0.75,
+            width: appWidth,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    minimumSize: Size(screenWidth * 0.6, 45),
+                    minimumSize: Size(appWidth * 0.6, 45),
                   ),
                   onPressed: () {
                     Navigator.push(
@@ -58,10 +57,9 @@ class Lobby extends StatelessWidget {
                       ),
                     );
                   },
-                  child: Text(AppLocalizations.of(context)?.login.toUpperCase()
-                      as String),
+                  child: Text(AppLocalizations.of(context)?.login.toUpperCase() as String),
                 ),
-                SizedBox(height: screenHeight * 0.03),
+                SizedBox(height: appHeight * 0.03),
                 OutlinedButton(
                   onPressed: () {
                     Navigator.push(
@@ -72,15 +70,14 @@ class Lobby extends StatelessWidget {
                     );
                   },
                   child: Text(
-                    AppLocalizations.of(context)?.sign_up.toUpperCase()
-                        as String,
+                    AppLocalizations.of(context)?.sign_up.toUpperCase() as String,
                     style: const TextStyle(
                       color: Color.fromRGBO(1, 30, 65, 1),
                     ),
                   ),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: const Color.fromRGBO(254, 251, 236, 1),
-                    minimumSize: Size(screenWidth * 0.6, 45),
+                    minimumSize: Size(appWidth * 0.6, 45),
                   ),
                 ),
               ],

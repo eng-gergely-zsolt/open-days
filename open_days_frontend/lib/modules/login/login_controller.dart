@@ -1,31 +1,28 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:open_days_frontend/constants/constants.dart';
-import 'package:open_days_frontend/models/user_response_model.dart';
-import 'package:open_days_frontend/models/user_request_model.dart';
-import 'package:open_days_frontend/shared/secure_storage.dart';
 
+import '../../constants/constants.dart';
+import '../../shared/secure_storage.dart';
+import '../../models/user_request_model.dart';
+import '../../models/user_response_model.dart';
 import '../../repositories/login_repository.dart';
 
 class LoginController {
   UserResponseModel? _loginResponse;
 
-  final ProviderRef ref;
-  final LoginRepository loginRepository;
+  final ProviderRef _ref;
+  final LoginRepository _loginRepository;
 
-  final UserRequestModel user = UserRequestModel();
+  final _user = UserRequestModel();
   final _isLoadingProvider = StateProvider<bool>((ref) => false);
 
-  LoginController({
-    required this.ref,
-    required this.loginRepository,
-  });
+  LoginController(this._ref, this._loginRepository);
 
   String getUsername() {
-    return user.username;
+    return _user.username;
   }
 
   String getPassword() {
-    return user.password;
+    return _user.password;
   }
 
   UserResponseModel? getLoginResponse() {
@@ -37,11 +34,11 @@ class LoginController {
   }
 
   void setUsername(String username) {
-    user.username = username;
+    _user.username = username;
   }
 
   void setPassword(String password) {
-    user.password = password;
+    _user.password = password;
   }
 
   void deleteResponse() {
@@ -49,18 +46,16 @@ class LoginController {
   }
 
   void loginUser() async {
-    ref.read(_isLoadingProvider.notifier).state = true;
+    _ref.read(_isLoadingProvider.notifier).state = true;
     _loginResponse = null;
-    _loginResponse = await loginRepository.loginUserRepo(user);
+    _loginResponse = await _loginRepository.loginUserRepo(_user);
 
-    if (_loginResponse != null &&
-        _loginResponse?.operationResult == operationResultSuccess) {
+    if (_loginResponse != null && _loginResponse?.operationResult == operationResultSuccess) {
       await SecureStorage.setUserId(_loginResponse?.id as String);
-      await SecureStorage.setAuthorizationToken(
-          _loginResponse?.authorizationToken as String);
+      await SecureStorage.setAuthorizationToken(_loginResponse?.authorizationToken as String);
     }
 
-    ref.read(_isLoadingProvider.notifier).state = false;
+    _ref.read(_isLoadingProvider.notifier).state = false;
   }
 
   String? validateUsername(String? value) {
@@ -82,5 +77,5 @@ class LoginController {
 
 final loginControllerProvider = Provider((ref) {
   final loginRepository = ref.watch(loginRepositoryProvider);
-  return LoginController(ref: ref, loginRepository: loginRepository);
+  return LoginController(ref, loginRepository);
 });

@@ -23,30 +23,22 @@ class EventDetails extends ConsumerWidget {
     final eventDetailsController = ref.read(eventDetailsControllerProvider);
 
     final isLoading = ref.watch(eventDetailsController.getIsLoading());
-
-    final initialData =
-        ref.watch(eventDetailsController.createInitialDataProvider(_event?.id));
+    final initialData = ref.watch(eventDetailsController.createInitialDataProvider(_event?.id));
 
     if (eventDetailsController.getEventParticipationResponse() != null &&
-        eventDetailsController
-                .getEventParticipationResponse()
-                ?.isOperationSuccessful ==
-            false) {
+        eventDetailsController.getEventParticipationResponse()?.isOperationSuccessful == false) {
       const snackBar = SnackBar(
         content: Text('Something went wrong. Please try again!'),
       );
 
-      Future.microtask(
-          () => ScaffoldMessenger.of(context).showSnackBar(snackBar));
+      Future.microtask(() => ScaffoldMessenger.of(context).showSnackBar(snackBar));
 
       eventDetailsController.deleteEventParticipatonResponse();
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: _event == null
-            ? Text(appLocale?.base_text_error as String)
-            : Text(_event?.activityName as String),
+        title: _event == null ? Text(appLocale?.base_text_error as String) : Text(_event?.activityName as String),
       ),
       body: isLoading == true
           ? Center(
@@ -147,16 +139,14 @@ class EventDetails extends ConsumerWidget {
                                       (_event?.meetingLink as String),
                                       style: TextStyle(
                                         fontSize: appHeight * 0.024,
-                                        color:
-                                            CustomTheme.lightTheme.primaryColor,
+                                        color: CustomTheme.lightTheme.primaryColor,
                                       ),
                                     ),
                                     SizedBox(height: appHeight * 0.02),
                                     Container(
                                       height: 1,
                                       width: double.infinity,
-                                      color:
-                                          CustomTheme.lightTheme.dividerColor,
+                                      color: CustomTheme.lightTheme.dividerColor,
                                     )
                                   ],
                                 )
@@ -175,16 +165,14 @@ class EventDetails extends ConsumerWidget {
                                       (_event?.location as String),
                                       style: TextStyle(
                                         fontSize: appHeight * 0.024,
-                                        color:
-                                            CustomTheme.lightTheme.primaryColor,
+                                        color: CustomTheme.lightTheme.primaryColor,
                                       ),
                                     ),
                                     SizedBox(height: appHeight * 0.02),
                                     Container(
                                       height: 1,
                                       width: double.infinity,
-                                      color:
-                                          CustomTheme.lightTheme.dividerColor,
+                                      color: CustomTheme.lightTheme.dividerColor,
                                     )
                                   ],
                                 ),
@@ -200,8 +188,7 @@ class EventDetails extends ConsumerWidget {
                                         fontSize: appHeight * 0.025,
                                       ),
                                     ),
-                                    onPressed: () => eventDetailsController
-                                        .deleteUserFromEvent(),
+                                    onPressed: () => eventDetailsController.deleteUserFromEvent(),
                                   )
                                 : ElevatedButton(
                                     child: Text(
@@ -210,8 +197,7 @@ class EventDetails extends ConsumerWidget {
                                         fontSize: appHeight * 0.025,
                                       ),
                                     ),
-                                    onPressed: () => eventDetailsController
-                                        .applyUserForEvent(),
+                                    onPressed: () => eventDetailsController.applyUserForEvent(),
                                   ),
                           ),
                         ],

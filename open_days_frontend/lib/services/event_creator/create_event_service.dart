@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
 
 import '../../models/base_response_model.dart';
@@ -15,11 +14,13 @@ Future<BaseResponseModel> createEventSvc(CreateEventModel payload) async {
     "Authorization": payload.authorizationToken,
   };
 
-  http.Response httpResponse = await http.post(
-    Uri.parse(uri),
-    headers: headers,
-    body: body,
-  );
+  http.Response httpResponse = await http
+      .post(
+        Uri.parse(uri),
+        headers: headers,
+        body: body,
+      )
+      .timeout(const Duration(seconds: 5));
 
   if (httpResponse.statusCode == 200) {
     response.isOperationSuccessful = true;

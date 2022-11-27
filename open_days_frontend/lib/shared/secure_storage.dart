@@ -6,8 +6,7 @@ class SecureStorage {
 
   static const _secureStorage = FlutterSecureStorage();
 
-  static Future<String?> getUserId() async =>
-      await _secureStorage.read(key: _userId);
+  static Future<String?> getUserId() async => await _secureStorage.read(key: _userId);
 
   static Future<String?> getAuthorizationToken() async =>
       await _secureStorage.read(key: _authorizationToken);
@@ -16,6 +15,5 @@ class SecureStorage {
       await _secureStorage.write(key: _userId, value: userId);
 
   static Future setAuthorizationToken(String authorizationToken) async =>
-      await _secureStorage.write(
-          key: _authorizationToken, value: authorizationToken);
+      await _secureStorage.write(key: _authorizationToken, value: authorizationToken);
 }

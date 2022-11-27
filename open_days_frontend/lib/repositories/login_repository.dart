@@ -1,7 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:open_days_frontend/models/user_response_model.dart';
-import 'package:open_days_frontend/models/user_request_model.dart';
-import 'package:open_days_frontend/services/login/post_login_user.dart';
+
+import '../models/user_request_model.dart';
+import '../models/user_response_model.dart';
+import '../services/login/post_login_user.dart';
 
 final loginRepositoryProvider = Provider((_) => LoginRepository());
 

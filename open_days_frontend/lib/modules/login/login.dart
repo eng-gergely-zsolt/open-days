@@ -1,12 +1,11 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:open_days_frontend/constants/constants.dart';
-import 'package:open_days_frontend/modules/home_base/home_base.dart';
-import 'package:open_days_frontend/modules/login/login_controller.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+
+import './login_controller.dart';
+import '../home_base/home_base.dart';
+import '../../constants/constants.dart';
 
 class Login extends ConsumerWidget {
   const Login({Key? key}) : super(key: key);
@@ -14,18 +13,15 @@ class Login extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var appLocale = AppLocalizations.of(context);
-
+    final appLocale = AppLocalizations.of(context);
     final appWidth = MediaQuery.of(context).size.width;
-    final appHeight = MediaQuery.of(context).size.height -
-        MediaQueryData.fromWindow(window).padding.top;
+    final appHeight = MediaQuery.of(context).size.height;
 
-    var loginController = ref.read(loginControllerProvider);
-    var isLoading = ref.watch(loginController.getIsLoadinProvider());
+    final loginController = ref.read(loginControllerProvider);
+    final isLoading = ref.watch(loginController.getIsLoadinProvider());
 
     if (loginController.getLoginResponse() != null) {
-      if (loginController.getLoginResponse()?.operationResult ==
-          operationResultSuccess) {
+      if (loginController.getLoginResponse()?.operationResult == operationResultSuccess) {
         Future.microtask(() => Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const HomeBase()),
@@ -35,8 +31,7 @@ class Login extends ConsumerWidget {
           content: Text('Something went wrong. Please try again!'),
         );
 
-        Future.microtask(
-            () => ScaffoldMessenger.of(context).showSnackBar(snackBar));
+        Future.microtask(() => ScaffoldMessenger.of(context).showSnackBar(snackBar));
       }
     }
 
@@ -69,8 +64,7 @@ class Login extends ConsumerWidget {
                           labelText: appLocale?.username,
                           prefixIcon: const Icon(Icons.person),
                         ),
-                        onChanged: ((value) =>
-                            loginController.setUsername(value)),
+                        onChanged: ((value) => loginController.setUsername(value)),
                         validator: (value) {
                           return loginController.validateUsername(value);
                         },
@@ -83,8 +77,7 @@ class Login extends ConsumerWidget {
                           labelText: appLocale?.password,
                           prefixIcon: const Icon(Icons.password),
                         ),
-                        onChanged: ((value) =>
-                            loginController.setPassword(value)),
+                        onChanged: ((value) => loginController.setPassword(value)),
                         validator: (value) {
                           return loginController.validatePassword(value);
                         },

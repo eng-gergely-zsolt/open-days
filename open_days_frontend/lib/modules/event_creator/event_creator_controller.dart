@@ -22,13 +22,11 @@ class EventCreatorController {
   final _isLoadingProvider = StateProvider<bool>((ref) => false);
   final _isOnlineMeetingProvider = StateProvider<bool>((ref) => false);
   final _selectedActivityProvider = StateProvider<String?>((ref) => null);
-  final _selectedDateTimeProvider =
-      StateProvider<DateTime>((ref) => DateTime.now());
+  final _selectedDateTimeProvider = StateProvider<DateTime>((ref) => DateTime.now());
 
   late FutureProvider<ActivitiesResponseModel> _activitiesProvider;
 
-  EventCreatorController(
-      this._ref, this._baseRepository, this._eventCreatorRepository) {
+  EventCreatorController(this._ref, this._baseRepository, this._eventCreatorRepository) {
     _activitiesProvider = getAllActivity();
   }
 
@@ -68,8 +66,7 @@ class EventCreatorController {
     return FutureProvider((ref) async {
       final baseRequestData = BaseRequestModel();
 
-      baseRequestData.authorizationToken =
-          await SecureStorage.getAuthorizationToken() ?? '';
+      baseRequestData.authorizationToken = await SecureStorage.getAuthorizationToken() ?? '';
 
       return _baseRepository.getAllActivityRepo(baseRequestData);
     });
@@ -151,20 +148,15 @@ class EventCreatorController {
     payload.event.isOnline = _ref.read(_isOnlineMeetingProvider);
     payload.event.meetingLink = payload.event.isOnline ? _meetingLink : null;
 
-    payload.authorizationToken =
-        await SecureStorage.getAuthorizationToken() ?? '';
-    payload.event.dateTime =
-        dateFormatter.format(_ref.read(_selectedDateTimeProvider));
+    payload.authorizationToken = await SecureStorage.getAuthorizationToken() ?? '';
+    payload.event.dateTime = dateFormatter.format(_ref.read(_selectedDateTimeProvider));
 
     payload.event.organizerId = await SecureStorage.getUserId() ?? '';
 
-    if (payload.event.location == '' ||
-        payload.event.organizerId == '' ||
-        payload.authorizationToken == '') {
+    if (payload.event.location == '' || payload.event.organizerId == '' || payload.authorizationToken == '') {
       _createEventResponse = BaseResponseModel();
     } else {
-      _createEventResponse =
-          await _eventCreatorRepository.createEventRepo(payload);
+      _createEventResponse = await _eventCreatorRepository.createEventRepo(payload);
     }
 
     if (_createEventResponse?.isOperationSuccessful == true) {

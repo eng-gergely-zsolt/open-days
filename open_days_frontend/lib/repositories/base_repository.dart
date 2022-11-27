@@ -7,8 +7,7 @@ import '../models/activities_response_model.dart';
 final baseRepositoryProvider = Provider((_) => BaseRepository());
 
 class BaseRepository {
-  Future<ActivitiesResponseModel> getAllActivityRepo(
-      BaseRequestModel baseRequestData) async {
+  Future<ActivitiesResponseModel> getAllActivityRepo(BaseRequestModel baseRequestData) async {
     await Future.delayed(const Duration(seconds: 3));
     return await getAllActivitySvc(baseRequestData);
   }

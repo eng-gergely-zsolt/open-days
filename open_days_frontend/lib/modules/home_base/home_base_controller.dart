@@ -1,21 +1,20 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:open_days_frontend/constants/constants.dart';
-import 'package:open_days_frontend/models/base_request_model.dart';
-import 'package:open_days_frontend/modules/home_base/models/initial_data_model.dart';
-import 'package:open_days_frontend/repositories/home_base_repository.dart';
 
-import '../../models/user_request_model.dart';
+import '../../constants/constants.dart';
 import '../../shared/secure_storage.dart';
+import './models/initial_data_model.dart';
+import '../../models/base_request_model.dart';
+import '../../models/user_request_model.dart';
+import '../../repositories/home_base_repository.dart';
 
 class HomeBaseController {
   final ProviderRef _ref;
   final HomeBaseRepository _homeBaseRepository;
-
-  late FutureProvider<InitialDataModel> _initialDataProvider;
-
   final _navigationBarIndexProvider = StateProvider<int>((_ref) => 0);
 
   InitialDataModel? _initialData;
+
+  late FutureProvider<InitialDataModel> _initialDataProvider;
 
   HomeBaseController(this._ref, this._homeBaseRepository) {
     _initialDataProvider = createInitialDataProvider();
@@ -48,8 +47,8 @@ class HomeBaseController {
       final baseRequestData = BaseRequestModel();
 
       userRequestData.id = await SecureStorage.getUserId() ?? '';
-      userRequestData.authorizationToken = baseRequestData.authorizationToken =
-          await SecureStorage.getAuthorizationToken() ?? '';
+      userRequestData.authorizationToken =
+          baseRequestData.authorizationToken = await SecureStorage.getAuthorizationToken() ?? '';
 
       InitialDataModel response = InitialDataModel();
 

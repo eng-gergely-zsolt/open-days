@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:open_days_frontend/constants/constants.dart';
-import 'package:open_days_frontend/modules/event_creator/event.creator.dart';
-import 'package:open_days_frontend/modules/home/home.dart';
-import 'package:open_days_frontend/modules/home_base/home_base_controller.dart';
-import 'package:open_days_frontend/modules/profile/profile.dart';
-import 'package:open_days_frontend/modules/settings/settings.dart';
-import 'package:open_days_frontend/shared/secure_storage.dart';
-import 'package:open_days_frontend/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+
+import '../home/home.dart';
+import '../../theme/theme.dart';
+import '../profile/profile.dart';
+import '../settings/settings.dart';
+import './home_base_controller.dart';
+import '../../constants/constants.dart';
+import '../../shared/secure_storage.dart';
+import '../event_creator/event.creator.dart';
 
 class HomeBase extends ConsumerWidget {
   const HomeBase({Key? key}) : super(key: key);
@@ -19,16 +20,14 @@ class HomeBase extends ConsumerWidget {
     SecureStorage.setUserId('qwertyuiopasdf3');
 
     final appLocale = AppLocalizations.of(context);
-    final _appHeight = MediaQuery.of(context).size.height;
+    final appHeight = MediaQuery.of(context).size.height;
 
-    var _homeBaseController = ref.read(homeBaseControllerProvider);
-    var _initialData = ref.watch(_homeBaseController.getInitialDataProvider());
+    final homeBaseController = ref.read(homeBaseControllerProvider);
+    final initialData = ref.watch(homeBaseController.getInitialDataProvider());
+    final curerrentIndex = ref.watch(homeBaseController.getNavigationBarIndexProvider());
 
-    var curerrentIndex =
-        ref.watch(_homeBaseController.getNavigationBarIndexProvider());
-
-    var screens = [
-      Home(initialDataModel: _homeBaseController.getInitialData()),
+    final screens = [
+      Home(initialDataModel: homeBaseController.getInitialData()),
       const Profile(),
       const Settings(),
     ];
@@ -44,10 +43,10 @@ class HomeBase extends ConsumerWidget {
         automaticallyImplyLeading: false,
         title: Center(child: Text(appBarTitle[curerrentIndex] as String)),
       ),
-      body: _initialData.when(
+      body: initialData.when(
         loading: () => Center(
           child: LoadingAnimationWidget.staggeredDotsWave(
-            size: _appHeight * 0.1,
+            size: appHeight * 0.1,
             color: const Color.fromRGBO(1, 30, 65, 1),
           ),
         ),
@@ -56,18 +55,16 @@ class HomeBase extends ConsumerWidget {
           return initialData.operationResult == operationResultSuccess
               ? RefreshIndicator(
                   child: screens[curerrentIndex],
-                  onRefresh: () =>
-                      _homeBaseController.invalidateInitialDataProvider(),
+                  onRefresh: () => homeBaseController.invalidateInitialDataProvider(),
                 )
               : const Text('FAILURE');
         },
       ),
-      floatingActionButton: _initialData.when(
+      floatingActionButton: initialData.when(
         loading: () => null,
         error: (error, stackTrace) => null,
         data: (initialData) {
-          return initialData.operationResult == operationResultSuccess &&
-                      initialData.user?.roleName == roleAdmin ||
+          return initialData.operationResult == operationResultSuccess && initialData.user?.roleName == roleAdmin ||
                   initialData.user?.roleName == roleOrganizer
               ? FloatingActionButton(
                   onPressed: () {
@@ -80,7 +77,7 @@ class HomeBase extends ConsumerWidget {
                   },
                   child: Icon(
                     Icons.add,
-                    size: _appHeight * 0.06,
+                    size: appHeight * 0.06,
                   ),
                 )
               : null;
@@ -90,8 +87,7 @@ class HomeBase extends ConsumerWidget {
         showUnselectedLabels: false,
         currentIndex: curerrentIndex,
         selectedIconTheme: CustomTheme.lightTheme.iconTheme,
-        onTap: (index) =>
-            _homeBaseController.setNavigationBarIndexProvider(index),
+        onTap: (index) => homeBaseController.setNavigationBarIndexProvider(index),
         items: [
           BottomNavigationBarItem(
             label: appLocale?.home,

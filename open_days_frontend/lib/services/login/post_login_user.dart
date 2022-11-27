@@ -6,31 +6,31 @@ import 'package:open_days_frontend/models/user_request_model.dart';
 import 'package:http/http.dart' as http;
 
 Future<UserResponseModel> loginUserSvc(UserRequestModel user) async {
-  String body = jsonEncode(user);
-  String uri = 'http://10.0.2.2:8081/open-days/users/login';
+  final body = jsonEncode(user);
+  const uri = 'http://10.0.2.2:8081/open-days/users/login';
   Map<String, String> headers = {"Content-Type": "application/json"};
 
-  http.Response response = await http.post(
+  final rawResponse = await http.post(
     Uri.parse(uri),
     headers: headers,
     body: body,
   );
 
-  final responseTemp = UserResponseModel(
-      operationResultCode: -1, operationResultMessage: '', operationResult: '');
+  final response =
+      UserResponseModel(operationResultCode: -1, operationResultMessage: '', operationResult: '');
 
-  if (response.statusCode == 200) {
-    responseTemp.operationResult = operationResultSuccess;
+  if (rawResponse.statusCode == 200) {
+    response.operationResult = operationResultSuccess;
 
-    for (var it in response.headers.entries) {
+    for (var it in rawResponse.headers.entries) {
       if (it.key == 'userid') {
-        responseTemp.id = it.value;
+        response.id = it.value;
       }
       if (it.key == 'authorization') {
-        responseTemp.authorizationToken = it.value;
+        response.authorizationToken = it.value;
       }
     }
   }
 
-  return responseTemp;
+  return response;
 }

@@ -1,16 +1,17 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:open_days_frontend/models/user_response_model.dart';
-import 'package:open_days_frontend/modules/registration/models/user.dart';
-import 'package:open_days_frontend/repositories/registration_repository.dart';
-import 'package:open_days_frontend/modules/registration/models/institution.dart';
+
+import './models/user.dart';
+import './models/institution.dart';
+import '../../models/user_response_model.dart';
+import '../../repositories/registration_repository.dart';
 
 class RegistrationController {
   UserResponseModel? _registrationResponse;
 
-  final ProviderRef ref;
-  final RegistrationRepository registrationRepository;
+  final ProviderRef _ref;
+  final RegistrationRepository _registrationRepository;
 
-  final User _user = User();
+  final _user = User();
   final _isLoadingProvider = StateProvider<bool>((ref) => false);
   final _selectedCountyProvider = StateProvider<String?>((ref) => null);
   final _selectedInstitutionProvider = StateProvider<String?>((ref) => null);
@@ -20,10 +21,7 @@ class RegistrationController {
     return registrationRepository.getAllInstitutionRepo();
   });
 
-  RegistrationController({
-    required this.ref,
-    required this.registrationRepository,
-  });
+  RegistrationController(this._ref, this._registrationRepository);
 
   User getUser() {
     return _user;
@@ -80,9 +78,9 @@ class RegistrationController {
   }
 
   createUser() async {
-    ref.read(_isLoadingProvider.notifier).state = true;
-    _registrationResponse = await registrationRepository.createUserRepo(_user);
-    ref.read(_isLoadingProvider.notifier).state = false;
+    _ref.read(_isLoadingProvider.notifier).state = true;
+    _registrationResponse = await _registrationRepository.createUserRepo(_user);
+    _ref.read(_isLoadingProvider.notifier).state = false;
   }
 
   String? validateName(String? value) {
@@ -98,9 +96,7 @@ class RegistrationController {
       return 'An email address is required.';
     }
 
-    bool emailValid = RegExp(
-            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-        .hasMatch(value);
+    bool emailValid = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value);
 
     if (!emailValid) {
       return 'This email address is not valid';
@@ -143,13 +139,11 @@ class RegistrationController {
     return countyNames.isNotEmpty ? countyNames[0] : "";
   }
 
-  List<String> getInstitutions(
-      String? selectedCounty, List<Institution> institutions) {
+  List<String> getInstitutions(String? selectedCounty, List<Institution> institutions) {
     List<String> institutionNames = [];
 
     for (Institution it in institutions) {
-      if (it.countyName == selectedCounty &&
-          !institutionNames.contains(it.institutionName)) {
+      if (it.countyName == selectedCounty && !institutionNames.contains(it.institutionName)) {
         institutionNames.add(it.institutionName);
       }
     }
@@ -158,13 +152,11 @@ class RegistrationController {
     return institutionNames;
   }
 
-  String getFirstInstitution(
-      String? selectedCounty, List<Institution> institutions) {
+  String getFirstInstitution(String? selectedCounty, List<Institution> institutions) {
     List<String> institutionNames = [];
 
     for (Institution it in institutions) {
-      if (it.countyName == selectedCounty &&
-          !institutionNames.contains(it.institutionName)) {
+      if (it.countyName == selectedCounty && !institutionNames.contains(it.institutionName)) {
         institutionNames.add(it.institutionName);
       }
     }
@@ -176,6 +168,5 @@ class RegistrationController {
 
 final registrationControllerProvider = Provider((ref) {
   final registrationRepository = ref.watch(registrationRepositoryProvider);
-  return RegistrationController(
-      ref: ref, registrationRepository: registrationRepository);
+  return RegistrationController(ref, registrationRepository);
 });

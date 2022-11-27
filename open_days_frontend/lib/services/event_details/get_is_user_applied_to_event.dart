@@ -5,13 +5,13 @@ import '../../shared/secure_storage.dart';
 import '../../modules/event_details/models/is_user_applied_for_event.dart';
 
 Future<IsUserAppliedForEvent> isUserAppliedForEventSvc(int eventId) async {
+  final response = IsUserAppliedForEvent();
   final userPublicId = await SecureStorage.getUserId() ?? '';
   final authorizationToken = await SecureStorage.getAuthorizationToken();
-  final uri =
-      'http://10.0.2.2:8081/open-days/event/is-user-applied-for-event/' +
-          eventId.toString() +
-          '/' +
-          userPublicId;
+  final uri = 'http://10.0.2.2:8081/open-days/event/is-user-applied-for-event/' +
+      eventId.toString() +
+      '/' +
+      userPublicId;
 
   Map<String, String> headers = {
     "Content-Type": "application/json",
@@ -24,8 +24,6 @@ Future<IsUserAppliedForEvent> isUserAppliedForEventSvc(int eventId) async {
         headers: headers,
       )
       .timeout(const Duration(seconds: 5));
-
-  final response = IsUserAppliedForEvent();
 
   if (rawResponse.statusCode == 200) {
     response.isOperationSuccessful = true;

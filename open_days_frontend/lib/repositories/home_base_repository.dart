@@ -10,15 +10,13 @@ import '../modules/home_base/models/get_all_event_model.dart';
 final homeBaseRepositoryProvider = Provider((_) => HomeBaseRepository());
 
 class HomeBaseRepository {
-  Future<UserResponseModel> getUserByIdRepo(
-      UserRequestModel userRequestData) async {
-    await Future.delayed(const Duration(seconds: 3));
-    return await getUserByIdSvc(userRequestData);
-  }
-
-  Future<GetAllEventModel> getAllEventRepo(
-      BaseRequestModel baseRequestData) async {
+  Future<GetAllEventModel> getAllEventRepo(BaseRequestModel baseRequestData) async {
     await Future.delayed(const Duration(seconds: 3));
     return await getAllEventSvc(baseRequestData);
+  }
+
+  Future<UserResponseModel> getUserByIdRepo(UserRequestModel userRequestData) async {
+    await Future.delayed(const Duration(seconds: 3));
+    return await getUserByIdSvc(userRequestData);
   }
 }

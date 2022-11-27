@@ -13,8 +13,8 @@ class Home extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _appWidth = MediaQuery.of(context).size.width;
-    final _appHeight = MediaQuery.of(context).size.height;
+    final appWidth = MediaQuery.of(context).size.width;
+    final appHeight = MediaQuery.of(context).size.height;
 
     return Container(
       color: const Color.fromRGBO(220, 220, 220, 0.7),
@@ -26,19 +26,18 @@ class Home extends ConsumerWidget {
               onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: ((context) =>
-                      EventDetails(_initialData?.events?.events[index])),
+                  builder: ((context) => EventDetails(_initialData?.events?.events[index])),
                 ),
               ),
               child: Container(
-                height: _appHeight * 0.2,
-                margin: EdgeInsets.all(_appWidth * 0.01),
+                height: appHeight * 0.2,
+                margin: EdgeInsets.all(appWidth * 0.01),
                 child: Card(
                   elevation: 5,
                   shadowColor: const Color.fromRGBO(1, 30, 65, 1),
                   child: Row(children: [
                     Container(
-                      margin: EdgeInsets.only(left: _appWidth * 0.05),
+                      margin: EdgeInsets.only(left: appWidth * 0.05),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,23 +45,21 @@ class Home extends ConsumerWidget {
                           Text(
                             event?.activityName as String,
                             style: TextStyle(
-                              fontSize: _appHeight * 0.025,
+                              fontSize: appHeight * 0.025,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           Text(
                             event?.dateTime as String,
                             style: TextStyle(
-                              fontSize: _appHeight * 0.025,
+                              fontSize: appHeight * 0.025,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           Text(
-                            (event?.organizerFirstName as String) +
-                                ' ' +
-                                (event?.organizerFirstName as String),
+                            (event?.organizerFirstName as String) + ' ' + (event?.organizerFirstName as String),
                             style: TextStyle(
-                              fontSize: _appHeight * 0.025,
+                              fontSize: appHeight * 0.025,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -71,7 +68,7 @@ class Home extends ConsumerWidget {
                     ),
                     const Spacer(),
                     Container(
-                      margin: EdgeInsets.only(right: _appWidth * 0.04),
+                      margin: EdgeInsets.only(right: appWidth * 0.04),
                       child: const Icon(Icons.arrow_forward_ios),
                     )
                   ]),

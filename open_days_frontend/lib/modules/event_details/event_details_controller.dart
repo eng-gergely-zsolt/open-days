@@ -1,19 +1,19 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:open_days_frontend/models/base_response_model.dart';
 
+import '../../models/base_response_model.dart';
 import './models/is_user_applied_for_event.dart';
 import '../../repositories/event_details_repository.dart';
 
 class EventDetailsController {
   final ProviderRef _ref;
-  final EventDetailsRepository eventDetailsRepository;
+  final EventDetailsRepository _eventDetailsRepository;
   final _isLoadingProvider = StateProvider((ref) => false);
 
   int? _eventId;
   BaseResponseModel? _eventParticipatonResponse;
   FutureProvider<IsUserAppliedForEvent>? _initialDataProvider;
 
-  EventDetailsController(this._ref, this.eventDetailsRepository);
+  EventDetailsController(this._ref, this._eventDetailsRepository);
 
   StateProvider getIsLoading() {
     return _isLoadingProvider;
@@ -36,8 +36,7 @@ class EventDetailsController {
     _ref.read(_isLoadingProvider.notifier).state = true;
 
     if (_eventId != null) {
-      response = _eventParticipatonResponse =
-          await eventDetailsRepository.applyUserForEventRepo(_eventId!);
+      response = _eventParticipatonResponse = await _eventDetailsRepository.applyUserForEventRepo(_eventId!);
     }
 
     if (response.isOperationSuccessful) {
@@ -52,8 +51,7 @@ class EventDetailsController {
     _ref.read(_isLoadingProvider.notifier).state = true;
 
     if (_eventId != null) {
-      response = _eventParticipatonResponse =
-          await eventDetailsRepository.deleteUserFromEventRepo(_eventId!);
+      response = _eventParticipatonResponse = await _eventDetailsRepository.deleteUserFromEventRepo(_eventId!);
     }
 
     if (response.isOperationSuccessful) {
@@ -70,8 +68,7 @@ class EventDetailsController {
       var response = IsUserAppliedForEvent();
 
       if (_eventId != null) {
-        response =
-            await eventDetailsRepository.isUserAppliedForEventRepo(_eventId!);
+        response = await _eventDetailsRepository.isUserAppliedForEventRepo(_eventId!);
       }
 
       _ref.read(_isLoadingProvider.notifier).state = false;
@@ -79,11 +76,8 @@ class EventDetailsController {
     });
   }
 
-  FutureProvider<IsUserAppliedForEvent> createInitialDataProvider(
-      int? eventId) {
-    if (_eventId != null &&
-        _eventId != eventId &&
-        _initialDataProvider != null) {
+  FutureProvider<IsUserAppliedForEvent> createInitialDataProvider(int? eventId) {
+    if (_eventId != null && _eventId != eventId && _initialDataProvider != null) {
       _ref.invalidate(_initialDataProvider!);
 
       setEventId(eventId);
@@ -92,8 +86,7 @@ class EventDetailsController {
         var response = IsUserAppliedForEvent();
 
         if (eventId != null) {
-          response =
-              await eventDetailsRepository.isUserAppliedForEventRepo(eventId);
+          response = await _eventDetailsRepository.isUserAppliedForEventRepo(eventId);
         }
 
         return response;
@@ -106,8 +99,7 @@ class EventDetailsController {
       var response = IsUserAppliedForEvent();
 
       if (eventId != null) {
-        response =
-            await eventDetailsRepository.isUserAppliedForEventRepo(eventId);
+        response = await _eventDetailsRepository.isUserAppliedForEventRepo(eventId);
       }
 
       return response;

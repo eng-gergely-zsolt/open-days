@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:open_days_frontend/theme/custom_material_color.dart';
+
+import './custom_material_color.dart';
 
 class CustomTheme {
-  // static lightDivider
-
   static ThemeData get lightTheme {
     return ThemeData(
       hintColor: Colors.blueGrey,

@@ -10,33 +10,22 @@ class EventCreator extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _appLocale = AppLocalizations.of(context);
-    final _appWidth = MediaQuery.of(context).size.width;
-    final _appHeight = MediaQuery.of(context).size.height;
+    final appLocale = AppLocalizations.of(context);
+    final appWidth = MediaQuery.of(context).size.width;
+    final appHeight = MediaQuery.of(context).size.height;
 
-    final _eventCreatorController = ref.read(eventCreatorControllerProvider);
+    final eventCreatorController = ref.read(eventCreatorControllerProvider);
+    final isLoading = ref.watch(eventCreatorController.getIsLoadinProvider());
+    final activities = ref.watch(eventCreatorController.getActivitiesProvider());
+    final isOnlineMeeting = ref.watch(eventCreatorController.getIsOnlineMeetingProvider());
+    final selectedDateTime = ref.watch(eventCreatorController.getSelectedDateTimeProvider());
 
-    final _activities =
-        ref.watch(_eventCreatorController.getActivitiesProvider());
+    var selectedActivityName = ref.watch(eventCreatorController.getSelectedActivityProvider());
 
-    final _isOnlineMeeting =
-        ref.watch(_eventCreatorController.getIsOnlineMeetingProvider());
-
-    final _selectedDateTime =
-        ref.watch(_eventCreatorController.getSelectedDateTimeProvider());
-
-    var _selectedActivityName =
-        ref.watch(_eventCreatorController.getSelectedActivityProvider());
-
-    final isLoading = ref.watch(_eventCreatorController.getIsLoadinProvider());
-
-    if (_eventCreatorController.getCreateEventResponse() != null) {
+    if (eventCreatorController.getCreateEventResponse() != null) {
       SnackBar snackBar;
 
-      if (_eventCreatorController
-              .getCreateEventResponse()
-              ?.isOperationSuccessful ==
-          true) {
+      if (eventCreatorController.getCreateEventResponse()?.isOperationSuccessful == true) {
         snackBar = const SnackBar(
           content: Text('Event created successfully'),
         );
@@ -46,53 +35,48 @@ class EventCreator extends ConsumerWidget {
         );
       }
 
-      Future.microtask(
-          () => ScaffoldMessenger.of(context).showSnackBar(snackBar));
+      Future.microtask(() => ScaffoldMessenger.of(context).showSnackBar(snackBar));
     }
 
-    _eventCreatorController.deleteCreateEventResponse();
+    eventCreatorController.deleteCreateEventResponse();
 
     return GestureDetector(
       onTap: (() => FocusScope.of(context).requestFocus(FocusNode())),
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          title:
-              Center(child: Text(_appLocale?.event_creator_header as String)),
+          title: Center(child: Text(appLocale?.event_creator_header as String)),
         ),
         body: isLoading == true
             ? Center(
                 child: LoadingAnimationWidget.staggeredDotsWave(
-                  size: _appHeight * 0.1,
+                  size: appHeight * 0.1,
                   color: const Color.fromRGBO(1, 30, 65, 1),
                 ),
               )
-            : _activities.when(
+            : activities.when(
                 error: (error, stackTrace) => const Center(),
                 loading: () => Center(
                       child: LoadingAnimationWidget.staggeredDotsWave(
-                        size: _appHeight * 0.1,
+                        size: appHeight * 0.1,
                         color: const Color.fromRGBO(1, 30, 65, 1),
                       ),
                     ),
                 data: (activities) {
-                  _selectedActivityName ??= activities.activities[0].name;
+                  selectedActivityName ??= activities.activities[0].name;
 
-                  return activities.isOperationSuccessful == true &&
-                          activities.activities.isNotEmpty
+                  return activities.isOperationSuccessful == true && activities.activities.isNotEmpty
                       ? Container(
                           width: double.infinity,
                           height: double.infinity,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: _appWidth * 0.05),
+                          padding: EdgeInsets.symmetric(horizontal: appWidth * 0.05),
                           child: SingleChildScrollView(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                SizedBox(height: _appHeight * 0.03),
+                                SizedBox(height: appHeight * 0.03),
                                 Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: _appWidth * 0.02),
+                                  padding: EdgeInsets.symmetric(horizontal: appWidth * 0.02),
                                   decoration: BoxDecoration(
                                     border: Border.all(
                                       width: 2,
@@ -103,11 +87,10 @@ class EventCreator extends ConsumerWidget {
                                   child: DropdownButtonHideUnderline(
                                     child: DropdownButton<String>(
                                       isExpanded: true,
-                                      value: _selectedActivityName,
+                                      value: selectedActivityName,
                                       icon: const Icon(Icons.arrow_downward),
-                                      items: _eventCreatorController
-                                          .getAllActivityName(
-                                              activities.activities)
+                                      items: eventCreatorController
+                                          .getAllActivityName(activities.activities)
                                           .map<DropdownMenuItem<String>>(
                                         (String value) {
                                           return DropdownMenuItem<String>(
@@ -117,11 +100,8 @@ class EventCreator extends ConsumerWidget {
                                         },
                                       ).toList(),
                                       onChanged: (String? value) {
-                                        ref
-                                            .read(_eventCreatorController
-                                                .getSelectedActivityProvider()
-                                                .notifier)
-                                            .state = value;
+                                        ref.read(eventCreatorController.getSelectedActivityProvider().notifier).state =
+                                            value;
                                       },
                                     ),
                                   ),
@@ -129,56 +109,52 @@ class EventCreator extends ConsumerWidget {
                                 Container(
                                   height: 1,
                                   color: Colors.grey,
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 30),
+                                  margin: const EdgeInsets.symmetric(vertical: 30),
                                 ),
                                 // DATE SELECTOR
                                 // -------------
                                 Container(
                                   padding: EdgeInsets.only(
-                                    left: _appWidth * 0.02,
-                                    bottom: _appHeight * 0.01,
+                                    left: appWidth * 0.02,
+                                    bottom: appHeight * 0.01,
                                   ),
                                   child: Text(
-                                    _appLocale?.base_text_date as String,
+                                    appLocale?.base_text_date as String,
                                     style: TextStyle(
-                                      fontSize: _appHeight * 0.026,
+                                      fontSize: appHeight * 0.026,
                                     ),
                                   ),
                                 ),
                                 GestureDetector(
                                   onTap: () async {
-                                    final date = await pickDate(
-                                        context, _selectedDateTime);
+                                    final date = await pickDate(context, selectedDateTime);
 
-                                    _eventCreatorController
-                                        .setSelectedDate(date);
+                                    eventCreatorController.setSelectedDate(date);
                                   },
                                   child: SizedBox(
-                                    height: _appHeight * 0.1,
+                                    height: appHeight * 0.1,
                                     child: Card(
                                       elevation: 5,
                                       child: Row(children: [
-                                        SizedBox(width: _appWidth * 0.03),
+                                        SizedBox(width: appWidth * 0.03),
                                         const Icon(
                                           Icons.date_range,
                                         ),
-                                        SizedBox(width: _appWidth * 0.03),
+                                        SizedBox(width: appWidth * 0.03),
                                         Text(
-                                          '${_selectedDateTime.year}/${_selectedDateTime.month}/${_selectedDateTime.day}',
+                                          '${selectedDateTime.year}/${selectedDateTime.month}/${selectedDateTime.day}',
                                           style: TextStyle(
-                                            fontSize: _appHeight * 0.026,
+                                            fontSize: appHeight * 0.026,
                                           ),
                                         ),
                                         const Spacer(),
                                         Text(
-                                          _appLocale?.base_text_change
-                                              as String,
+                                          appLocale?.base_text_change as String,
                                           style: TextStyle(
-                                            fontSize: _appHeight * 0.026,
+                                            fontSize: appHeight * 0.026,
                                           ),
                                         ),
-                                        SizedBox(width: _appWidth * 0.03),
+                                        SizedBox(width: appWidth * 0.03),
                                       ]),
                                     ),
                                   ),
@@ -186,85 +162,76 @@ class EventCreator extends ConsumerWidget {
                                 Container(
                                   height: 1,
                                   color: Colors.grey,
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 30),
+                                  margin: const EdgeInsets.symmetric(vertical: 30),
                                 ),
                                 // TIME SELECTOR
                                 // -------------
                                 Container(
                                   padding: EdgeInsets.only(
-                                    left: _appWidth * 0.02,
-                                    bottom: _appHeight * 0.01,
+                                    left: appWidth * 0.02,
+                                    bottom: appHeight * 0.01,
                                   ),
                                   child: Text(
-                                    _appLocale?.base_text_time as String,
+                                    appLocale?.base_text_time as String,
                                     style: TextStyle(
-                                      fontSize: _appHeight * 0.026,
+                                      fontSize: appHeight * 0.026,
                                     ),
                                   ),
                                 ),
                                 GestureDetector(
                                   onTap: () async {
-                                    final time = await pickTime(
-                                        context, _selectedDateTime);
+                                    final time = await pickTime(context, selectedDateTime);
 
-                                    _eventCreatorController
-                                        .setSelectedTime(time);
+                                    eventCreatorController.setSelectedTime(time);
                                   },
                                   child: SizedBox(
-                                    height: _appHeight * 0.1,
+                                    height: appHeight * 0.1,
                                     child: Card(
                                       elevation: 5,
                                       child: Row(children: [
-                                        SizedBox(width: _appWidth * 0.03),
+                                        SizedBox(width: appWidth * 0.03),
                                         const Icon(
                                           Icons.timelapse,
                                         ),
-                                        SizedBox(width: _appWidth * 0.03),
+                                        SizedBox(width: appWidth * 0.03),
                                         Text(
-                                          _eventCreatorController
-                                              .getFormattedTime(
-                                                  _selectedDateTime),
+                                          eventCreatorController.getFormattedTime(selectedDateTime),
                                           style: TextStyle(
-                                            fontSize: _appHeight * 0.026,
+                                            fontSize: appHeight * 0.026,
                                           ),
                                         ),
                                         const Spacer(),
                                         Text(
-                                          _appLocale?.base_text_change
-                                              as String,
+                                          appLocale?.base_text_change as String,
                                           style: TextStyle(
-                                            fontSize: _appHeight * 0.026,
+                                            fontSize: appHeight * 0.026,
                                           ),
                                         ),
-                                        SizedBox(width: _appWidth * 0.03),
+                                        SizedBox(width: appWidth * 0.03),
                                       ]),
                                     ),
                                   ),
                                 ),
-                                SizedBox(height: _appHeight * 0.05),
+                                SizedBox(height: appHeight * 0.05),
                                 // LOCATION TEXTFIELD
                                 // ------------------
                                 Container(
                                   padding: EdgeInsets.only(
-                                    left: _appWidth * 0.02,
-                                    bottom: _appHeight * 0.01,
+                                    left: appWidth * 0.02,
+                                    bottom: appHeight * 0.01,
                                   ),
                                   child: Text(
-                                    _appLocale?.base_text_location as String,
+                                    appLocale?.base_text_location as String,
                                     style: TextStyle(
-                                      fontSize: _appHeight * 0.026,
+                                      fontSize: appHeight * 0.026,
                                     ),
                                   ),
                                 ),
                                 TextFormField(
                                   maxLines: null,
                                   keyboardType: TextInputType.multiline,
-                                  initialValue:
-                                      _eventCreatorController.getLocation(),
-                                  onChanged: (location) =>
-                                      _eventCreatorController
-                                          .setLocation(location),
+                                  initialValue: eventCreatorController.getLocation(),
+                                  onChanged: (location) => eventCreatorController.setLocation(location),
                                   decoration: const InputDecoration(
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.all(
@@ -273,39 +240,33 @@ class EventCreator extends ConsumerWidget {
                                     ),
                                   ),
                                 ),
-                                SizedBox(height: _appHeight * 0.05),
+                                SizedBox(height: appHeight * 0.05),
                                 // MEETING LINK
                                 // ------------
                                 Container(
                                   padding: EdgeInsets.only(
-                                    left: _appWidth * 0.02,
-                                    bottom: _appHeight * 0.01,
+                                    left: appWidth * 0.02,
+                                    bottom: appHeight * 0.01,
                                   ),
                                   child: Text(
-                                    _appLocale?.event_creator_online_event
-                                        as String,
+                                    appLocale?.event_creator_online_event as String,
                                     style: TextStyle(
-                                      fontSize: _appHeight * 0.026,
+                                      fontSize: appHeight * 0.026,
                                     ),
                                   ),
                                 ),
                                 Checkbox(
-                                  value: _isOnlineMeeting,
-                                  onChanged: ((value) => _eventCreatorController
-                                      .setIsOnlineMeetingProvider(value)),
+                                  value: isOnlineMeeting,
+                                  onChanged: ((value) => eventCreatorController.setIsOnlineMeetingProvider(value)),
                                 ),
-                                _isOnlineMeeting
+                                isOnlineMeeting
                                     ? TextFormField(
                                         maxLines: null,
                                         keyboardType: TextInputType.multiline,
-                                        initialValue:
-                                            _eventCreatorController.getLink(),
-                                        onChanged: (link) =>
-                                            _eventCreatorController
-                                                .setLink(link),
+                                        initialValue: eventCreatorController.getLink(),
+                                        onChanged: (link) => eventCreatorController.setLink(link),
                                         decoration: InputDecoration(
-                                          hintText: _appLocale?.base_text_link
-                                              as String,
+                                          hintText: appLocale?.base_text_link as String,
                                           border: const OutlineInputBorder(
                                             borderRadius: BorderRadius.all(
                                               Radius.circular(10),
@@ -314,22 +275,21 @@ class EventCreator extends ConsumerWidget {
                                         ),
                                       )
                                     : const SizedBox.shrink(),
-                                SizedBox(height: _appHeight * 0.05),
+                                SizedBox(height: appHeight * 0.05),
                                 // Save button
                                 // -----------
                                 Container(
                                   width: double.infinity,
-                                  height: _appHeight * 0.07,
+                                  height: appHeight * 0.07,
                                   padding: EdgeInsets.symmetric(
-                                    horizontal: _appWidth * 0.1,
+                                    horizontal: appWidth * 0.1,
                                   ),
                                   child: ElevatedButton(
                                     child: const Text('Mentes'),
-                                    onPressed: () => _eventCreatorController
-                                        .createEvent(_selectedActivityName),
+                                    onPressed: () => eventCreatorController.createEvent(selectedActivityName),
                                   ),
                                 ),
-                                SizedBox(height: _appHeight * 0.05),
+                                SizedBox(height: appHeight * 0.05),
                               ],
                             ),
                           ),
@@ -340,13 +300,12 @@ class EventCreator extends ConsumerWidget {
     );
   }
 
-  Future<TimeOfDay?> pickTime(context, DateTime selectedDateTime) =>
-      showTimePicker(
-          context: context,
-          initialTime: TimeOfDay(
-            hour: selectedDateTime.hour,
-            minute: selectedDateTime.minute,
-          ));
+  Future<TimeOfDay?> pickTime(context, DateTime selectedDateTime) => showTimePicker(
+      context: context,
+      initialTime: TimeOfDay(
+        hour: selectedDateTime.hour,
+        minute: selectedDateTime.minute,
+      ));
 
   Future<DateTime?> pickDate(context, selectedDateTime) => showDatePicker(
         context: context,
