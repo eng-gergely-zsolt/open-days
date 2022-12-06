@@ -21,6 +21,16 @@
     "base_text_error": "Error",
     "base_text_change": "Change",
     "base_text_location": "Location",
+    "base_text_organizer": "Organizer",
+    "base_text_general_error_message": "Something went wrong",
+    "base_text_general_try_again_message": "Something went wrong. Please try again!",
+
+    "bottom_navigation_bar_title_QR": "QR",
+
+    "application_bar_scanner": "QR Code Scanner",
+
+    "event_details_participate": "Participate",
+    "event_details_cancel_participation": "Cancel",
 
     "event_creator_header": "Event Creator",
     "event_creator_online_event": "Online event?"

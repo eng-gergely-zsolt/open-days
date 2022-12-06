@@ -39,6 +39,7 @@ dependencies:
   http: any
   flutter_riverpod: any
   cupertino_icons: ^1.0.2
+  qr_code_scanner: ^1.0.1
   loading_animation_widget:
   flutter_secure_storage: ^5.1.2
 

@@ -25,7 +25,8 @@ class Registration extends ConsumerWidget {
     var selectedInstitution = ref.watch(registrationController.getSelectedInstitutionProvider());
 
     if (registrationController.getRegistrationResponse() != null) {
-      if (registrationController.getRegistrationResponse()?.operationResult == operationResultSuccess) {
+      if (registrationController.getRegistrationResponse()?.operationResult ==
+          operationResultSuccess) {
         Future.microtask(
           () => Navigator.push(
             context,
@@ -63,8 +64,11 @@ class Registration extends ConsumerWidget {
             selectedCounty ??= registrationController.getFirstCounty(institutions);
 
             if (selectedInstitution == null ||
-                !registrationController.getInstitutions(selectedCounty, institutions).contains(selectedInstitution)) {
-              selectedInstitution = registrationController.getFirstInstitution(selectedCounty, institutions);
+                !registrationController
+                    .getInstitutions(selectedCounty, institutions)
+                    .contains(selectedInstitution)) {
+              selectedInstitution =
+                  registrationController.getFirstInstitution(selectedCounty, institutions);
             }
 
             registrationController.setInstitution(selectedInstitution);
@@ -96,9 +100,7 @@ class Registration extends ConsumerWidget {
                                 onChanged: ((value) {
                                   registrationController.setFirstName(value);
                                 }),
-                                validator: (value) {
-                                  registrationController.validateName(value);
-                                }),
+                                validator: (value) => registrationController.validateName(value)),
                             TextFormField(
                               maxLength: 50,
                               decoration: InputDecoration(
@@ -146,7 +148,8 @@ class Registration extends ConsumerWidget {
                               onChanged: ((value) {
                                 registrationController.setPassword(value);
                               }),
-                              validator: ((value) => registrationController.validatePassword(value)),
+                              validator: ((value) =>
+                                  registrationController.validatePassword(value)),
                             ),
                             SizedBox(height: appHeight * 0.03),
                             Container(
@@ -163,7 +166,9 @@ class Registration extends ConsumerWidget {
                                   isExpanded: true,
                                   value: selectedCounty,
                                   icon: const Icon(Icons.arrow_downward),
-                                  items: registrationController.getCounties(institutions).map<DropdownMenuItem<String>>(
+                                  items: registrationController
+                                      .getCounties(institutions)
+                                      .map<DropdownMenuItem<String>>(
                                     (String value) {
                                       return DropdownMenuItem<String>(
                                         value: value,
@@ -172,7 +177,11 @@ class Registration extends ConsumerWidget {
                                     },
                                   ).toList(),
                                   onChanged: (String? value) {
-                                    ref.read(registrationController.getSelectedCountyProvider().notifier).state = value;
+                                    ref
+                                        .read(registrationController
+                                            .getSelectedCountyProvider()
+                                            .notifier)
+                                        .state = value;
                                   },
                                 ),
                               ),
@@ -203,8 +212,11 @@ class Registration extends ConsumerWidget {
                                     },
                                   ).toList(),
                                   onChanged: (String? value) {
-                                    ref.read(registrationController.getSelectedInstitutionProvider().notifier).state =
-                                        value;
+                                    ref
+                                        .read(registrationController
+                                            .getSelectedInstitutionProvider()
+                                            .notifier)
+                                        .state = value;
                                     registrationController.setInstitution(value);
                                   },
                                 ),

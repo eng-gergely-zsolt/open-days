@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../../theme/theme.dart';
+import '../../utils/utils.dart';
 import './event_details_controller.dart';
 import '../home_base/models/event_response_model.dart';
 
@@ -27,8 +28,10 @@ class EventDetails extends ConsumerWidget {
 
     if (eventDetailsController.getEventParticipationResponse() != null &&
         eventDetailsController.getEventParticipationResponse()?.isOperationSuccessful == false) {
-      const snackBar = SnackBar(
-        content: Text('Something went wrong. Please try again!'),
+      var snackBar = SnackBar(
+        content: Text(
+          Utils.getString(appLocale?.base_text_general_try_again_message),
+        ),
       );
 
       Future.microtask(() => ScaffoldMessenger.of(context).showSnackBar(snackBar));
@@ -38,7 +41,9 @@ class EventDetails extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: _event == null ? Text(appLocale?.base_text_error as String) : Text(_event?.activityName as String),
+        title: _event == null
+            ? Text(appLocale?.base_text_error as String)
+            : Text(_event?.activityName as String),
       ),
       body: isLoading == true
           ? Center(
@@ -48,12 +53,12 @@ class EventDetails extends ConsumerWidget {
               ),
             )
           : _event == null
-              ? const Center(
-                  child: Text('Something went wrong'),
+              ? Center(
+                  child: Text(Utils.getString(appLocale?.base_text_general_error_message)),
                 )
               : initialData.when(
-                  error: (error, stackTrace) => const Center(
-                    child: Text('Something went wrong'),
+                  error: (error, stackTrace) => Center(
+                    child: Text(Utils.getString(appLocale?.base_text_general_error_message)),
                   ),
                   loading: () => Center(
                     child: LoadingAnimationWidget.staggeredDotsWave(
@@ -73,7 +78,7 @@ class EventDetails extends ConsumerWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Date',
+                                appLocale?.base_text_date as String,
                                 style: TextStyle(
                                   fontSize: appHeight * 0.024,
                                   color: CustomTheme.lightTheme.hintColor,
@@ -100,7 +105,7 @@ class EventDetails extends ConsumerWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Organizer',
+                                Utils.getString(appLocale?.base_text_organizer),
                                 style: TextStyle(
                                   fontSize: appHeight * 0.024,
                                   color: CustomTheme.lightTheme.hintColor,
@@ -128,7 +133,7 @@ class EventDetails extends ConsumerWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Meeting link',
+                                      Utils.getString(appLocale?.base_text_link),
                                       style: TextStyle(
                                         fontSize: appHeight * 0.024,
                                         color: CustomTheme.lightTheme.hintColor,
@@ -154,7 +159,7 @@ class EventDetails extends ConsumerWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Location',
+                                      Utils.getString(appLocale?.base_text_location),
                                       style: TextStyle(
                                         fontSize: appHeight * 0.024,
                                         color: CustomTheme.lightTheme.hintColor,
@@ -183,7 +188,8 @@ class EventDetails extends ConsumerWidget {
                             child: initialData.isUserAppliedForEvent
                                 ? OutlinedButton(
                                     child: Text(
-                                      'Cancel',
+                                      Utils.getString(
+                                          appLocale?.event_details_cancel_participation),
                                       style: TextStyle(
                                         fontSize: appHeight * 0.025,
                                       ),
@@ -192,7 +198,7 @@ class EventDetails extends ConsumerWidget {
                                   )
                                 : ElevatedButton(
                                     child: Text(
-                                      'Participate',
+                                      Utils.getString(appLocale?.event_details_participate),
                                       style: TextStyle(
                                         fontSize: appHeight * 0.025,
                                       ),

@@ -6,9 +6,9 @@ class CustomTheme {
   static ThemeData get lightTheme {
     return ThemeData(
       hintColor: Colors.blueGrey,
-      dividerColor: const Color.fromRGBO(170, 170, 170, 0.4),
-      primaryColor: const Color.fromRGBO(1, 30, 65, 1),
       scaffoldBackgroundColor: Colors.white,
+      primaryColor: const Color.fromRGBO(1, 30, 65, 1),
+      dividerColor: const Color.fromRGBO(170, 170, 170, 0.4),
       primarySwatch: CustomMaterialColor(1, 30, 65).getColor,
       iconTheme: const IconThemeData(
         color: Color.fromRGBO(1, 30, 65, 1),
@@ -19,6 +19,7 @@ class CustomTheme {
             if (states.contains(MaterialState.selected)) {
               return const Color.fromRGBO(1, 30, 65, 1);
             }
+            return null;
           },
         ),
       ),

@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/base_request_model.dart';
 import '../models/user_request_model.dart';
 import '../models/user_response_model.dart';
-import '../services/home_base/get-all-event.dart';
+import '../services/home_base/get_all_event.dart';
 import '../services/home_base/get_user_by_id.dart';
 import '../modules/home_base/models/get_all_event_model.dart';
 

@@ -5,12 +5,12 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../home/home.dart';
 import '../../theme/theme.dart';
-import '../profile/profile.dart';
-import '../settings/settings.dart';
+import '../../utils/utils.dart';
 import './home_base_controller.dart';
 import '../../constants/constants.dart';
 import '../../shared/secure_storage.dart';
 import '../event_creator/event.creator.dart';
+import '../event_scanner/event_scanner.dart';
 
 class HomeBase extends ConsumerWidget {
   const HomeBase({Key? key}) : super(key: key);
@@ -18,6 +18,8 @@ class HomeBase extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     SecureStorage.setUserId('qwertyuiopasdf3');
+    SecureStorage.setAuthorizationToken(
+        'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTY3MjE0NzMzN30.CScVmYn9yytjiqWjVSxdC0YqmqFL8xUGY9f47Vpi1rvQ2uMoBFTgFlg2EiCx9Qboh2z5hUnHhryjK-4CqAhoVw');
 
     final appLocale = AppLocalizations.of(context);
     final appHeight = MediaQuery.of(context).size.height;
@@ -28,14 +30,12 @@ class HomeBase extends ConsumerWidget {
 
     final screens = [
       Home(initialDataModel: homeBaseController.getInitialData()),
-      const Profile(),
-      const Settings(),
+      const EventScanner(),
     ];
 
     final appBarTitle = [
       appLocale?.home,
-      appLocale?.profile,
-      appLocale?.settings,
+      Utils.getString(appLocale?.application_bar_scanner),
     ];
 
     return Scaffold(
@@ -64,7 +64,8 @@ class HomeBase extends ConsumerWidget {
         loading: () => null,
         error: (error, stackTrace) => null,
         data: (initialData) {
-          return initialData.operationResult == operationResultSuccess && initialData.user?.roleName == roleAdmin ||
+          return initialData.operationResult == operationResultSuccess &&
+                      initialData.user?.roleName == roleAdmin ||
                   initialData.user?.roleName == roleOrganizer
               ? FloatingActionButton(
                   onPressed: () {
@@ -95,14 +96,9 @@ class HomeBase extends ConsumerWidget {
             icon: const Icon(Icons.home_outlined),
           ),
           BottomNavigationBarItem(
-            label: appLocale?.profile,
-            activeIcon: const Icon(Icons.person),
-            icon: const Icon(Icons.person_outline),
-          ),
-          BottomNavigationBarItem(
-            label: appLocale?.settings,
-            activeIcon: const Icon(Icons.settings),
-            icon: const Icon(Icons.settings_outlined),
+            label: Utils.getString(appLocale?.bottom_navigation_bar_title_QR),
+            activeIcon: const Icon(Icons.qr_code),
+            icon: const Icon(Icons.qr_code),
           ),
         ],
       ),

@@ -17,6 +17,16 @@
     "base_text_error": "Eroare",
     "base_text_change": "Schimbare",
     "base_text_location": "Loc",
+    "base_text_organizer": "Organizator",
+    "base_text_general_error_message": "Ceva n-a mers bine",
+    "base_text_general_try_again_message": "Ceva n-a mers bine. Vă rugăm să încercați din nou!",
+
+    "bottom_navigation_bar_title_QR": "QR",
+
+    "application_bar_scanner": "Scaner QR",
+
+    "event_details_participate": "Participare",
+    "event_details_cancel_participation": "Anulare",
 
     "event_creator_header": "Crearea evenimentelor",
     "event_creator_online_event": "Eveniment online?"
