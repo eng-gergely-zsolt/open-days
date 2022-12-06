@@ -29,7 +29,7 @@ public class EventController {
 
 	@ResponseBody
 	@GetMapping(path = "/is-user-applied-for-event/{eventId}/{userPublicId}")
-	public boolean getIsUserAppliedForEvent(@PathVariable long eventId, @PathVariable String userPublicId) {
+	public boolean isUserAppliedForEvent(@PathVariable long eventId, @PathVariable String userPublicId) {
 		return eventService.getIsUserAppliedForEvent(eventId, userPublicId);
 	}
 
@@ -51,6 +51,11 @@ public class EventController {
 	@PostMapping(path = "/apply_user_for_event/{eventId}/{userPublicId}")
 	public void applyUserForEvent(@PathVariable long eventId, @PathVariable String userPublicId) {
 		eventService.applyUserForEvent(eventId, userPublicId);
+	}
+
+	@PostMapping(path = "/user_participates_in_event/{eventId}/{userPublicId}")
+	public void userParticipatesInEvent(@PathVariable long eventId, @PathVariable String userPublicId) {
+		eventService.userParticipatesInEvent(eventId, userPublicId);
 	}
 
 	@PostMapping

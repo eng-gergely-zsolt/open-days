@@ -14,5 +14,7 @@ public interface EventService {
 
 	void deleteUserFromEvent(long eventId, String userPublicId);
 
+	void userParticipatesInEvent(long eventId, String userPublicId);
+
 	boolean getIsUserAppliedForEvent(long eventId, String userPublicId);
 }

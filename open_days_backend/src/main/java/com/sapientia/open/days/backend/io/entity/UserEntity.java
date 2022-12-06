@@ -40,17 +40,27 @@ public class UserEntity implements Serializable {
 	@Serial
 	private static final long serialVersionUID = 232383759086741088L;
 
-	@ManyToMany(mappedBy = "users")
-	private Set<EventEntity> userEvents;
-
+	// Contains all the events that the user organized.
 	@OneToMany(mappedBy = "organizer")
 	private Set<EventEntity> events;
 
+	// Contains all the events thad the user applied for.
+	@ManyToMany(mappedBy = "users")
+	private Set<EventEntity> userEvents;
+
+	// It's the institution the user belongs to.
 	@ManyToOne
 	@JoinColumn(name = "institution_id", nullable = false)
 	private InstitutionEntity institution;
 
-	// This creates a new table in cases of ManyToManyRelationships.
+	// Contains all the events that the user participated in.
+	@ManyToMany(mappedBy = "participatedUsers")
+	private Set<EventEntity> participatedEvents;
+
+	/*
+	Contains all the roles the user has.
+	This creates a new table in cases of ManyToManyRelationships.
+	 */
 	@ManyToMany(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
 	@JoinTable(name = "users_roles",
 			joinColumns = @JoinColumn(name = "users_id", referencedColumnName = "id"),

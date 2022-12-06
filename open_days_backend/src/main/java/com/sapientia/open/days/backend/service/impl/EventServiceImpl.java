@@ -59,6 +59,27 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
+	public void userParticipatesInEvent(long eventId, String userPublicId) {
+		EventEntity event = eventRepository.findById(eventId);
+		UserEntity user = userRepository.findByPublicId(userPublicId);
+
+		if (user != null && event != null) {
+			try {
+				Set<UserEntity> participatedUsers = event.getParticipatedUsers();
+				participatedUsers.add(user);
+				event.setParticipatedUsers(participatedUsers);
+				eventRepository.save(event);
+			} catch (Exception e) {
+				throw new GeneralServiceException(ErrorCode.UNSPECIFIED_ERROR.getErrorCode(),
+						ErrorMessage.UNSPECIFIED_ERROR.getErrorMessage());
+			}
+		} else {
+			throw new GeneralServiceException(ErrorCode.UNSPECIFIED_ERROR.getErrorCode(),
+					ErrorMessage.UNSPECIFIED_ERROR.getErrorMessage());
+		}
+	}
+
+	@Override
 	public void deleteUserFromEvent(long eventId, String userPublicId) {
 		EventEntity event = eventRepository.findById(eventId);
 		UserEntity user = userRepository.findByPublicId(userPublicId);
