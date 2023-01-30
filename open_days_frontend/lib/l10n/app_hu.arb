@@ -21,11 +21,15 @@
     "base_text_general_error_message": "Hiba történt",
     "base_text_general_try_again_message": "Hiba történt. Kérjük próbálja újra!",
 
+    "event_scanner_successful_registration": "Sikeres Regisztráció",
+
     "bottom_navigation_bar_title_QR": "QR",
 
     "application_bar_scanner": "QR kód olvasó",
 
+    "event_details_qr_code": "QR kód",
     "event_details_participate": "Jelentkezés",
+    "event_details_create_qr_code": "QR Készítése",
     "event_details_cancel_participation": "Lemond",
 
     "event_creator_header": "Eseménykészítő",

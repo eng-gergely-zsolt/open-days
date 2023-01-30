@@ -1,5 +1,5 @@
 import 'package:open_days_frontend/constants/constants.dart';
-import 'package:open_days_frontend/modules/home_base/models/get_all_event_model.dart';
+import 'package:open_days_frontend/screens/home_base/models/get_all_event_model.dart';
 
 import '../../../models/user_response_model.dart';
 

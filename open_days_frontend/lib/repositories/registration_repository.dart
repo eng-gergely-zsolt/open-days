@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/user_response_model.dart';
-import '../modules/registration/models/user.dart';
+import '../screens/registration/models/user.dart';
 import '../services/registration/create_user.dart';
-import '../modules/registration/models/institution.dart';
+import '../screens/registration/models/institution.dart';
 import '../services/registration/get_all_institution.dart';
 
 final registrationRepositoryProvider = Provider((_) => RegistrationRepository());

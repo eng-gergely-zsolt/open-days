@@ -26,7 +26,10 @@ class Home extends ConsumerWidget {
               onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: ((context) => EventDetails(_initialData?.events?.events[index])),
+                  builder: ((context) => EventDetails(
+                        _initialData?.events?.events[index],
+                        _initialData?.user?.roleName,
+                      )),
                 ),
               ),
               child: Container(
@@ -57,7 +60,9 @@ class Home extends ConsumerWidget {
                             ),
                           ),
                           Text(
-                            (event?.organizerFirstName as String) + ' ' + (event?.organizerFirstName as String),
+                            (event?.organizerFirstName as String) +
+                                ' ' +
+                                (event?.organizerFirstName as String),
                             style: TextStyle(
                               fontSize: appHeight * 0.025,
                               fontWeight: FontWeight.bold,

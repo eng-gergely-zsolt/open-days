@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import '../../models/base_response_model.dart';
-import '../../modules/event_creator/models/create_event_model.dart';
+import '../../screens/event_creator/models/create_event_model.dart';
 
 Future<BaseResponseModel> createEventSvc(CreateEventModel payload) async {
   final response = BaseResponseModel();

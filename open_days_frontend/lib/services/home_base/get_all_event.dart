@@ -3,8 +3,8 @@ import 'package:http/http.dart' as http;
 
 import '../../constants/constants.dart';
 import '../../models/base_request_model.dart';
-import '../../modules/home_base/models/get_all_event_model.dart';
-import '../../modules/home_base/models/event_response_model.dart';
+import '../../screens/home_base/models/get_all_event_model.dart';
+import '../../screens/home_base/models/event_response_model.dart';
 
 Future<GetAllEventModel> getAllEventSvc(BaseRequestModel baseRequestData) async {
   final response = GetAllEventModel();

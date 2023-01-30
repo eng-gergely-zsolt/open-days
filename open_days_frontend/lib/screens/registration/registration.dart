@@ -7,12 +7,24 @@ import '../login/login.dart';
 import './registration_controller.dart';
 import '../../constants/constants.dart';
 
-class Registration extends ConsumerWidget {
+class Registration extends ConsumerStatefulWidget {
   const Registration({Key? key}) : super(key: key);
+
+  @override
+  _RegistrationState createState() => _RegistrationState();
+}
+
+class _RegistrationState extends ConsumerState<Registration> {
   static final _formKey = GlobalKey<FormState>();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void dispose() {
+    ref.invalidate(registrationControllerProvider);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final appLocale = AppLocalizations.of(context);
     final appWidth = MediaQuery.of(context).size.width;
     final appHeight = MediaQuery.of(context).size.height;

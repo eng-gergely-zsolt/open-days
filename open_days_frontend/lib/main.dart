@@ -6,7 +6,7 @@ import 'package:open_days_frontend/l10n/l10n.dart';
 import 'package:open_days_frontend/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'modules/lobby/lobby.dart';
+import 'screens/lobby/lobby.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));

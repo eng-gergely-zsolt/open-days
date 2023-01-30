@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import '../../models/user_response_model.dart';
-import '../../modules/registration/models/user.dart';
+import '../../screens/registration/models/user.dart';
 
 Future<UserResponseModel> createUserSvc(User user) async {
   final body = jsonEncode(user);

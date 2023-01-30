@@ -5,6 +5,8 @@ import './models/is_user_applied_for_event.dart';
 import '../../repositories/event_details_repository.dart';
 
 class EventDetailsController {
+  var _qrImageText = '';
+
   final ProviderRef _ref;
   final EventDetailsRepository _eventDetailsRepository;
   final _isLoadingProvider = StateProvider((ref) => false);
@@ -13,7 +15,13 @@ class EventDetailsController {
   BaseResponseModel? _eventParticipatonResponse;
   FutureProvider<IsUserAppliedForEvent>? _initialDataProvider;
 
+  final _eventScannerUri = 'http://10.0.2.2:8081/open-days/event/user_participates_in_event/';
+
   EventDetailsController(this._ref, this._eventDetailsRepository);
+
+  String getQrImageText() {
+    return _qrImageText;
+  }
 
   StateProvider getIsLoading() {
     return _isLoadingProvider;
@@ -27,6 +35,10 @@ class EventDetailsController {
     _eventId = eventId;
   }
 
+  void setQrImageText(String eventId) {
+    _qrImageText = _eventScannerUri + eventId;
+  }
+
   void deleteEventParticipatonResponse() {
     _eventParticipatonResponse = null;
   }
@@ -36,7 +48,8 @@ class EventDetailsController {
     _ref.read(_isLoadingProvider.notifier).state = true;
 
     if (_eventId != null) {
-      response = _eventParticipatonResponse = await _eventDetailsRepository.applyUserForEventRepo(_eventId!);
+      response = _eventParticipatonResponse =
+          await _eventDetailsRepository.applyUserForEventRepo(_eventId!);
     }
 
     if (response.isOperationSuccessful) {
@@ -51,7 +64,8 @@ class EventDetailsController {
     _ref.read(_isLoadingProvider.notifier).state = true;
 
     if (_eventId != null) {
-      response = _eventParticipatonResponse = await _eventDetailsRepository.deleteUserFromEventRepo(_eventId!);
+      response = _eventParticipatonResponse =
+          await _eventDetailsRepository.deleteUserFromEventRepo(_eventId!);
     }
 
     if (response.isOperationSuccessful) {

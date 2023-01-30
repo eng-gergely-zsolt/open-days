@@ -2,8 +2,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
+import '../../utils/utils.dart';
 import './event_scanner_controller.dart';
 import '../../models/base_response_model.dart';
 import '../home_base/home_base_controller.dart';
@@ -45,6 +47,8 @@ class _EventScannerState extends ConsumerState<EventScanner> {
 
   @override
   Widget build(BuildContext context) {
+    final appLocale = AppLocalizations.of(context);
+
     reassemble();
 
     _eventScannerController = ref.read(eventScannerControllerProvider);
@@ -56,8 +60,10 @@ class _EventScannerState extends ConsumerState<EventScanner> {
     final isApplyingSuccessful = ref.watch(_eventScannerController!.getIsApplyingSuccessful());
 
     if (isApplyingSuccessful == true) {
-      var snackBar = const SnackBar(
-        content: Text('You registered successfully to this event.'),
+      var snackBar = SnackBar(
+        content: Text(
+          Utils.getString(appLocale?.event_details_qr_code),
+        ),
       );
 
       Future.microtask(() => ScaffoldMessenger.of(context).showSnackBar(snackBar));

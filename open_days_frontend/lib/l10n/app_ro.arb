@@ -21,11 +21,15 @@
     "base_text_general_error_message": "Ceva n-a mers bine",
     "base_text_general_try_again_message": "Ceva n-a mers bine. Vă rugăm să încercați din nou!",
 
+    "event_scanner_successful_registration": "Înregistrare cu succes",
+
     "bottom_navigation_bar_title_QR": "QR",
 
     "application_bar_scanner": "Scaner QR",
 
+    "event_details_qr_code": "Cod QR",
     "event_details_participate": "Participare",
+    "event_details_create_qr_code": "Crearea QR",
     "event_details_cancel_participation": "Anulare",
 
     "event_creator_header": "Crearea evenimentelor",

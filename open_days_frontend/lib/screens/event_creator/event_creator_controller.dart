@@ -153,7 +153,9 @@ class EventCreatorController {
 
     payload.event.organizerId = await SecureStorage.getUserId() ?? '';
 
-    if (payload.event.location == '' || payload.event.organizerId == '' || payload.authorizationToken == '') {
+    if (payload.event.location == '' ||
+        payload.event.organizerId == '' ||
+        payload.authorizationToken == '') {
       _createEventResponse = BaseResponseModel();
     } else {
       _createEventResponse = await _eventCreatorRepository.createEventRepo(payload);

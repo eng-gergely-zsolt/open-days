@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import '../../shared/secure_storage.dart';
-import '../../modules/event_details/models/is_user_applied_for_event.dart';
+import '../../screens/event_details/models/is_user_applied_for_event.dart';
 
 Future<IsUserAppliedForEvent> isUserAppliedForEventSvc(int eventId) async {
   final response = IsUserAppliedForEvent();

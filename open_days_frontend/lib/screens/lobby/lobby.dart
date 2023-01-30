@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../home_base/home_base.dart';
+import '../login/login.dart';
 import '../registration/registration.dart';
 
 class Lobby extends StatelessWidget {
@@ -54,6 +55,7 @@ class Lobby extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (context) => const HomeBase(),
+                        // builder: (context) => const Login(),
                       ),
                     );
                   },
