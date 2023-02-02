@@ -80,6 +80,16 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
+	public void deleteEvent(long eventId) {
+		try {
+			eventRepository.deleteById(eventId);
+		} catch (Exception e) {
+			throw new GeneralServiceException(ErrorCode.UNSPECIFIED_ERROR.getErrorCode(),
+					ErrorMessage.UNSPECIFIED_ERROR.getErrorMessage());
+		}
+	}
+
+	@Override
 	public void deleteUserFromEvent(long eventId, String userPublicId) {
 		EventEntity event = eventRepository.findById(eventId);
 		UserEntity user = userRepository.findByPublicId(userPublicId);

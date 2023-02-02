@@ -8,6 +8,8 @@ import java.util.List;
 public interface EventService {
 	List<EventDto> getAllEvent();
 
+	void deleteEvent(long eventId);
+
 	void createEvent(CreateEventDto event);
 
 	void applyUserForEvent(long eventId, String userPublicId);

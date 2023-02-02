@@ -105,8 +105,20 @@ public class EventController {
 		return response;
 	}
 
+	/**
+	 * It deletes and event from the database by id.
+	 * @param eventId The unique id of the event.
+	 */
+	@DeleteMapping(path = "/delete_event/{eventId}")
+	public void deleteEvent(@PathVariable long eventId) {
+		eventService.deleteEvent(eventId);
+	}
+
 	@DeleteMapping(path = "/delete_user_from_event/{eventId}/{userPublicId}")
 	public void deleteUserFromEvent(@PathVariable long eventId, @PathVariable String userPublicId) {
 		eventService.deleteUserFromEvent(eventId, userPublicId);
 	}
+
+//	@PutMapping(path = "update_event_data")
+//	public void updateEvent(@RequestBody)
 }
