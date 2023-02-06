@@ -29,7 +29,10 @@ class HomeBase extends ConsumerWidget {
     final curerrentIndex = ref.watch(homeBaseController.getNavigationBarIndexProvider());
 
     final screens = [
-      Home(initialDataModel: homeBaseController.getInitialData()),
+      Home(
+        initialDataModel: homeBaseController.getInitialData(),
+        homeBaseController: homeBaseController,
+      ),
       const EventScanner(),
     ];
 

@@ -1,34 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import './home_controller.dart';
+import '../../constants/constants.dart';
 import '../event_details/event_details.dart';
+import '../home_base/home_base_controller.dart';
 import '../home_base/models/initial_data_model.dart';
 
-class Home extends ConsumerWidget {
+class Home extends ConsumerStatefulWidget {
   final InitialDataModel? _initialData;
+  final HomeBaseController _homeBaseController;
 
-  const Home({Key? key, required InitialDataModel? initialDataModel})
+  const Home(
+      {Key? key,
+      required InitialDataModel? initialDataModel,
+      required HomeBaseController homeBaseController})
       : _initialData = initialDataModel,
+        _homeBaseController = homeBaseController,
         super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends ConsumerState<Home> {
+  @override
+  Widget build(BuildContext context) {
     final appWidth = MediaQuery.of(context).size.width;
     final appHeight = MediaQuery.of(context).size.height;
+
+    final homeController = ref.read(homeControllerProvider);
+    final homeBaseController = ref.read(homeBaseControllerProvider);
 
     return Container(
       color: const Color.fromRGBO(220, 220, 220, 0.7),
       child: ListView.builder(
-          itemCount: _initialData?.events?.events.length,
+          itemCount: widget._initialData?.events?.events.length,
           itemBuilder: (context, index) {
-            final event = _initialData?.events?.events[index];
+            final event = widget._initialData?.events?.events[index];
             return GestureDetector(
               onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: ((context) => EventDetails(
-                        _initialData?.events?.events[index],
-                        _initialData?.user?.roleName,
+                        widget._initialData?.events?.events[index],
+                        widget._initialData?.user?.roleName,
                       )),
                 ),
               ),
@@ -72,6 +88,25 @@ class Home extends ConsumerWidget {
                       ),
                     ),
                     const Spacer(),
+                    widget._initialData?.user?.roleName == roleOrganizer
+                        ? Row(children: [
+                            IconButton(
+                              icon: const Icon(
+                                Icons.delete,
+                              ),
+                              onPressed: () {
+                                homeController.deleteEvent(
+                                    widget._initialData?.events?.events[index].id as int,
+                                    homeBaseController);
+                                setState(() {
+                                  widget._initialData?.events?.events.removeWhere((element) =>
+                                      element.id == widget._initialData?.events?.events[index].id);
+                                });
+                              },
+                            ),
+                            SizedBox(width: appWidth * 0.1),
+                          ])
+                        : const SizedBox.shrink(),
                     Container(
                       margin: EdgeInsets.only(right: appWidth * 0.04),
                       child: const Icon(Icons.arrow_forward_ios),

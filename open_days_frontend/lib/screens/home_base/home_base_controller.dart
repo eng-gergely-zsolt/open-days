@@ -32,6 +32,10 @@ class HomeBaseController {
     return _initialDataProvider;
   }
 
+  void invalidateInitialDataProviderNow() {
+    _ref.invalidate(_initialDataProvider);
+  }
+
   Future<void> invalidateInitialDataProvider() async {
     _ref.invalidate(_initialDataProvider);
     return await Future<void>.delayed(const Duration(seconds: 3));
