@@ -5,6 +5,7 @@ import com.sapientia.open.days.backend.service.EventService;
 import com.sapientia.open.days.backend.shared.dto.CreateEventDto;
 import com.sapientia.open.days.backend.shared.dto.EventDto;
 import com.sapientia.open.days.backend.ui.model.request.CreateEventModel;
+import com.sapientia.open.days.backend.ui.model.request.UpdateEventRequestModel;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorCode;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorMessage;
 import com.sapientia.open.days.backend.ui.model.resource.OperationStatus;
@@ -119,6 +120,13 @@ public class EventController {
 		eventService.deleteUserFromEvent(eventId, userPublicId);
 	}
 
-//	@PutMapping(path = "update_event_data")
-//	public void updateEvent(@RequestBody)
+	/**
+	 * It updates the data of the event with the specified id in the path.
+	 * @param eventId The unique id of the event.
+	 * @param updateEventPayload It contains the data that we use to update the existing record in the database.
+	 */
+	@PutMapping(path = "/update_event/{eventId}")
+	public void updateEvent(@PathVariable long eventId, @RequestBody UpdateEventRequestModel updateEventPayload) {
+		eventService.updateEvent(eventId, updateEventPayload);
+	}
 }

@@ -2,6 +2,7 @@ package com.sapientia.open.days.backend.service;
 
 import com.sapientia.open.days.backend.shared.dto.CreateEventDto;
 import com.sapientia.open.days.backend.shared.dto.EventDto;
+import com.sapientia.open.days.backend.ui.model.request.UpdateEventRequestModel;
 
 import java.util.List;
 
@@ -19,4 +20,6 @@ public interface EventService {
 	void userParticipatesInEvent(long eventId, String userPublicId);
 
 	boolean getIsUserAppliedForEvent(long eventId, String userPublicId);
+
+	void updateEvent(long eventId, UpdateEventRequestModel updateEventPayload);
 }

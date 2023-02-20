@@ -348,6 +348,9 @@ public class InitialSetup {
 		events.add(new EventEntity(false, "1. emelet",
 				"2024-01-26 07:12", null, organizer, activity2));
 
+		events.add(new EventEntity(true, "2. emelet",
+				"2024-01-08 09:10", "https://meeting.com", organizer, activity2));
+
 		for (EventEntity event : events) {
 			if (eventRepository.findByLocation(event.getLocation()) == null) {
 				eventRepository.save(event);

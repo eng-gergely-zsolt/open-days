@@ -10,6 +10,8 @@ import com.sapientia.open.days.backend.io.repository.UserRepository;
 import com.sapientia.open.days.backend.service.EventService;
 import com.sapientia.open.days.backend.shared.dto.CreateEventDto;
 import com.sapientia.open.days.backend.shared.dto.EventDto;
+import com.sapientia.open.days.backend.shared.utils.DateUtils;
+import com.sapientia.open.days.backend.ui.model.request.UpdateEventRequestModel;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorCode;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorMessage;
 import org.joda.time.DateTime;
@@ -36,6 +38,87 @@ public class EventServiceImpl implements EventService {
 
 	@Autowired
 	ActivityRepository activityRepository;
+
+	@Override
+	public void deleteEvent(long eventId) {
+		try {
+			eventRepository.deleteById(eventId);
+		} catch (Exception e) {
+			throw new GeneralServiceException(ErrorCode.UNSPECIFIED_ERROR.getErrorCode(),
+					ErrorMessage.UNSPECIFIED_ERROR.getErrorMessage());
+		}
+	}
+
+	@Override
+	public void updateEvent(long eventId, UpdateEventRequestModel updateEventPayload) {
+		EventEntity event = eventRepository.findById(eventId);
+		ActivityEntity activity = activityRepository.findByName(updateEventPayload.getActivityName());
+
+		DateTime dateTime = DateUtils.getDateTimeFromString(updateEventPayload.getDateTime());
+
+		if (event == null) {
+			throw new GeneralServiceException(ErrorCode.UNSPECIFIED_ERROR.getErrorCode(),
+					ErrorMessage.UNSPECIFIED_ERROR .getErrorMessage());
+		}
+
+		event.setIsOnline(updateEventPayload.getIsOnline());
+		event.setMeetingLink(updateEventPayload.getMeetingLink());
+
+		if (activity != null) {
+			event.setActivity(activity);
+		}
+
+		if (dateTime != null) {
+			event.setDateTime(updateEventPayload.getDateTime());
+		}
+
+		if (updateEventPayload.getLocation() != null) {
+			event.setLocation(updateEventPayload.getLocation());
+		}
+
+		try {
+			eventRepository.save(event);
+		} catch (Exception exception) {
+			throw new GeneralServiceException(ErrorCode.UNSPECIFIED_ERROR.getErrorCode(),
+					ErrorMessage.UNSPECIFIED_ERROR .getErrorMessage());
+		}
+	}
+
+	@Override
+	public boolean getIsUserAppliedForEvent(long eventId, String userPublicId) {
+		EventEntity event = eventRepository.findById(eventId);
+		Set<UserEntity> users = event.getUsers();
+		HashSet<String> publicIds = new HashSet<>();
+
+		for (UserEntity user: users) {
+			publicIds.add(user.getPublicId());
+		}
+
+		return publicIds.contains(userPublicId);
+	}
+
+	@Override
+	public void deleteUserFromEvent(long eventId, String userPublicId) {
+		EventEntity event = eventRepository.findById(eventId);
+		UserEntity user = userRepository.findByPublicId(userPublicId);
+
+		if (user != null && event != null) {
+			try {
+				Set<UserEntity> users = event.getUsers();
+				if (users.contains(user)) {
+					users.remove(user);
+				}
+				event.setUsers(users);
+				eventRepository.save(event);
+			} catch (Exception e) {
+				throw new GeneralServiceException(ErrorCode.UNSPECIFIED_ERROR.getErrorCode(),
+						ErrorMessage.UNSPECIFIED_ERROR.getErrorMessage());
+			}
+		} else {
+			throw new GeneralServiceException(ErrorCode.UNSPECIFIED_ERROR.getErrorCode(),
+					ErrorMessage.UNSPECIFIED_ERROR.getErrorMessage());
+		}
+	}
 
 	@Override
 	public void applyUserForEvent(long eventId, String userPublicId) {
@@ -80,49 +163,27 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public void deleteEvent(long eventId) {
-		try {
-			eventRepository.deleteById(eventId);
-		} catch (Exception e) {
-			throw new GeneralServiceException(ErrorCode.UNSPECIFIED_ERROR.getErrorCode(),
-					ErrorMessage.UNSPECIFIED_ERROR.getErrorMessage());
-		}
-	}
+	public void createEvent(CreateEventDto event) {
+		UserEntity organizer = userRepository.findByPublicId(event.getOrganizerId());
+		ActivityEntity activity = activityRepository.findByName(event.getActivityName());
 
-	@Override
-	public void deleteUserFromEvent(long eventId, String userPublicId) {
-		EventEntity event = eventRepository.findById(eventId);
-		UserEntity user = userRepository.findByPublicId(userPublicId);
-
-		if (user != null && event != null) {
-			try {
-				Set<UserEntity> users = event.getUsers();
-				if (users.contains(user)) {
-					users.remove(user);
-				}
-				event.setUsers(users);
-				eventRepository.save(event);
-			} catch (Exception e) {
-				throw new GeneralServiceException(ErrorCode.UNSPECIFIED_ERROR.getErrorCode(),
-						ErrorMessage.UNSPECIFIED_ERROR.getErrorMessage());
-			}
-		} else {
-			throw new GeneralServiceException(ErrorCode.UNSPECIFIED_ERROR.getErrorCode(),
-					ErrorMessage.UNSPECIFIED_ERROR.getErrorMessage());
-		}
-	}
-
-	@Override
-	public boolean getIsUserAppliedForEvent(long eventId, String userPublicId) {
-		EventEntity event = eventRepository.findById(eventId);
-		Set<UserEntity> users = event.getUsers();
-		HashSet<String> publicIds = new HashSet<>();
-
-		for (UserEntity user: users) {
-			publicIds.add(user.getPublicId());
+		if (organizer == null) {
+			throw new GeneralServiceException(ErrorCode.EVENT_INVALID_ORGANIZER_ID.getErrorCode(),
+					ErrorMessage.EVENT_INVALID_ORGANIZER_ID.getErrorMessage());
 		}
 
-		return publicIds.contains(userPublicId);
+		if (activity == null) {
+			throw new GeneralServiceException(ErrorCode.EVENT_INVALID_ACTIVITY.getErrorCode(),
+					ErrorMessage.EVENT_INVALID_ACTIVITY.getErrorMessage());
+		}
+
+		EventEntity newEvent = new EventEntity();
+		BeanUtils.copyProperties(event, newEvent);
+
+		newEvent.setActivity(activity);
+		newEvent.setOrganizer(organizer);
+
+		eventRepository.save(newEvent);
 	}
 
 	@Override
@@ -155,32 +216,5 @@ public class EventServiceImpl implements EventService {
 		}
 
 		return events;
-	}
-
-	@Override
-	public void createEvent(CreateEventDto event) {
-
-		UserEntity organizer = userRepository.findByPublicId(event.getOrganizerId());
-		ActivityEntity activity = activityRepository.findByName(event.getActivityName());
-
-		if (organizer == null) {
-			throw new GeneralServiceException(ErrorCode.EVENT_INVALID_ORGANIZER_ID.getErrorCode(),
-					ErrorMessage.EVENT_INVALID_ORGANIZER_ID.getErrorMessage());
-		}
-
-		if (activity == null) {
-			throw new GeneralServiceException(ErrorCode.EVENT_INVALID_ACTIVITY.getErrorCode(),
-					ErrorMessage.EVENT_INVALID_ACTIVITY.getErrorMessage());
-		}
-
-
-
-		EventEntity newEvent = new EventEntity();
-		BeanUtils.copyProperties(event, newEvent);
-
-		newEvent.setActivity(activity);
-		newEvent.setOrganizer(organizer);
-
-		eventRepository.save(newEvent);
 	}
 }
