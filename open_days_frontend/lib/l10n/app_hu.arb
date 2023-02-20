@@ -33,5 +33,7 @@
     "event_details_cancel_participation": "Lemond",
 
     "event_creator_header": "Eseménykészítő",
-    "event_creator_online_event": "Online esemény?"
+    "event_creator_online_event": "Online esemény?",
+
+    "event_modification_header": "Esemény módosítása"
 }

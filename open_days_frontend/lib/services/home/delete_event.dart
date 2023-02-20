@@ -1,7 +1,7 @@
 import 'package:http/http.dart' as http;
 
 import '../../shared/secure_storage.dart';
-import '../../models/base_response_model.dart';
+import '../../domain/models/base_response_model.dart';
 
 /// It deletes the event with the given id.
 Future<BaseResponseModel> deleteEventSvc(int eventId) async {

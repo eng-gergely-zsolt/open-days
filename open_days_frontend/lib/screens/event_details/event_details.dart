@@ -200,29 +200,31 @@ class EventDetails extends ConsumerWidget {
                   ],
                 ),
           SizedBox(height: appHeight * 0.05),
-          SizedBox(
-            width: appWidth * 0.6,
-            height: appHeight * 0.07,
-            child: initialData.isUserAppliedForEvent
-                ? OutlinedButton(
-                    child: Text(
-                      Utils.getString(appLocale?.event_details_cancel_participation),
-                      style: TextStyle(
-                        fontSize: appHeight * 0.025,
-                      ),
-                    ),
-                    onPressed: () => eventDetailsController.deleteUserFromEvent(),
-                  )
-                : ElevatedButton(
-                    child: Text(
-                      Utils.getString(appLocale?.event_details_participate),
-                      style: TextStyle(
-                        fontSize: appHeight * 0.025,
-                      ),
-                    ),
-                    onPressed: () => eventDetailsController.applyUserForEvent(),
-                  ),
-          ),
+          _roleName == roleUser
+              ? SizedBox(
+                  width: appWidth * 0.6,
+                  height: appHeight * 0.07,
+                  child: initialData.isUserAppliedForEvent
+                      ? OutlinedButton(
+                          child: Text(
+                            Utils.getString(appLocale?.event_details_cancel_participation),
+                            style: TextStyle(
+                              fontSize: appHeight * 0.025,
+                            ),
+                          ),
+                          onPressed: () => eventDetailsController.deleteUserFromEvent(),
+                        )
+                      : ElevatedButton(
+                          child: Text(
+                            Utils.getString(appLocale?.event_details_participate),
+                            style: TextStyle(
+                              fontSize: appHeight * 0.025,
+                            ),
+                          ),
+                          onPressed: () => eventDetailsController.applyUserForEvent(),
+                        ),
+                )
+              : const SizedBox.shrink(),
           SizedBox(height: appHeight * 0.04),
           _roleName == roleAdmin || _roleName == roleOrganizer
               ? SizedBox(

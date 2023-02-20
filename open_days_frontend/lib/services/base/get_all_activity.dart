@@ -2,16 +2,17 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import '../../models/activity_model.dart';
-import '../../models/base_request_model.dart';
+import '../../shared/secure_storage.dart';
 import '../../models/activities_response_model.dart';
 
-Future<ActivitiesResponseModel> getAllActivitySvc(BaseRequestModel baseRequestData) async {
+Future<ActivitiesResponseModel> getAllActivitySvc() async {
   final response = ActivitiesResponseModel();
+  final authorizationToken = await SecureStorage.getAuthorizationToken();
   const uri = 'http://10.0.2.2:8081/open-days/activity/all-activity';
 
   Map<String, String> headers = {
     "Content-Type": "application/json",
-    "Authorization": baseRequestData.authorizationToken,
+    "Authorization": authorizationToken ?? '',
   };
 
   final rawResponse = await http

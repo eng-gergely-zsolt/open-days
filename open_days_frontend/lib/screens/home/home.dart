@@ -6,6 +6,7 @@ import '../../constants/constants.dart';
 import '../event_details/event_details.dart';
 import '../home_base/home_base_controller.dart';
 import '../home_base/models/initial_data_model.dart';
+import '../event_modification/event_modification.dart';
 
 class Home extends ConsumerStatefulWidget {
   final InitialDataModel? _initialData;
@@ -90,6 +91,20 @@ class _HomeState extends ConsumerState<Home> {
                     const Spacer(),
                     widget._initialData?.user?.roleName == roleOrganizer
                         ? Row(children: [
+                            IconButton(
+                              icon: const Icon(
+                                Icons.edit,
+                              ),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => EventModification(
+                                        widget._initialData?.events?.events[index]),
+                                  ),
+                                );
+                              },
+                            ),
                             IconButton(
                               icon: const Icon(
                                 Icons.delete,

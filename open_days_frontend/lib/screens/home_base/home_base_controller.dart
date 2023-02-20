@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../constants/constants.dart';
 import '../../shared/secure_storage.dart';
 import './models/initial_data_model.dart';
-import '../../models/base_request_model.dart';
 import '../../models/user_request_model.dart';
 import '../../repositories/home_base_repository.dart';
 
@@ -47,17 +46,10 @@ class HomeBaseController {
 
   FutureProvider<InitialDataModel> createInitialDataProvider() {
     return FutureProvider((ref) async {
-      final userRequestData = UserRequestModel();
-      final baseRequestData = BaseRequestModel();
-
-      userRequestData.id = await SecureStorage.getUserId() ?? '';
-      userRequestData.authorizationToken =
-          baseRequestData.authorizationToken = await SecureStorage.getAuthorizationToken() ?? '';
-
       InitialDataModel response = InitialDataModel();
 
-      var userResponse = _homeBaseRepository.getUserByIdRepo(userRequestData);
-      var eventResponse = _homeBaseRepository.getAllEventRepo(baseRequestData);
+      var eventResponse = _homeBaseRepository.getAllEventRepo();
+      var userResponse = _homeBaseRepository.getUserByIdRepo();
 
       response.user = await userResponse;
       response.events = await eventResponse;

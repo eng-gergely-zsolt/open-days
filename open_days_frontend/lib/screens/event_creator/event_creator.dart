@@ -65,7 +65,8 @@ class EventCreator extends ConsumerWidget {
                 data: (activities) {
                   selectedActivityName ??= activities.activities[0].name;
 
-                  return activities.isOperationSuccessful == true && activities.activities.isNotEmpty
+                  return activities.isOperationSuccessful == true &&
+                          activities.activities.isNotEmpty
                       ? Container(
                           width: double.infinity,
                           height: double.infinity,
@@ -100,8 +101,11 @@ class EventCreator extends ConsumerWidget {
                                         },
                                       ).toList(),
                                       onChanged: (String? value) {
-                                        ref.read(eventCreatorController.getSelectedActivityProvider().notifier).state =
-                                            value;
+                                        ref
+                                            .read(eventCreatorController
+                                                .getSelectedActivityProvider()
+                                                .notifier)
+                                            .state = value;
                                       },
                                     ),
                                   ),
@@ -231,7 +235,8 @@ class EventCreator extends ConsumerWidget {
                                   maxLines: null,
                                   keyboardType: TextInputType.multiline,
                                   initialValue: eventCreatorController.getLocation(),
-                                  onChanged: (location) => eventCreatorController.setLocation(location),
+                                  onChanged: (location) =>
+                                      eventCreatorController.setLocation(location),
                                   decoration: const InputDecoration(
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.all(
@@ -257,7 +262,8 @@ class EventCreator extends ConsumerWidget {
                                 ),
                                 Checkbox(
                                   value: isOnlineMeeting,
-                                  onChanged: ((value) => eventCreatorController.setIsOnlineMeetingProvider(value)),
+                                  onChanged: ((value) =>
+                                      eventCreatorController.setIsOnlineMeetingProvider(value)),
                                 ),
                                 isOnlineMeeting
                                     ? TextFormField(
@@ -286,7 +292,8 @@ class EventCreator extends ConsumerWidget {
                                   ),
                                   child: ElevatedButton(
                                     child: const Text('Mentes'),
-                                    onPressed: () => eventCreatorController.createEvent(selectedActivityName),
+                                    onPressed: () =>
+                                        eventCreatorController.createEvent(selectedActivityName),
                                   ),
                                 ),
                                 SizedBox(height: appHeight * 0.05),

@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../models/base_response_model.dart';
+import '../domain/models/base_response_model.dart';
 import '../services/home/delete_event.dart';
 
 final homeRepositoryProvider = Provider((_) => HomeRepository());

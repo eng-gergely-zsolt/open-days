@@ -2,17 +2,18 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import '../../constants/constants.dart';
-import '../../models/base_request_model.dart';
+import '../../shared/secure_storage.dart';
 import '../../screens/home_base/models/get_all_event_model.dart';
 import '../../screens/home_base/models/event_response_model.dart';
 
-Future<GetAllEventModel> getAllEventSvc(BaseRequestModel baseRequestData) async {
+Future<GetAllEventModel> getAllEventSvc() async {
   final response = GetAllEventModel();
+  final authorizationToken = await SecureStorage.getAuthorizationToken();
   const uri = 'http://10.0.2.2:8081/open-days/event/all-event';
 
   Map<String, String> headers = {
     "Content-Type": "application/json",
-    "Authorization": baseRequestData.authorizationToken,
+    "Authorization": authorizationToken ?? '',
   };
 
   final rawResponse = await http

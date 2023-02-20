@@ -5,8 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import './models/create_event_model.dart';
 import '../../models/activity_model.dart';
 import '../../shared/secure_storage.dart';
-import '../../models/base_request_model.dart';
-import '../../models/base_response_model.dart';
+import '../../domain/models/base_response_model.dart';
 import '../../repositories/base_repository.dart';
 import '../../models/activities_response_model.dart';
 import '../../repositories/event_creator_repository.dart';
@@ -64,11 +63,7 @@ class EventCreatorController {
 
   FutureProvider<ActivitiesResponseModel> getAllActivity() {
     return FutureProvider((ref) async {
-      final baseRequestData = BaseRequestModel();
-
-      baseRequestData.authorizationToken = await SecureStorage.getAuthorizationToken() ?? '';
-
-      return _baseRepository.getAllActivityRepo(baseRequestData);
+      return _baseRepository.getAllActivityRepo();
     });
   }
 

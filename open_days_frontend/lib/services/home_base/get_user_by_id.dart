@@ -2,16 +2,18 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import '../../constants/constants.dart';
-import '../../models/user_request_model.dart';
+import '../../shared/secure_storage.dart';
 import '../../models/user_response_model.dart';
 
-Future<UserResponseModel> getUserByIdSvc(UserRequestModel userRequestData) async {
+Future<UserResponseModel> getUserByIdSvc() async {
   var result = UserResponseModel();
-  final uri = 'http://10.0.2.2:8081/open-days/users/' + userRequestData.id;
+  final userId = await SecureStorage.getUserId() ?? '';
+  final authorizationToken = await SecureStorage.getAuthorizationToken();
+  final uri = 'http://10.0.2.2:8081/open-days/users/' + userId;
 
   Map<String, String> headers = {
     "Content-Type": "application/json",
-    "Authorization": userRequestData.authorizationToken,
+    "Authorization": authorizationToken ?? '',
   };
 
   final rawResponse = await http

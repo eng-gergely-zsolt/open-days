@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../models/base_response_model.dart';
+import '../../domain/models/base_response_model.dart';
 import './models/is_user_applied_for_event.dart';
 import '../../repositories/event_details_repository.dart';
 

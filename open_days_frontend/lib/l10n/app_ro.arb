@@ -33,5 +33,7 @@
     "event_details_cancel_participation": "Anulare",
 
     "event_creator_header": "Crearea evenimentelor",
-    "event_creator_online_event": "Eveniment online?"
+    "event_creator_online_event": "Eveniment online?",
+
+    "event_modification_header": "Modificarea evenimentului"
 }

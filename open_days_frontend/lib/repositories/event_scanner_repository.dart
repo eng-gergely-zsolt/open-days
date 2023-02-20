@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../models/base_response_model.dart';
+import '../domain/models/base_response_model.dart';
 import '../services/event_scanner/post_apply_user_for_event.dart';
 
 final eventScannerRepositoyProvider = Provider((_) => EventScannerRepository());

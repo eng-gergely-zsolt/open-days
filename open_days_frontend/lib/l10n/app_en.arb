@@ -37,5 +37,7 @@
     "event_details_cancel_participation": "Cancel",
 
     "event_creator_header": "Event Creator",
-    "event_creator_online_event": "Online event?"
+    "event_creator_online_event": "Online event?",
+
+    "event_modification_header": "Event Modification"
 }

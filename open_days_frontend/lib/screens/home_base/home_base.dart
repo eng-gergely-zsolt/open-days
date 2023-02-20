@@ -9,7 +9,7 @@ import '../../utils/utils.dart';
 import './home_base_controller.dart';
 import '../../constants/constants.dart';
 import '../../shared/secure_storage.dart';
-import '../event_creator/event.creator.dart';
+import '../event_creator/event_creator.dart';
 import '../event_scanner/event_scanner.dart';
 
 class HomeBase extends ConsumerWidget {
@@ -19,7 +19,7 @@ class HomeBase extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     SecureStorage.setUserId('qwertyuiopasdf2');
     SecureStorage.setAuthorizationToken(
-        'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTY3NzcwMDY2Nn0.4xRj8DnysZCx3aFls-hpHslvgdWmlKfgiQWUt3dOIIHpQPz6ij96tZYyMmWF3FqZ6rbDufssRYtk-pcNzSdoQg');
+        'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTY3ODM4OTE4OH0.rTVj_GRSTkQ3GHLtOR5adi_T8G4BKM6xHdiIo7U3fjJrxNYNfOws0MfuapTOaBqb1Yu1rdAH5xZLVoAh945_fw');
 
     final appLocale = AppLocalizations.of(context);
     final appHeight = MediaQuery.of(context).size.height;
@@ -87,23 +87,46 @@ class HomeBase extends ConsumerWidget {
               : null;
         },
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        showUnselectedLabels: false,
-        currentIndex: curerrentIndex,
-        selectedIconTheme: CustomTheme.lightTheme.iconTheme,
-        onTap: (index) => homeBaseController.setNavigationBarIndexProvider(index),
-        items: [
-          BottomNavigationBarItem(
-            label: appLocale?.home,
-            activeIcon: const Icon(Icons.home),
-            icon: const Icon(Icons.home_outlined),
-          ),
-          BottomNavigationBarItem(
-            label: Utils.getString(appLocale?.bottom_navigation_bar_title_QR),
-            activeIcon: const Icon(Icons.qr_code),
-            icon: const Icon(Icons.qr_code),
-          ),
-        ],
+      bottomNavigationBar: initialData.when(
+        loading: () => null,
+        error: (error, stackTrace) => null,
+        data: (initialData) => initialData.user?.roleName == roleUser
+            ? BottomNavigationBar(
+                showUnselectedLabels: false,
+                currentIndex: curerrentIndex,
+                selectedIconTheme: CustomTheme.lightTheme.iconTheme,
+                onTap: (index) => homeBaseController.setNavigationBarIndexProvider(index),
+                items: [
+                  BottomNavigationBarItem(
+                    label: appLocale?.home,
+                    activeIcon: const Icon(Icons.home),
+                    icon: const Icon(Icons.home_outlined),
+                  ),
+                  BottomNavigationBarItem(
+                    label: Utils.getString(appLocale?.bottom_navigation_bar_title_QR),
+                    activeIcon: const Icon(Icons.qr_code),
+                    icon: const Icon(Icons.qr_code),
+                  ),
+                ],
+              )
+            : BottomNavigationBar(
+                showUnselectedLabels: false,
+                currentIndex: curerrentIndex,
+                selectedIconTheme: CustomTheme.lightTheme.iconTheme,
+                onTap: (index) => homeBaseController.setNavigationBarIndexProvider(0),
+                items: [
+                  BottomNavigationBarItem(
+                    label: appLocale?.home,
+                    activeIcon: const Icon(Icons.home),
+                    icon: const Icon(Icons.home_outlined),
+                  ),
+                  BottomNavigationBarItem(
+                    label: Utils.getString(appLocale?.bottom_navigation_bar_title_QR),
+                    activeIcon: const Icon(Icons.qr_code),
+                    icon: const Icon(Icons.qr_code),
+                  ),
+                ],
+              ),
       ),
     );
   }

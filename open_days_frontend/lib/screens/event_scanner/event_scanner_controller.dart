@@ -1,7 +1,7 @@
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../models/base_response_model.dart';
+import '../../domain/models/base_response_model.dart';
 import '../../repositories/event_scanner_repository.dart';
 
 class EventScannerController {
