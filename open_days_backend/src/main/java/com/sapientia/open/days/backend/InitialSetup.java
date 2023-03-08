@@ -112,15 +112,15 @@ public class InitialSetup {
 //		));
 
 		for (SettlementModel settlement : settlements) {
-			CountyEntity county = countyRepository.findByName(settlement.county());
+			CountyEntity county = countyRepository.findByName(settlement.getCounty());
 
 			if (county != null) {
-				SettlementEntity settlementEntity = settlementRepository.findByName(settlement.settlement());
+				SettlementEntity settlementEntity = settlementRepository.findByName(settlement.getSettlement());
 
 				if (settlementEntity == null) {
 					settlementEntity = new SettlementEntity();
 					settlementEntity.setCounty(county);
-					settlementEntity.setName(settlement.settlement());
+					settlementEntity.setName(settlement.getSettlement());
 					settlementRepository.save(settlementEntity);
 				}
 			}
@@ -174,15 +174,15 @@ public class InitialSetup {
 //		));
 
 		for (InstitutionModel institution : institutions) {
-			SettlementEntity settlement = settlementRepository.findByName(institution.settlement());
+			SettlementEntity settlement = settlementRepository.findByName(institution.getSettlement());
 
 			if (settlement != null) {
-				InstitutionEntity institutionEntity = institutionRepository.findByName(institution.institution());
+				InstitutionEntity institutionEntity = institutionRepository.findByName(institution.getInstitution());
 
 				if (institutionEntity == null) {
 					institutionEntity = new InstitutionEntity();
 					institutionEntity.setSettlement(settlement);
-					institutionEntity.setName(institution.institution());
+					institutionEntity.setName(institution.getInstitution());
 					institutionRepository.save(institutionEntity);
 				}
 			}
