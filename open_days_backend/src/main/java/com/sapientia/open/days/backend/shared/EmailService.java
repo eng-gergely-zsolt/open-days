@@ -28,11 +28,11 @@ public class EmailService {
 		final String textBody = "Please verify your email address. "
 				+ " Thank you for your registration! To be able to log in,"
 				+ " please complete the process by opening the following link in you browser: "
-				+ " https://open-days-thesis.herokuapp.com/open-days-email-service/email-verification.html?token=$tokenValue";
+				+ " https://open-days-thesis-web.herokuapp.com/open-days-email-service/email-verification.html?token=$tokenValue";
 
 		final String htmlBody = "<h2>Please verify your email address</h2>"
 				+ "<p>Thank you for your registration! To be able to log in, please complete the process by clicking on this "
-				+ "<a href='https://open-days-thesis.herokuapp.com/open-days-email-service/email-verification.html?token=$tokenValue'>"
+				+ "<a href='https://open-days-thesis-web.herokuapp.com/open-days-email-service/email-verification.html?token=$tokenValue'>"
 				+ "link" + "</a><br/><bt/>";
 
 		AmazonSimpleEmailService emailService = AmazonSimpleEmailServiceClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).build();
@@ -67,12 +67,12 @@ public class EmailService {
 		final String textBody = "A request to reset password. "
 				+ "Hi, $firstName! "
 				+ " If you want to change your password, please open the below link in your browser: "
-				+ " https://open-days-thesis.herokuapp.com/open-days-email-service/password-reset.html?token=$tokenValue";
+				+ " https://open-days-thesis-web.herokuapp.com/open-days-email-service/password-reset.html?token=$tokenValue";
 
 		final String htmlBody = "<h2>A request to reset password</h2>"
 				+ "<p> Hi, $firstName!</p>"
 				+ "<p>If you want to change your password, please click this "
-				+ "<a href='https://open-days-thesis.herokuapp.com/open-days-email-service/password-reset.html?token=$tokenValue'>"
+				+ "<a href='https://open-days-thesis-web.herokuapp.com/open-days-email-service/password-reset.html?token=$tokenValue'>"
 				+ "link" + "</a><br/><bt/>";
 
 		AmazonSimpleEmailService emailService = AmazonSimpleEmailServiceClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).build();
