@@ -18,7 +18,7 @@
 
                 function verifyToken(tokenValue)
                 {
-                    $.get('http://localhost:8080/open-days/users/email-verification', {token: tokenValue})
+                    $.get('https://open-days-thesis.herokuapp.com/open-days/users/email-verification', {token: tokenValue})
                     .done(function (response) {
 
                         if ($(response).attr("operationResult") === "SUCCESS")
