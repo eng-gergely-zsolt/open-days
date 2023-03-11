@@ -1,18 +1,17 @@
 package com.sapientia.open.days.backend.ui.model.response;
 
-public class BaseResponse {
-	private int errorCode;
+@SuppressWarnings("unused")
+public class BaseErrorResponse {
 
+	private int errorCode;
 	private String errorMessage;
 
-	private boolean isOperationSuccessful = false;
+	public BaseErrorResponse() {
+	}
 
-	public BaseResponse() {}
-
-	public BaseResponse(int errorCode, String errorMessage, boolean isOperationSuccessful) {
+	public BaseErrorResponse(int errorCode, String errorMessage) {
 		this.errorCode = errorCode;
 		this.errorMessage = errorMessage;
-		this.isOperationSuccessful = isOperationSuccessful;
 	}
 
 	public int getErrorCode() {
@@ -24,7 +23,7 @@ public class BaseResponse {
 	}
 
 	public boolean getIsOperationSuccessful() {
-		return isOperationSuccessful;
+		return false;
 	}
 
 	public void setErrorCode(int errorCode) {
@@ -33,9 +32,5 @@ public class BaseResponse {
 
 	public void setErrorMessage(String errorMessage) {
 		this.errorMessage = errorMessage;
-	}
-
-	public void setIsOperationSuccessful(boolean operationSuccessful) {
-		isOperationSuccessful = operationSuccessful;
 	}
 }

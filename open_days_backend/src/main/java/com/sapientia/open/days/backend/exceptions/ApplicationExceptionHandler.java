@@ -2,6 +2,7 @@ package com.sapientia.open.days.backend.exceptions;
 
 import com.sapientia.open.days.backend.ui.model.resource.ErrorCode;
 import com.sapientia.open.days.backend.ui.model.resource.OperationStatus;
+import com.sapientia.open.days.backend.ui.model.response.BaseErrorResponse;
 import com.sapientia.open.days.backend.ui.model.response.ErrorMessageModel;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,15 @@ import java.util.Date;
 @SuppressWarnings("unused")
 public class ApplicationExceptionHandler {
 
+	/**
+	 * It creates the response model if a BaseException is thrown.
+	 */
+	@ExceptionHandler(value = {BaseException.class})
+	public ResponseEntity<Object> handleBaseException(BaseException exception, WebRequest request) {
+		BaseErrorResponse response = new BaseErrorResponse(exception.getErrorCode(), exception.getMessage());
+		return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
 	/*
 	 * A custom error message.
 	 * This method is responsible for only one GeneralServiceException exception.
@@ -23,7 +33,8 @@ public class ApplicationExceptionHandler {
 	@ExceptionHandler(value = {GeneralServiceException.class})
 	public ResponseEntity<Object> handleUserServiceException(GeneralServiceException exception, WebRequest request) {
 
-		ErrorMessageModel errorMessages = new ErrorMessageModel(exception.getCode(), exception.getMessage(), exception.getOperationResult());
+		ErrorMessageModel errorMessages = new ErrorMessageModel(exception.getCode(), exception.getMessage(),
+				exception.getOperationResult());
 
 		return new ResponseEntity<>(errorMessages, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 	}

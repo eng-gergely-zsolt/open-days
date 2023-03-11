@@ -1,5 +1,6 @@
 package com.sapientia.open.days.backend.service.impl;
 
+import com.sapientia.open.days.backend.exceptions.BaseException;
 import com.sapientia.open.days.backend.exceptions.GeneralServiceException;
 import com.sapientia.open.days.backend.io.entity.InstitutionEntity;
 import com.sapientia.open.days.backend.io.entity.PasswordResetTokenEntity;
@@ -206,7 +207,7 @@ public class UserServiceImpl implements UserService {
 				userEntity.setEmailVerificationToken(null);
 				userEntity.setEmailVerificationStatus(Boolean.TRUE);
 				userRepository.save(userEntity);
-				result.setOperationSuccessful(true);
+				result.setIsOperationSuccessful(true);
 			} else {
 				result.setErrorCode(ErrorCode.EMAIL_VERIFICATION_TOKEN_EXPIRED.getErrorCode());
 				result.setErrorMessage(ErrorMessage.EMAIL_VERIFICATION_TOKEN_EXPIRED.getErrorMessage());

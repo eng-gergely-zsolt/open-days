@@ -15,24 +15,14 @@ public class EmailService {
 
 		String emailSubject = "Open Days email verification";
 
-//		final String textBody = "Please verify your email address. "
-//				+ " Thank you for your registration! To be able to log in,"
-//				+ " please complete the process by opening the following link in you browser: "
-//				+ " http://localhost:8081/open-days-email-service/email-verification.html?token=$tokenValue";
-//
-//		final String htmlBody = "<h2>Please verify your email address</h2>"
-//				+ "<p>Thank you for your registration! To be able to log in, please complete the process by clicking on this "
-//				+ "<a href='http://localhost:8081/open-days-email-service/email-verification.html?token=$tokenValue'>"
-//				+ "link" + "</a><br/><bt/>";
-
 		final String textBody = "Please verify your email address. "
 				+ " Thank you for your registration! To be able to log in,"
 				+ " please complete the process by opening the following link in you browser: "
-				+ " https://open-days-thesis-web.herokuapp.com/open-days-email-service/email-verification.html?token=$tokenValue";
+				+ " https://open-days-email-service-4243d.web.app/#/email-verification/$tokenValue";
 
 		final String htmlBody = "<h2>Please verify your email address</h2>"
 				+ "<p>Thank you for your registration! To be able to log in, please complete the process by clicking on this "
-				+ "<a href='https://open-days-thesis-web.herokuapp.com/open-days-email-service/email-verification.html?token=$tokenValue'>"
+				+ "<a href='https://open-days-email-service-4243d.web.app/#/email-verification/$tokenValue'>"
 				+ "link" + "</a><br/><bt/>";
 
 		AmazonSimpleEmailService emailService = AmazonSimpleEmailServiceClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).build();
