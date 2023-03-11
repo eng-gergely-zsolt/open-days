@@ -12,6 +12,7 @@ import com.sapientia.open.days.backend.ui.model.request.UserUpdateRequestModel;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorCode;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorMessage;
 import com.sapientia.open.days.backend.ui.model.resource.OperationStatus;
+import com.sapientia.open.days.backend.ui.model.response.BaseResponse;
 import com.sapientia.open.days.backend.ui.model.response.OperationStatusModel;
 import com.sapientia.open.days.backend.ui.model.response.UserResponseModel;
 import org.springframework.beans.BeanUtils;
@@ -162,26 +163,15 @@ public class UserController {
 		return result;
 	}
 
-	/*
-	 * http://localhost:8080/open-days/users/email-verification?token=<token>
-	 **/
+	/**
+	 * It verifies the token that was sent to check the user's email.
+	 *
+	 * @param emailVerificationToken The token that was sent to the user.
+	 * @return It returns a base response.
+	 */
 	@GetMapping(path = "/email-verification")
-	public ResponseEntity<OperationStatusModel> verifyEmailToken(@RequestParam(value = "token") String emailVerificationToken) {
-
-		HttpHeaders responseHeaders = new HttpHeaders();
-		OperationStatusModel responseBody = new OperationStatusModel();
-
-		responseHeaders.set("Access-Control-Allow-Origin", "*");
-
-		boolean isVerified = userService.verifyEmailVerificationToken(emailVerificationToken);
-
-		if (isVerified) {
-			responseBody.setOperationResult(OperationStatus.SUCCESS.name());
-		} else {
-			responseBody.setOperationResult(OperationStatus.ERROR.name());
-		}
-
-		return new ResponseEntity<>(responseBody, responseHeaders, HttpStatus.OK);
+	public BaseResponse verifyEmail(@RequestParam(value = "token") String emailVerificationToken) {
+		return userService.verifyEmail(emailVerificationToken);
 	}
 
 	/*

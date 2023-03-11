@@ -16,6 +16,7 @@ import com.sapientia.open.days.backend.shared.Utils;
 import com.sapientia.open.days.backend.shared.dto.UserDTO;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorCode;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorMessage;
+import com.sapientia.open.days.backend.ui.model.response.BaseResponse;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -187,11 +188,16 @@ public class UserServiceImpl implements UserService {
 		userRepository.delete(userEntity);
 	}
 
-	// Verifies the token if it's expired ot not.
+	/**
+	 * It verifies the token that was sent to check the user's email.
+	 *
+	 * @param emailVerificationToken The token that was sent to the user.
+	 * @return It returns a base response.
+	 */
 	@Override
-	public boolean verifyEmailVerificationToken(String emailVerificationToken) {
+	public BaseResponse verifyEmail(String emailVerificationToken) {
 
-		boolean result = false;
+		BaseResponse result = new BaseResponse();
 		UserEntity userEntity = userRepository.findUserByEmailVerificationToken(emailVerificationToken);
 
 		if (userEntity != null) {
@@ -200,8 +206,14 @@ public class UserServiceImpl implements UserService {
 				userEntity.setEmailVerificationToken(null);
 				userEntity.setEmailVerificationStatus(Boolean.TRUE);
 				userRepository.save(userEntity);
-				result = true;
+				result.setOperationSuccessful(true);
+			} else {
+				result.setErrorCode(ErrorCode.EMAIL_VERIFICATION_TOKEN_EXPIRED.getErrorCode());
+				result.setErrorMessage(ErrorMessage.EMAIL_VERIFICATION_TOKEN_EXPIRED.getErrorMessage());
 			}
+		} else {
+			result.setErrorCode(ErrorCode.EMAIL_VERIFICATION_NO_USER.getErrorCode());
+			result.setErrorMessage(ErrorMessage.EMAIL_VERIFICATION_NO_USER.getErrorMessage());
 		}
 
 		return result;
