@@ -170,15 +170,10 @@ public class UserController {
 	 * @param emailVerificationToken The token that was sent to the user.
 	 * @return It returns a base response.
 	 */
-//	@CrossOrigin(origins = "*")
+	@CrossOrigin(origins = "*")
 	@GetMapping(path = "/email-verification")
-	public ResponseEntity<BaseResponse> verifyEmail(@RequestParam(value = "token") String emailVerificationToken) {
-		HttpHeaders responseHeaders = new HttpHeaders();
-		BaseResponse responseBody = userService.verifyEmail(emailVerificationToken);
-
-		responseHeaders.set("Access-Control-Allow-Origin", "*");
-
-		return new ResponseEntity<>(responseBody, responseHeaders, HttpStatus.OK);
+	public BaseResponse verifyEmail(@RequestParam(value = "token") String emailVerificationToken) {
+		return userService.verifyEmail(emailVerificationToken);
 	}
 
 	/*

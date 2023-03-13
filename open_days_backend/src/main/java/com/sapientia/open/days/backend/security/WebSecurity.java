@@ -77,7 +77,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
 	@Bean
 	SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
-		http.cors(cors -> cors.disable());
+		http.cors(ServerHttpSecurity.CorsSpec::disable);
 		return http.build();
 	}
 
