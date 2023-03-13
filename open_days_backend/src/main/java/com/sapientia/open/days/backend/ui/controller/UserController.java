@@ -30,7 +30,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("users")
-@CrossOrigin(origins = "*")
+//@CrossOrigin(origins = "*")
 public class UserController {
 
 	@Autowired
@@ -170,7 +170,7 @@ public class UserController {
 	 * @param emailVerificationToken The token that was sent to the user.
 	 * @return It returns a base response.
 	 */
-	@CrossOrigin(origins = "*")
+//	@CrossOrigin(origins = "*")
 	@GetMapping(path = "/email-verification")
 	public ResponseEntity<BaseResponse> verifyEmail(@RequestParam(value = "token") String emailVerificationToken) {
 		HttpHeaders responseHeaders = new HttpHeaders();
