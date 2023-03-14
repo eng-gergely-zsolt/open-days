@@ -188,8 +188,11 @@ public class UserController {
 		BaseResponse response = userService.verifyEmail(emailVerificationToken);
 
 		httpHeaders.add("Access-Control-Allow-Origin", "*");
-		httpHeaders.add("Access-Control-Allow-Methods", "GET");
-		httpHeaders.add("Access-Control-Allow-Headers", "Origin");
+		httpHeaders.add("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT, PATCH, HEAD");
+		httpHeaders.add("Access-Control-Allow-Headers", "Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
+		httpHeaders.add("Access-Control-Expose-Headers", "Access-Control-Allow-Origin, Access-Control-Allow-Credentials");
+		httpHeaders.add("Access-Control-Allow-Credentials", "true");
+		httpHeaders.add("Access-Control-Max-Age", "10");
 
 		return new ResponseEntity<>(response, httpHeaders, HttpStatus.OK);
 	}
