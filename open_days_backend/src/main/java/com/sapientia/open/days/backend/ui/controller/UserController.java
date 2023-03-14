@@ -24,6 +24,7 @@ import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -163,16 +164,33 @@ public class UserController {
 		return result;
 	}
 
+//	/**
+//	 * It verifies the token that was sent to check the user's email.
+//	 *
+//	 * @param emailVerificationToken The token that was sent to the user.
+//	 * @return It returns a base response.
+//	 */
+//	@GetMapping(path = "/email-verification")
+//	public BaseResponse verifyEmail(@RequestParam(value = "token") String emailVerificationToken) {
+//		return userService.verifyEmail(emailVerificationToken);
+//	}
+
 	/**
 	 * It verifies the token that was sent to check the user's email.
 	 *
 	 * @param emailVerificationToken The token that was sent to the user.
 	 * @return It returns a base response.
 	 */
-//	@CrossOrigin(origins = "*")
+	@CrossOrigin(origins = "*")
 	@GetMapping(path = "/email-verification")
-	public BaseResponse verifyEmail(@RequestParam(value = "token") String emailVerificationToken) {
-		return userService.verifyEmail(emailVerificationToken);
+	public ResponseEntity<BaseResponse> verifyEmail(@RequestParam(value = "token") String emailVerificationToken) {
+		HttpHeaders httpHeaders = new HttpHeaders();
+		BaseResponse response = userService.verifyEmail(emailVerificationToken);
+
+		httpHeaders.add("Access-Control-Allow-Origin", "*");
+		httpHeaders.add("Access-Control-Allow-Methods", "*");
+
+		return new ResponseEntity<>(response, httpHeaders, HttpStatus.OK);
 	}
 
 	/*
