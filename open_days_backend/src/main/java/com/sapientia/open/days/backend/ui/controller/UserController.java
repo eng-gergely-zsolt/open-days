@@ -175,28 +175,6 @@ public class UserController {
 		return userService.verifyEmail(emailVerificationToken);
 	}
 
-//	/**
-//	 * It verifies the token that was sent to check the user's email.
-//	 *
-//	 * @param emailVerificationToken The token that was sent to the user.
-//	 * @return It returns a base response.
-//	 */
-//	@CrossOrigin(origins = "*")
-//	@GetMapping(path = "/email-verification")
-//	public ResponseEntity<BaseResponse> verifyEmail(@RequestParam(value = "token") String emailVerificationToken) {
-//		HttpHeaders httpHeaders = new HttpHeaders();
-//		BaseResponse response = userService.verifyEmail(emailVerificationToken);
-//
-//		httpHeaders.add("Access-Control-Allow-Origin", "*");
-//		httpHeaders.add("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT, PATCH, HEAD");
-//		httpHeaders.add("Access-Control-Allow-Headers", "Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
-//		httpHeaders.add("Access-Control-Expose-Headers", "Access-Control-Allow-Origin, Access-Control-Allow-Credentials");
-//		httpHeaders.add("Access-Control-Allow-Credentials", "true");
-//		httpHeaders.add("Access-Control-Max-Age", "10");
-//
-//		return new ResponseEntity<>(response, httpHeaders, HttpStatus.OK);
-//	}
-
 	/*
 	 * http://localhost:8080/open-days/users/password-reset-request
 	 **/
