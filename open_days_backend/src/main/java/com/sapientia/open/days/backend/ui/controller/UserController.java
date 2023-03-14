@@ -188,7 +188,8 @@ public class UserController {
 		BaseResponse response = userService.verifyEmail(emailVerificationToken);
 
 		httpHeaders.add("Access-Control-Allow-Origin", "*");
-		httpHeaders.add("Access-Control-Allow-Methods", "*");
+		httpHeaders.add("Access-Control-Allow-Methods", "GET");
+		httpHeaders.add("Access-Control-Allow-Headers", "Origin");
 
 		return new ResponseEntity<>(response, httpHeaders, HttpStatus.OK);
 	}
