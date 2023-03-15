@@ -9,6 +9,10 @@ public class BaseResponse {
 
 	public BaseResponse() {}
 
+	public BaseResponse(boolean isOperationSuccessful) {
+		this.isOperationSuccessful = isOperationSuccessful;
+	}
+
 	public BaseResponse(int errorCode, String errorMessage, boolean isOperationSuccessful) {
 		this.errorCode = errorCode;
 		this.errorMessage = errorMessage;

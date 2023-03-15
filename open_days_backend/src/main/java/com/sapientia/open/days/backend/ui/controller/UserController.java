@@ -165,6 +165,14 @@ public class UserController {
 	}
 
 	/**
+	 * It verifies if the given authorization token is valid or not.
+	 */
+	@GetMapping(path = "/token-verification")
+	public BaseResponse verifyAuthorizationToken() {
+		return new BaseResponse(true);
+	}
+
+	/**
 	 * It verifies the token that was sent to check the user's email.
 	 *
 	 * @param emailVerificationToken The token that was sent to the user.

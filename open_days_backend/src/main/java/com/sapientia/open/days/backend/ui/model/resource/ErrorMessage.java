@@ -23,7 +23,7 @@ public enum ErrorMessage {
     ACTIVITY_MISSING_LOCATION("Activity location is missing"),
     ACTIVITY_ALREADY_EXISTING_NAME("This activity name already exists"),
 
-    // Email verification 1020-1040
+    // Email verification 1020-1039
     EMAIL_VERIFICATION_NO_USER("User not found"),
     EMAIL_VERIFICATION_TOKEN_EXPIRED("The email verification token has expired"),
 
