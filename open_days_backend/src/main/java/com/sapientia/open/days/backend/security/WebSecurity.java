@@ -10,14 +10,12 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
+
 import java.util.List;
 
 @EnableWebSecurity
@@ -27,12 +25,13 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 	private final UserService userDetailsService;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-	public WebSecurity(UserService userDetailsService,
-	                   BCryptPasswordEncoder bCryptPasswordEncoder,
-	                   UserRepository userRepository) {
+	public WebSecurity(UserRepository userRepository,
+	                   UserService userDetailsService,
+	                   BCryptPasswordEncoder bCryptPasswordEncoder) {
+
+		this.userRepository = userRepository;
 		this.userDetailsService = userDetailsService;
 		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-		this.userRepository = userRepository;
 	}
 
 	/*
@@ -79,11 +78,11 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 	CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
 
-		configuration.setAllowedOrigins(Arrays.asList("*"));
-		configuration.setAllowedHeaders(Arrays.asList("*"));
-		configuration.setAllowedMethods(Arrays.asList("*"));
+		configuration.setAllowedOrigins(List.of("*"));
+		configuration.setAllowedHeaders(List.of("*"));
+		configuration.setAllowedMethods(List.of("*"));
 		configuration.setAllowCredentials(true);
-		configuration.setExposedHeaders(Arrays.asList("*"));
+		configuration.setExposedHeaders(List.of("*"));
 
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);

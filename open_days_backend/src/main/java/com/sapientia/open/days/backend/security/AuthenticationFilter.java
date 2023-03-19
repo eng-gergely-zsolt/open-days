@@ -51,7 +51,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 	 * Once the token is generated, it will be included into the header. The client have to extract this web token,
 	 * and he has to store it (for example, in the mobile app). The user has to include the token as a header into
 	 * the request to be able to communicate with the secure endpoints.
-	 * // We add the user id to the header.
+	 * We add the user id to the header.
 	 */
 	@Override
 	protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain, Authentication auth) {
