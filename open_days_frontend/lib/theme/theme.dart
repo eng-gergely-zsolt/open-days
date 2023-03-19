@@ -48,6 +48,21 @@ class CustomTheme {
         foregroundColor: Colors.white,
         backgroundColor: Color.fromRGBO(1, 30, 65, 1),
       ),
+      textTheme: const TextTheme(
+        button: TextStyle(
+          fontSize: 18.0,
+          color: Color.fromRGBO(1, 30, 65, 1),
+        ),
+        headline5: TextStyle(
+          fontSize: 20.0,
+          fontWeight: FontWeight.bold,
+          color: Color.fromRGBO(1, 30, 65, 1),
+        ),
+        bodyText1: TextStyle(
+          fontSize: 16.0,
+          color: Colors.blueGrey,
+        ),
+      ),
     );
   }
 }

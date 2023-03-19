@@ -16,13 +16,11 @@ abstract class IRegistrationRepository {
 class RegistrationRepository extends IRegistrationRepository {
   @override
   Future<List<Institution>> getAllInstitutionRepo() async {
-    await Future.delayed(const Duration(seconds: 3));
     return await getAllInstitutionSvc();
   }
 
   @override
   Future<UserResponseModel> createUserRepo(User user) async {
-    await Future.delayed(const Duration(seconds: 3));
     return await createUserSvc(user);
   }
 }

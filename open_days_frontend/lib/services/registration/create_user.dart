@@ -6,7 +6,7 @@ import '../../screens/registration/models/user.dart';
 
 Future<UserResponseModel> createUserSvc(User user) async {
   final body = jsonEncode(user);
-  const uri = 'http://10.0.2.2:8081/open-days/users';
+  const uri = 'https://open-days-thesis.herokuapp.com/open-days/users';
 
   final rawResponse = await http.post(
     Uri.parse(uri),

@@ -1,7 +1,7 @@
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../domain/models/base_response_model.dart';
+import '../../models/base_response_model.dart';
 import '../../repositories/event_scanner_repository.dart';
 
 class EventScannerController {
@@ -50,7 +50,7 @@ class EventScannerController {
     _ref.invalidate(_eventParticipationProvider);
 
     _eventParticipationProvider = FutureProvider(((ref) async {
-      final response = await _eventScannerRepository.participateInEvent(_barcode?.code);
+      final response = await _eventScannerRepository.participateInEventRepo(_barcode?.code);
 
       if (response.isOperationSuccessful == true) {
         _ref.read(_isApplyingSuccessful.notifier).state = true;

@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../domain/models/base_response_model.dart';
 import './models/is_user_applied_for_event.dart';
+import '../../models/base_response_model.dart';
 import '../../repositories/event_details_repository.dart';
 
 class EventDetailsController {
@@ -15,7 +15,8 @@ class EventDetailsController {
   BaseResponseModel? _eventParticipatonResponse;
   FutureProvider<IsUserAppliedForEvent>? _initialDataProvider;
 
-  final _eventScannerUri = 'http://10.0.2.2:8081/open-days/event/user_participates_in_event/';
+  final _eventScannerUri =
+      'https://open-days-thesis.herokuapp.com/open-days/event/user_participates_in_event/';
 
   EventDetailsController(this._ref, this._eventDetailsRepository);
 

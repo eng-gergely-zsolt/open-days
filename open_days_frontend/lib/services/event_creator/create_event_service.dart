@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-import '../../domain/models/base_response_model.dart';
+import '../../models/base_response_model.dart';
 import '../../screens/event_creator/models/create_event_model.dart';
 
 Future<BaseResponseModel> createEventSvc(CreateEventModel payload) async {
   final response = BaseResponseModel();
   final body = jsonEncode(payload.event);
-  const uri = 'http://10.0.2.2:8081/open-days/event';
+  const uri = 'https://open-days-thesis.herokuapp.com/open-days/event';
 
   Map<String, String> headers = {
     "Content-Type": "application/json",

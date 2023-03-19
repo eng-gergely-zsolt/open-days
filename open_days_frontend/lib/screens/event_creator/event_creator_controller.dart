@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import './models/create_event_model.dart';
 import '../../models/activity_model.dart';
 import '../../shared/secure_storage.dart';
-import '../../domain/models/base_response_model.dart';
+import '../../models/base_response_model.dart';
 import '../../repositories/base_repository.dart';
 import '../../models/activities_response_model.dart';
 import '../../repositories/event_creator_repository.dart';

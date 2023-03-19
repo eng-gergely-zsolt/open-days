@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.open_days_frontend">
+    <uses-permission android:name="android.permission.INTERNET" />
    <application
         android:label="open_days_frontend"
         android:name="${applicationName}"

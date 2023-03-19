@@ -244,7 +244,7 @@ class _RegistrationState extends ConsumerState<Registration> {
                               style: ElevatedButton.styleFrom(
                                 minimumSize: Size(appWidth * 0.6, 40),
                               ),
-                              child: Text(appLocale?.sign_up as String),
+                              child: Text(appLocale?.sign_up.toUpperCase() as String),
                             ),
                           ],
                         ),

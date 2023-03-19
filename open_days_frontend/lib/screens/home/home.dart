@@ -50,6 +50,7 @@ class _HomeState extends ConsumerState<Home> {
                 ),
               ),
               child: Container(
+                width: appWidth * 0.8,
                 height: appHeight * 0.2,
                 margin: EdgeInsets.all(appWidth * 0.01),
                 child: Card(
@@ -119,7 +120,7 @@ class _HomeState extends ConsumerState<Home> {
                                 });
                               },
                             ),
-                            SizedBox(width: appWidth * 0.1),
+                            SizedBox(width: appWidth * 0.05),
                           ])
                         : const SizedBox.shrink(),
                     Container(

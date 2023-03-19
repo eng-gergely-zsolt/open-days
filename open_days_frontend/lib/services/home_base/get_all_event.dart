@@ -9,7 +9,7 @@ import '../../screens/home_base/models/event_response_model.dart';
 Future<GetAllEventModel> getAllEventSvc() async {
   final response = GetAllEventModel();
   final authorizationToken = await SecureStorage.getAuthorizationToken();
-  const uri = 'http://10.0.2.2:8081/open-days/event/all-event';
+  const uri = 'https://open-days-thesis.herokuapp.com/open-days/event/all-event';
 
   Map<String, String> headers = {
     "Content-Type": "application/json",

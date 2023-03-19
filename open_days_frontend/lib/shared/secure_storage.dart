@@ -16,4 +16,9 @@ class SecureStorage {
 
   static Future setAuthorizationToken(String authorizationToken) async =>
       await _secureStorage.write(key: _authorizationToken, value: authorizationToken);
+
+  static Future deleteUserId() async => await _secureStorage.delete(key: _userId);
+
+  static Future deleteAuthorizationToken() async =>
+      await _secureStorage.delete(key: _authorizationToken);
 }

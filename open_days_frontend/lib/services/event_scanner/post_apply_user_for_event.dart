@@ -1,7 +1,7 @@
 import 'package:http/http.dart' as http;
 
 import '../../shared/secure_storage.dart';
-import '../../domain/models/base_response_model.dart';
+import '../../models/base_response_model.dart';
 
 Future<BaseResponseModel> participateInEventSvc(String? uri) async {
   final response = BaseResponseModel();

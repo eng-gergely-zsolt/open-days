@@ -9,12 +9,10 @@ final homeBaseRepositoryProvider = Provider((_) => HomeBaseRepository());
 
 class HomeBaseRepository {
   Future<GetAllEventModel> getAllEventRepo() async {
-    await Future.delayed(const Duration(seconds: 3));
     return await getAllEventSvc();
   }
 
   Future<UserResponseModel> getUserByIdRepo() async {
-    await Future.delayed(const Duration(seconds: 3));
     return await getUserByIdSvc();
   }
 }

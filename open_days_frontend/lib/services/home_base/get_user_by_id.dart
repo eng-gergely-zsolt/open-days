@@ -9,7 +9,7 @@ Future<UserResponseModel> getUserByIdSvc() async {
   var result = UserResponseModel();
   final userId = await SecureStorage.getUserId() ?? '';
   final authorizationToken = await SecureStorage.getAuthorizationToken();
-  final uri = 'http://10.0.2.2:8081/open-days/users/' + userId;
+  final uri = 'https://open-days-thesis.herokuapp.com/open-days/users/' + userId;
 
   Map<String, String> headers = {
     "Content-Type": "application/json",

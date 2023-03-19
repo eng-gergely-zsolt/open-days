@@ -7,7 +7,6 @@ final baseRepositoryProvider = Provider((_) => BaseRepository());
 
 class BaseRepository {
   Future<ActivitiesResponseModel> getAllActivityRepo() async {
-    await Future.delayed(const Duration(seconds: 3));
     return await getAllActivitySvc();
   }
 }

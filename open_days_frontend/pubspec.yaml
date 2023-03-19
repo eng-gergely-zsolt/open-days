@@ -42,7 +42,10 @@ dependencies:
   cupertino_icons: ^1.0.2
   qr_code_scanner: ^1.0.1
   loading_animation_widget:
+  connectivity_plus: ^3.0.3
+  flutter_native_splash: ^2.2.18
   flutter_secure_storage: ^5.1.2
+  internet_connection_checker: ^1.0.0+1
 
 dev_dependencies:
   flutter_test:

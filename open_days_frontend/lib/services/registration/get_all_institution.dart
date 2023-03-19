@@ -4,7 +4,8 @@ import 'package:http/http.dart' as http;
 import '../../screens/registration/models/institution.dart';
 
 Future<List<Institution>> getAllInstitutionSvc() async {
-  const uri = 'http://10.0.2.2:8081/open-days/institution/all-name-with-county';
+  const uri = 'https://open-days-thesis.herokuapp.com/open-days/institution/all-name-with-county';
+
   final response = await http.get(Uri.parse(uri)).timeout(const Duration(seconds: 5));
 
   if (response.statusCode == 200) {

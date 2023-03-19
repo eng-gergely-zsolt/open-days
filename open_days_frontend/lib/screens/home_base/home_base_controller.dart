@@ -1,9 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constants/constants.dart';
-import '../../shared/secure_storage.dart';
 import './models/initial_data_model.dart';
-import '../../models/user_request_model.dart';
 import '../../repositories/home_base_repository.dart';
 
 class HomeBaseController {
@@ -42,6 +40,17 @@ class HomeBaseController {
 
   void setNavigationBarIndexProvider(int navigationBarIndex) {
     _ref.read(_navigationBarIndexProvider.notifier).state = navigationBarIndex;
+  }
+
+  bool isParticipant(InitialDataModel initialData) {
+    return initialData.user?.roleName == roleUser;
+  }
+
+  // It decides if we should show the floating button for creating events or not.
+  bool isFloatingButtonRequired(InitialDataModel initialData) {
+    return _ref.read(_navigationBarIndexProvider) == 0 &&
+        initialData.operationResult == operationResultSuccess &&
+        (initialData.user?.roleName == roleAdmin || initialData.user?.roleName == roleOrganizer);
   }
 
   FutureProvider<InitialDataModel> createInitialDataProvider() {

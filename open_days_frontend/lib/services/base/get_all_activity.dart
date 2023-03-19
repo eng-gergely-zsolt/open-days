@@ -8,7 +8,7 @@ import '../../models/activities_response_model.dart';
 Future<ActivitiesResponseModel> getAllActivitySvc() async {
   final response = ActivitiesResponseModel();
   final authorizationToken = await SecureStorage.getAuthorizationToken();
-  const uri = 'http://10.0.2.2:8081/open-days/activity/all-activity';
+  const uri = 'https://open-days-thesis.herokuapp.com/open-days/activity/all-activity';
 
   Map<String, String> headers = {
     "Content-Type": "application/json",

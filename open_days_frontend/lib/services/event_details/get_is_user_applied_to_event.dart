@@ -8,7 +8,7 @@ Future<IsUserAppliedForEvent> isUserAppliedForEventSvc(int eventId) async {
   final response = IsUserAppliedForEvent();
   final userPublicId = await SecureStorage.getUserId() ?? '';
   final authorizationToken = await SecureStorage.getAuthorizationToken();
-  final uri = 'http://10.0.2.2:8081/open-days/event/is-user-applied-for-event/' +
+  final uri = 'https://open-days-thesis.herokuapp.com/open-days/event/is-user-applied-for-event/' +
       eventId.toString() +
       '/' +
       userPublicId;

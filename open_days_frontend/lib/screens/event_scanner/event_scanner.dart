@@ -7,8 +7,8 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../../utils/utils.dart';
 import './event_scanner_controller.dart';
-import '../../domain/models/base_response_model.dart';
 import '../home_base/home_base_controller.dart';
+import '../../models/base_response_model.dart';
 
 class EventScanner extends ConsumerStatefulWidget {
   const EventScanner({Key? key}) : super(key: key);

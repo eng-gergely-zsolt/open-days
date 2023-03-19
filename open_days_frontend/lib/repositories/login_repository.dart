@@ -8,7 +8,6 @@ final loginRepositoryProvider = Provider((_) => LoginRepository());
 
 class LoginRepository {
   Future<UserResponseModel> loginUserRepo(UserRequestModel user) async {
-    await Future.delayed(const Duration(seconds: 3));
     return await loginUserSvc(user);
   }
 }
