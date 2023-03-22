@@ -14,7 +14,7 @@ public class SecurityConstants {
 
 	public static final String HEADER_STRING = "Authorization";
 
-	public static final String GET_ALL_EVENT_URL = "events/all-event";
+	public static final String GET_ALL_EVENT_URL = "/event/all-event";
 
 	public static final String PASSWORD_RESET_URL = "/users/password-reset";
 
