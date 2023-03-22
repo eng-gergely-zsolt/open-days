@@ -14,14 +14,13 @@ public class SecurityConstants {
 
 	public static final String HEADER_STRING = "Authorization";
 
+	public static final String GET_ALL_EVENT_URL = "events/all-event";
+
 	public static final String PASSWORD_RESET_URL = "/users/password-reset";
 
 	public static final String EMAIL_VERIFICATION_URL = "/users/email-verification";
 
 	public static final String PASSWORD_RESET_REQUEST_URL = "/users/password-reset-request";
-
-	// County controller
-	public static final String COUNTY_ALL_NAME = "/county/all-name";
 
 	// Institution controller
 	public static final String INSTITUTION_ALL_NAME_WITH_COUNTY = "/institution//all-name-with-county";
