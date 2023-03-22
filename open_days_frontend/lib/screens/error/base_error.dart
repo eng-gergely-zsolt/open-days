@@ -13,12 +13,12 @@ class BaseError extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            appLocale?.connectivity_offline as String,
+            appLocale?.base_text_sorry as String,
             style: Theme.of(context).textTheme.headline5,
           ),
           const SizedBox(height: 25),
           Text(
-            appLocale?.connectivity_check_connection as String,
+            appLocale?.error_something_went_wrong as String,
             style: Theme.of(context).textTheme.bodyText1,
           ),
         ],

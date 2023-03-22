@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../home_base/home_base.dart';
 import '../login/login.dart';
+import '../home_base/home_base.dart';
+import '../../constants/page_routes.dart';
 import '../registration/registration.dart';
 
 class Lobby extends StatelessWidget {
@@ -10,6 +11,7 @@ class Lobby extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appLocale = AppLocalizations.of(context);
     final appWidth = MediaQuery.of(context).size.width;
     final appHeight = MediaQuery.of(context).size.height;
 
@@ -38,6 +40,19 @@ class Lobby extends StatelessWidget {
                 height: appHeight * 0.45,
                 color: Colors.white,
               ),
+            ),
+          ),
+          Positioned(
+            top: appHeight * 0.04,
+            left: appWidth * 0.79,
+            child: TextButton(
+              child: Text(
+                appLocale?.base_text_guest as String,
+                style: Theme.of(context).textTheme.bodyText1?.copyWith(color: Colors.white),
+              ),
+              onPressed: () {
+                Navigator.pushNamed(context, guestModeRoute);
+              },
             ),
           ),
           Positioned(

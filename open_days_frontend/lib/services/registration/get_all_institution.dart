@@ -6,7 +6,7 @@ import '../../screens/registration/models/institution.dart';
 Future<List<Institution>> getAllInstitutionSvc() async {
   const uri = 'https://open-days-thesis.herokuapp.com/open-days/institution/all-name-with-county';
 
-  final response = await http.get(Uri.parse(uri)).timeout(const Duration(seconds: 5));
+  final response = await http.get(Uri.parse(uri)).timeout(const Duration(seconds: 10));
 
   if (response.statusCode == 200) {
     Iterable decodedResponse = json.decode(response.body);

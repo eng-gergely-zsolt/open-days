@@ -19,12 +19,16 @@
     "base_text_time": "Time",
     "base_text_link": "Link",
     "base_text_error": "Error",
+    "base_text_guest": "Guest",
+    "base_text_sorry": "Sorry",
     "base_text_change": "Change",
     "base_text_log_out": "Log out",
     "base_text_location": "Location",
     "base_text_organizer": "Organizer",
     "base_text_general_error_message": "Something went wrong",
     "base_text_general_try_again_message": "Something went wrong. Please try again!",
+
+    "error_something_went_wrong": "Oops! Something went wrong. Please try again.",
 
     "connectivity_offline": "You're offline",
     "connectivity_check_connection": "Check your connection and try again.",
