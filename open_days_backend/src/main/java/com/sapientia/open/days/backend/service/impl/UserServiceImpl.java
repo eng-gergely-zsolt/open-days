@@ -32,6 +32,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import static com.sapientia.open.days.backend.shared.Roles.*;
+
 @Service
 @SuppressWarnings("unused")
 public class UserServiceImpl implements UserService {
@@ -71,6 +73,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserDTO getUserByPublicId(String publicId) {
+		List<String> userRoles = new ArrayList<>();
 		UserEntity userEntity = userRepository.findByPublicId(publicId);
 
 		if (userEntity == null) {
@@ -81,7 +84,17 @@ public class UserServiceImpl implements UserService {
 		UserDTO result = new UserDTO();
 		BeanUtils.copyProperties(userEntity, result);
 
-		result.setRoleName(userEntity.getRoles().iterator().next().getName());
+		for (RoleEntity userRole : userEntity.getRoles()) {
+			userRoles.add(userRole.getName());
+		}
+
+		if (userRoles.contains(ROLE_ADMIN.name())) {
+			result.setRoleName(ROLE_ADMIN.name());
+		} else if (userRoles.contains(ROLE_ORGANIZER.name())) {
+			result.setRoleName(ROLE_ORGANIZER.name());
+		} else {
+			result.setRoleName(ROLE_USER.name());
+		}
 
 		return result;
 	}
