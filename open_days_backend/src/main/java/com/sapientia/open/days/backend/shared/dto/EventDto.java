@@ -10,6 +10,7 @@ public class EventDto implements Serializable {
 	private boolean isOnline;
 	private String location;
 	private String dateTime;
+	private String imageLink;
 	private String meetingLink;
 	private String organizerId;
 	private String activityName;
@@ -33,6 +34,10 @@ public class EventDto implements Serializable {
 
 	public String getDateTime() {
 		return dateTime;
+	}
+
+	public String getImageLink() {
+		return imageLink;
 	}
 
 	public String getMeetingLink() {
@@ -69,6 +74,10 @@ public class EventDto implements Serializable {
 
 	public void setDateTime(String dateTime) {
 		this.dateTime = dateTime;
+	}
+
+	public void setImageLink(String imageLink) {
+		this.imageLink = imageLink;
 	}
 
 	public void setMeetingLink(String meetingLink) {

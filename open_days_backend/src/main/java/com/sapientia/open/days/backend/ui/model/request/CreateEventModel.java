@@ -8,6 +8,7 @@ public class CreateEventModel {
 	private boolean isOnline;
 	private String dateTime;
 	private String location;
+	private String imageLink;
 	private String meetingLink;
 	private String organizerId;
 	private String activityName;
@@ -23,6 +24,10 @@ public class CreateEventModel {
 
 	public String getLocation() {
 		return location;
+	}
+
+	public String getImageLink() {
+		return imageLink;
 	}
 
 	public String getMeetingLink() {
@@ -47,6 +52,10 @@ public class CreateEventModel {
 
 	public void setLocation(String location) {
 		this.location = location;
+	}
+
+	public void setImageLink(String imageLink) {
+		this.imageLink = imageLink;
 	}
 
 	public void setMeetingLink(String meetingLink) {

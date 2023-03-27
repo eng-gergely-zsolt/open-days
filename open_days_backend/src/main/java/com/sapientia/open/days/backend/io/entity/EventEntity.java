@@ -22,6 +22,9 @@ public class EventEntity {
 	private boolean isOnline;
 
 	@Column(nullable = true)
+	private String imageLink;
+
+	@Column(nullable = true)
 	private String meetingLink;
 
 	// It's the user that organises/organised the event.
@@ -50,10 +53,12 @@ public class EventEntity {
 
 	public EventEntity() {}
 
-	public EventEntity(boolean isOnline, String location, String dateTime, String meetingLink, UserEntity organizer, ActivityEntity activity) {
+	public EventEntity(boolean isOnline, String location, String dateTime, String imageLink, String meetingLink,
+	                   UserEntity organizer, ActivityEntity activity) {
 		this.isOnline = isOnline;
 		this.location = location;
 		this.dateTime = dateTime;
+		this.imageLink = imageLink;
 		this.meetingLink = meetingLink;
 		this.organizer = organizer;
 		this.activity = activity;
@@ -73,6 +78,10 @@ public class EventEntity {
 
 	public boolean getIsOnline() {
 		return isOnline;
+	}
+
+	public String getImageLink() {
+		return imageLink;
 	}
 
 	public String getMeetingLink() {
@@ -109,6 +118,10 @@ public class EventEntity {
 
 	public void setIsOnline(boolean isOnline) {
 		this.isOnline = isOnline;
+	}
+
+	public void setImageLink(String imageLink) {
+		this.imageLink = imageLink;
 	}
 
 	public void setMeetingLink(String meetingLink) {
