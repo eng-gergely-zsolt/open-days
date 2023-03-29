@@ -328,28 +328,28 @@ public class InitialSetup {
 		ArrayList<EventEntity> events = new ArrayList<>();
 
 		events.add(new EventEntity(false, "Sapientia",
-				"2023-09-15 10:15", "gs://open-days-9f91c.appspot.com/event-placeholder.jpg" , null, organizer, activity1));
+				"2023-09-15 10:15", "event/placeholder.jpg" , null, organizer, activity1));
 
 		events.add(new EventEntity(false, "312-es terem",
-				"2023-10-20 11:20", "gs://open-days-9f91c.appspot.com/event-placeholder.jpg", null, organizer, activity1));
+				"2023-10-20 11:20", "event/placeholder.jpg", null, organizer, activity1));
 
 		events.add(new EventEntity(false, "Sportpalya",
-				"2023-11-25 15:30", "gs://open-days-9f91c.appspot.com/event-placeholder.jpg", null, organizer, activity1));
+				"2023-11-25 15:30", "event/placeholder.jpg", null, organizer, activity1));
 
 		events.add(new EventEntity(false, "314-es terem",
-				"2021-08-02 09:30", "gs://open-days-9f91c.appspot.com/event-placeholder.jpg", null, organizer, activity1));
+				"2021-08-02 09:30", "event/placeholder.jpg", null, organizer, activity1));
 
 		events.add(new EventEntity(false, "Udvar",
-				"2023-08-02 22:30", "gs://open-days-9f91c.appspot.com/event-placeholder.jpg", null, organizer, activity2));
+				"2023-08-02 22:30", "event/placeholder.jpg", null, organizer, activity2));
 
 		events.add(new EventEntity(false, "Aula",
-				"2023-04-22 19:45", "gs://open-days-9f91c.appspot.com/event-placeholder.jpg", null, organizer, activity2));
+				"2023-04-22 19:45", "event/placeholder.jpg", null, organizer, activity2));
 
 		events.add(new EventEntity(false, "1. emelet",
-				"2024-01-26 07:12", "gs://open-days-9f91c.appspot.com/event-placeholder.jpg", null, organizer, activity2));
+				"2024-01-26 07:12", "event/placeholder.jpg", null, organizer, activity2));
 
 		events.add(new EventEntity(true, "2. emelet",
-				"2024-01-08 09:10", "gs://open-days-9f91c.appspot.com/event-placeholder.jpg", "https://meeting.com", organizer, activity2));
+				"2024-01-08 09:10", "event/placeholder.jpg", "https://meeting.com", organizer, activity2));
 
 		for (EventEntity event : events) {
 			if (eventRepository.findByLocation(event.getLocation()) == null) {
