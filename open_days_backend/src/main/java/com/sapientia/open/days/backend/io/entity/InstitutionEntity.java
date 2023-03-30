@@ -11,7 +11,7 @@ import java.util.Set;
 public class InstitutionEntity implements Serializable {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
 	@Column(length = 100, nullable = false)

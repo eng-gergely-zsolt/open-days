@@ -10,8 +10,8 @@ import java.io.Serializable;
 public class OrganizerEmailEntity implements Serializable {
 
 	@Id
-	@GeneratedValue
-	private long Id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
 
 	@Column(length = 100, unique = true, nullable = false)
 	private String email;
@@ -28,7 +28,7 @@ public class OrganizerEmailEntity implements Serializable {
 	}
 
 	public long getId() {
-		return Id;
+		return id;
 	}
 
 	public String getEmail() {
@@ -36,7 +36,7 @@ public class OrganizerEmailEntity implements Serializable {
 	}
 
 	public void setId(long id) {
-		Id = id;
+		this.id = id;
 	}
 
 	public void setEmail(String email) {
