@@ -67,6 +67,9 @@ public class UserEntity implements Serializable {
 			inverseJoinColumns = @JoinColumn(name = "roles_id", referencedColumnName = "id"))
 	private Set<RoleEntity> roles;
 
+	public UserEntity() {
+	}
+
 	public UserEntity(String email, String userName, String firstName, String lastName, String publicId,
 	                  String encryptedPassword, Set<RoleEntity> roles, InstitutionEntity institution,
 	                  boolean emailVerificationStatus) {

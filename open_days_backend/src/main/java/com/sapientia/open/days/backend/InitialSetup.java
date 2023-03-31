@@ -291,7 +291,7 @@ public class InitialSetup {
 	}
 
 	private void createEvents() {
-		UserEntity organizer = userRepository.findByEmail("organizer@mailinator.com");
+		UserEntity organizer = userRepository.findByEmail("geergely.zsolt@gmail.com");
 
 		ActivityEntity activity1 = activityRepository.findByName("Kampusztura");
 		ActivityEntity activity2 = activityRepository.findByName("Kerteszmernoki tanszek");
