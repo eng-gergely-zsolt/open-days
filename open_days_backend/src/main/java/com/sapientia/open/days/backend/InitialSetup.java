@@ -276,12 +276,12 @@ public class InitialSetup {
 		ArrayList<ActivityEntity> activities = new ArrayList<>();
 
 		activities.add(new ActivityEntity("Kampusztura"));
-		activities.add(new ActivityEntity("Gepeszmernoki Tanszek bemutato"));
-		activities.add(new ActivityEntity("Kerteszmernoki tanszek bemutato"));
-		activities.add(new ActivityEntity("Villamosmernoki Tanszek bemutato"));
-		activities.add(new ActivityEntity("Matematika-Informatika Tanszek bemutato"));
-		activities.add(new ActivityEntity("Alkalmazott Nyelveszeti Tanszek bemutato"));
-		activities.add(new ActivityEntity("Alkalmazott Tarsadalomtudomanyok Tanszek bemutato"));
+		activities.add(new ActivityEntity("Gepeszmernoki tanszekbemutato"));
+		activities.add(new ActivityEntity("Kerteszmernoki tanszekbemutato"));
+		activities.add(new ActivityEntity("Villamosmernoki tanszekbemutato"));
+		activities.add(new ActivityEntity("Matematika-Informatika tanszekbemutato"));
+		activities.add(new ActivityEntity("Alkalmazott Nyelveszeti tanszekbemutato"));
+		activities.add(new ActivityEntity("Alkalmazott Tarsadalomtudomanyok tanszekbemutato"));
 
 		for (ActivityEntity activity : activities) {
 			if (activityRepository.findByName(activity.getName()) == null) {
@@ -291,17 +291,16 @@ public class InitialSetup {
 	}
 
 	private void createEvents() {
+		ArrayList<EventEntity> events = new ArrayList<>();
 		UserEntity organizer = userRepository.findByEmail("geergely.zsolt@gmail.com");
 
 		ActivityEntity activity1 = activityRepository.findByName("Kampusztura");
-		ActivityEntity activity2 = activityRepository.findByName("Kerteszmernoki tanszek bemutato");
-		ActivityEntity activity3 = activityRepository.findByName("Gepeszmernoki Tanszek bemutato");
-		ActivityEntity activity4 = activityRepository.findByName("Villamosmernoki Tanszek bemutato");
-		ActivityEntity activity5 = activityRepository.findByName("Matematika-Informatika Tanszek bemutato");
-		ActivityEntity activity6 = activityRepository.findByName("Alkalmazott Nyelveszeti Tanszek bemutato");
-		ActivityEntity activity7 = activityRepository.findByName("Alkalmazott Tarsadalomtudomanyok Tanszek bemutato");
-
-		ArrayList<EventEntity> events = new ArrayList<>();
+		ActivityEntity activity3 = activityRepository.findByName("Gepeszmernoki tanszekbemutato");
+		ActivityEntity activity2 = activityRepository.findByName("Kerteszmernoki tanszekbemutato");
+		ActivityEntity activity4 = activityRepository.findByName("Villamosmernoki tanszekbemutato");
+		ActivityEntity activity5 = activityRepository.findByName("Matematika-Informatika tanszekbemutato");
+		ActivityEntity activity6 = activityRepository.findByName("Alkalmazott Nyelveszeti tanszekbemutato");
+		ActivityEntity activity7 = activityRepository.findByName("Alkalmazott Tarsadalomtudomanyok tanszekbemutato");
 
 		String descriptionActivity1 = "Ezen az esemenyen a diakoknak bemutatjuk az egyetem kampuszat erintve a konyvtarat," +
 				"HOK-ot, sportpalyat, bentlakast es placcot. öüóőúűéáí";

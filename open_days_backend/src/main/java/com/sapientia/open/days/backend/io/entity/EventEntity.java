@@ -42,16 +42,12 @@ public class EventEntity {
 
 	// Contains all the users that applied for this event.
 	@ManyToMany(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
-	@JoinTable(name = "users_events",
-			joinColumns = @JoinColumn(name = "event_id", referencedColumnName = "id"),
-			inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
+	@JoinTable(name = "users_events", joinColumns = @JoinColumn(name = "event_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
 	private Set<UserEntity> users;
 
 	// Contains all the users that have participated in this event.
 	@ManyToMany(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
-	@JoinTable(name = "participated_users",
-			joinColumns = @JoinColumn(name = "event_id", referencedColumnName = "id"),
-			inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
+	@JoinTable(name = "participated_users", joinColumns = @JoinColumn(name = "event_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
 	private Set<UserEntity> participatedUsers;
 
 	public EventEntity() {
@@ -63,9 +59,11 @@ public class EventEntity {
 		this.location = location;
 		this.dateTime = dateTime;
 		this.imageLink = imageLink;
+		this.description = description;
 		this.meetingLink = meetingLink;
-		this.organizer = organizer;
 		this.activity = activity;
+		this.organizer = organizer;
+
 	}
 
 	public long getId() {
