@@ -308,10 +308,7 @@ public class InitialSetup {
 
 		String defaultDescription = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem" +
 				"Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a" +
-				"galley of type and scrambled it to make a type specimen book. It has survived not only five centuries," +
-				"but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in" +
-				"the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with" +
-				"desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
+				"galley of type and scrambled it to make a type specimen book.";
 
 		events.add(new EventEntity(false, "Sapientia",
 				"2024-03-01 10:15", "event/placeholder.jpg", descriptionActivity1, null, organizer, activity1));
@@ -319,7 +316,7 @@ public class InitialSetup {
 		events.add(new EventEntity(false, "312-es terem",
 				"2024-03-01 11:20", "event/placeholder.jpg", defaultDescription, null, organizer, activity2));
 
-		events.add(new EventEntity(false, "Sportpalya",
+		events.add(new EventEntity(false, "Sportpálya",
 				"2024-03-10 15:30", "event/placeholder.jpg", defaultDescription, null, organizer, activity3));
 
 		events.add(new EventEntity(false, "114-es terem",
