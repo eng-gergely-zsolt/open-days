@@ -246,7 +246,7 @@ public class InitialSetup {
 			userRepository.save(adminUser);
 		}
 
-		UserEntity organizerUser = userRepository.findByEmail("organizer@mailinator.com");
+		UserEntity organizerUser = userRepository.findByEmail("geergely.zsolt@gmail.com");
 		RoleEntity roleOrganizer = roleRepository.findByName(Roles.ROLE_ORGANIZER.name());
 
 		if (organizerUser == null && roleOrganizer != null) {
@@ -258,8 +258,8 @@ public class InitialSetup {
 			userRepository.save(organizerUser);
 		}
 
+		UserEntity participantUser = userRepository.findByEmail("user@mailinator.com");
 		RoleEntity roleParticipant = roleRepository.findByName(Roles.ROLE_USER.name());
-		UserEntity participantUser = userRepository.findByEmail("customer@mailinator.com");
 
 		if (participantUser == null && roleParticipant != null) {
 			Set<RoleEntity> roles = new HashSet<>(List.of(roleParticipant));
@@ -322,7 +322,7 @@ public class InitialSetup {
 		events.add(new EventEntity(false, "114-es terem",
 				"2024-03-15 09:30", "event/placeholder.jpg", defaultDescription, null, organizer, activity4));
 
-		events.add(new EventEntity(false, "114-es terem",
+		events.add(new EventEntity(false, "114-es tanterem",
 				"2024-04-02 22:30", "event/placeholder.jpg", defaultDescription, null, organizer, activity5));
 
 		events.add(new EventEntity(false, "Aula",
