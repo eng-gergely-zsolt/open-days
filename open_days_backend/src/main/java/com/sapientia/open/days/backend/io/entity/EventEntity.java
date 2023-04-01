@@ -24,6 +24,9 @@ public class EventEntity {
 	@Column(nullable = true)
 	private String imageLink;
 
+	@Column(nullable = false)
+	private String description;
+
 	@Column(nullable = true)
 	private String meetingLink;
 
@@ -51,10 +54,11 @@ public class EventEntity {
 			inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
 	private Set<UserEntity> participatedUsers;
 
-	public EventEntity() {}
+	public EventEntity() {
+	}
 
-	public EventEntity(boolean isOnline, String location, String dateTime, String imageLink, String meetingLink,
-	                   UserEntity organizer, ActivityEntity activity) {
+	public EventEntity(boolean isOnline, String location, String dateTime, String imageLink, String description,
+	                   String meetingLink, UserEntity organizer, ActivityEntity activity) {
 		this.isOnline = isOnline;
 		this.location = location;
 		this.dateTime = dateTime;
@@ -82,6 +86,10 @@ public class EventEntity {
 
 	public String getImageLink() {
 		return imageLink;
+	}
+
+	public String getDescription() {
+		return description;
 	}
 
 	public String getMeetingLink() {
@@ -122,6 +130,10 @@ public class EventEntity {
 
 	public void setImageLink(String imageLink) {
 		this.imageLink = imageLink;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public void setMeetingLink(String meetingLink) {

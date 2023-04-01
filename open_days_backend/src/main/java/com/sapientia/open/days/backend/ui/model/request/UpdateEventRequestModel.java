@@ -5,6 +5,7 @@ public class UpdateEventRequestModel {
 	private String dateTime;
 	private boolean isOnline;
 	private String imageLink;
+	private String description;
 	private String meetingLink;
 	private String activityName;
 
@@ -22,6 +23,10 @@ public class UpdateEventRequestModel {
 
 	public String getImageLink() {
 		return imageLink;
+	}
+
+	public String getDescription() {
+		return description;
 	}
 
 	public String getMeetingLink() {
@@ -46,6 +51,10 @@ public class UpdateEventRequestModel {
 
 	public void setImageLink(String imageLink) {
 		this.imageLink = imageLink;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public void setMeetingLink(String meetingLink) {

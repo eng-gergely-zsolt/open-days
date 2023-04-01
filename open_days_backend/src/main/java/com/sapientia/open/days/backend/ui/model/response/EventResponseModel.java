@@ -9,6 +9,7 @@ public class EventResponseModel {
 	private String location;
 	private String dateTime;
 	private String imageLink;
+	private String description;
 	private String meetingLink;
 	private String organizerId;
 	private String activityName;
@@ -36,6 +37,10 @@ public class EventResponseModel {
 
 	public String getImageLink() {
 		return imageLink;
+	}
+
+	public String getDescription() {
+		return description;
 	}
 
 	public String getMeetingLink() {
@@ -76,6 +81,10 @@ public class EventResponseModel {
 
 	public void setImageLink(String imageLink) {
 		this.imageLink = imageLink;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public void setMeetingLink(String meetingLink) {

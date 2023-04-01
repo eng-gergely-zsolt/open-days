@@ -276,8 +276,8 @@ public class InitialSetup {
 		ArrayList<ActivityEntity> activities = new ArrayList<>();
 
 		activities.add(new ActivityEntity("Kampusztura"));
-		activities.add(new ActivityEntity("Kerteszmernoki tanszek"));
 		activities.add(new ActivityEntity("Gepeszmernoki Tanszek bemutato"));
+		activities.add(new ActivityEntity("Kerteszmernoki tanszek bemutato"));
 		activities.add(new ActivityEntity("Villamosmernoki Tanszek bemutato"));
 		activities.add(new ActivityEntity("Matematika-Informatika Tanszek bemutato"));
 		activities.add(new ActivityEntity("Alkalmazott Nyelveszeti Tanszek bemutato"));
@@ -294,7 +294,7 @@ public class InitialSetup {
 		UserEntity organizer = userRepository.findByEmail("geergely.zsolt@gmail.com");
 
 		ActivityEntity activity1 = activityRepository.findByName("Kampusztura");
-		ActivityEntity activity2 = activityRepository.findByName("Kerteszmernoki tanszek");
+		ActivityEntity activity2 = activityRepository.findByName("Kerteszmernoki tanszek bemutato");
 		ActivityEntity activity3 = activityRepository.findByName("Gepeszmernoki Tanszek bemutato");
 		ActivityEntity activity4 = activityRepository.findByName("Villamosmernoki Tanszek bemutato");
 		ActivityEntity activity5 = activityRepository.findByName("Matematika-Informatika Tanszek bemutato");
@@ -303,29 +303,32 @@ public class InitialSetup {
 
 		ArrayList<EventEntity> events = new ArrayList<>();
 
+		String descriptionActivity1 = "Ezen az esemenyen a diakoknak bemutatjuk az egyetem kampuszat erintve a konyvtarat," +
+				"HOK-ot, sportpalyat, bentlakast es placcot. öüóőúűéáí";
+
 		events.add(new EventEntity(false, "Sapientia",
-				"2024-03-01 10:15", "event/placeholder.jpg", null, organizer, activity1));
+				"2024-03-01 10:15", "event/placeholder.jpg", descriptionActivity1, null, organizer, activity1));
 
 		events.add(new EventEntity(false, "312-es terem",
-				"2024-03-01 11:20", "event/placeholder.jpg", null, organizer, activity2));
+				"2024-03-01 11:20", "event/placeholder.jpg", "", null, organizer, activity2));
 
 		events.add(new EventEntity(false, "Sportpalya",
-				"2024-03-10 15:30", "event/placeholder.jpg", null, organizer, activity3));
+				"2024-03-10 15:30", "event/placeholder.jpg", "", null, organizer, activity3));
 
 		events.add(new EventEntity(false, "114-es terem",
-				"2024-03-15 09:30", "event/placeholder.jpg", null, organizer, activity4));
+				"2024-03-15 09:30", "event/placeholder.jpg", "", null, organizer, activity4));
 
 		events.add(new EventEntity(false, "114-es terem",
-				"2024-04-02 22:30", "event/placeholder.jpg", null, organizer, activity5));
+				"2024-04-02 22:30", "event/placeholder.jpg", "", null, organizer, activity5));
 
 		events.add(new EventEntity(false, "Aula",
-				"2024-04-22 19:45", "event/placeholder.jpg", null, organizer, activity6));
+				"2024-04-22 19:45", "event/placeholder.jpg", "", null, organizer, activity6));
 
 		events.add(new EventEntity(false, "1. emelet",
-				"2024-05-26 07:12", "event/placeholder.jpg", null, organizer, activity7));
+				"2024-05-26 07:12", "event/placeholder.jpg", "", null, organizer, activity7));
 
 		events.add(new EventEntity(true, "2. emelet",
-				"2024-05-08 09:10", "event/placeholder.jpg", "https://meeting.com", organizer, activity1));
+				"2024-05-08 09:10", "event/placeholder.jpg", "", "https://meeting.com", organizer, activity1));
 
 		for (EventEntity event : events) {
 			if (eventRepository.findByLocation(event.getLocation()) == null) {
