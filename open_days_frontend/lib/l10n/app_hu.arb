@@ -1,6 +1,6 @@
 {
     "language": "Magyar",
-    "login": "Bejelentkezés",
+
     "sign_up": "Regisztráció",
     "username": "Felhasználónév",
     "password": "Jelszó",
@@ -24,6 +24,9 @@
     "base_text_general_error_message": "Hiba történt",
     "base_text_general_try_again_message": "Hiba történt. Kérjük próbálja újra!",
 
+    "sign_in": "Bejelentkezés",
+    "sign_in_from_here": "Jelentkezz be itt",
+
     "error_something_went_wrong": "Hupsz, hiba történt. Kérjük próbálja újra.",
 
     "connectivity_offline": "Offline állapotban van",
@@ -35,6 +38,7 @@
 
     "application_bar_scanner": "QR kód olvasó",
 
+    "events": "Események",
     "event_details_qr_code": "QR kód",
     "event_details_participate": "Jelentkezés",
     "event_details_create_qr_code": "QR Készítése",
@@ -42,6 +46,10 @@
 
     "event_creator_header": "Eseménykészítő",
     "event_creator_online_event": "Online esemény?",
+
+    "order_by": "Rendezés",
+    "order_by_name": "Név szerint",
+    "order_by_date": "Dátum szerint",
 
     "event_modification_header": "Esemény módosítása"
 }

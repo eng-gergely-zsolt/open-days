@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:open_days_frontend/theme/theme.dart';
 
 import '../login/login.dart';
 import './registration_controller.dart';
@@ -66,7 +67,7 @@ class _RegistrationState extends ConsumerState<Registration> {
           loading: () => Center(
             child: LoadingAnimationWidget.staggeredDotsWave(
               size: appHeight * 0.1,
-              color: const Color.fromRGBO(1, 30, 65, 1),
+              color: const Color.fromRGBO(38, 70, 83, 1),
             ),
           ),
           error: (error, stackTrace) => Center(
@@ -89,7 +90,7 @@ class _RegistrationState extends ConsumerState<Registration> {
                 ? Center(
                     child: LoadingAnimationWidget.staggeredDotsWave(
                       size: appHeight * 0.1,
-                      color: const Color.fromRGBO(1, 30, 65, 1),
+                      color: const Color.fromRGBO(38, 70, 83, 1),
                     ),
                   )
                 : Container(
@@ -101,52 +102,63 @@ class _RegistrationState extends ConsumerState<Registration> {
                         key: _formKey,
                         child: Column(
                           children: [
-                            SizedBox(height: appHeight * 0.05),
                             TextFormField(
                                 maxLength: 50,
                                 decoration: InputDecoration(
                                   labelText: appLocale?.first_name,
-                                  prefixIcon: const Icon(Icons.person_add_alt_outlined),
+                                  prefixIcon: Icon(
+                                    Icons.person_add_outlined,
+                                    color: Theme.of(context).iconTheme.color,
+                                  ),
                                 ),
-                                initialValue: registrationController.getUser().firstName,
                                 onChanged: ((value) {
                                   registrationController.setFirstName(value);
                                 }),
+                                initialValue: registrationController.getUser().firstName,
                                 validator: (value) => registrationController.validateName(value)),
                             TextFormField(
                               maxLength: 50,
                               decoration: InputDecoration(
                                 labelText: appLocale?.last_name,
-                                prefixIcon: const Icon(Icons.person_add_alt_outlined),
+                                prefixIcon: Icon(
+                                  Icons.person_add_alt_outlined,
+                                  color: Theme.of(context).iconTheme.color,
+                                ),
                               ),
-                              initialValue: registrationController.getUser().lastName,
                               onChanged: ((value) {
                                 registrationController.setLastName(value);
                               }),
+                              initialValue: registrationController.getUser().lastName,
                               validator: ((value) => registrationController.validateName(value)),
                             ),
                             TextFormField(
                               maxLength: 50,
                               decoration: InputDecoration(
                                 labelText: appLocale?.username,
-                                prefixIcon: const Icon(Icons.person_outline),
+                                prefixIcon: Icon(
+                                  Icons.person_outline,
+                                  color: Theme.of(context).iconTheme.color,
+                                ),
                               ),
-                              initialValue: registrationController.getUser().username,
                               onChanged: ((value) {
                                 registrationController.setUsername(value);
                               }),
+                              initialValue: registrationController.getUser().username,
                               validator: ((value) => registrationController.validateName(value)),
                             ),
                             TextFormField(
                               maxLength: 100,
                               decoration: InputDecoration(
                                 labelText: appLocale?.email,
-                                prefixIcon: const Icon(Icons.alternate_email),
+                                prefixIcon: Icon(
+                                  Icons.alternate_email,
+                                  color: Theme.of(context).iconTheme.color,
+                                ),
                               ),
-                              initialValue: registrationController.getUser().email,
                               onChanged: ((value) {
                                 registrationController.setEmail(value);
                               }),
+                              initialValue: registrationController.getUser().email,
                               validator: ((value) => registrationController.validateEmail(value)),
                             ),
                             TextFormField(
@@ -154,30 +166,36 @@ class _RegistrationState extends ConsumerState<Registration> {
                               obscureText: true,
                               decoration: InputDecoration(
                                 labelText: appLocale?.password,
-                                prefixIcon: const Icon(Icons.password),
+                                prefixIcon: Icon(
+                                  Icons.password,
+                                  color: Theme.of(context).iconTheme.color,
+                                ),
                               ),
-                              initialValue: registrationController.getUser().password,
                               onChanged: ((value) {
                                 registrationController.setPassword(value);
                               }),
                               validator: ((value) =>
                                   registrationController.validatePassword(value)),
+                              initialValue: registrationController.getUser().password,
                             ),
                             SizedBox(height: appHeight * 0.03),
                             Container(
-                              padding: EdgeInsets.symmetric(horizontal: appWidth * 0.02),
                               decoration: BoxDecoration(
-                                border: Border.all(
-                                  width: 2,
-                                  color: Colors.grey,
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: CustomTheme.lightTheme.dividerColor,
+                                  ),
                                 ),
-                                borderRadius: BorderRadius.circular(10),
                               ),
+                              padding: EdgeInsets.symmetric(horizontal: appWidth * 0.02),
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton<String>(
                                   isExpanded: true,
                                   value: selectedCounty,
-                                  icon: const Icon(Icons.arrow_downward),
+                                  icon: Icon(
+                                    Icons.keyboard_arrow_down,
+                                    color: Theme.of(context).iconTheme.color,
+                                  ),
                                   items: registrationController
                                       .getCounties(institutions)
                                       .map<DropdownMenuItem<String>>(
@@ -198,21 +216,24 @@ class _RegistrationState extends ConsumerState<Registration> {
                                 ),
                               ),
                             ),
-                            SizedBox(height: appHeight * 0.03),
+                            SizedBox(height: appHeight * 0.05),
                             Container(
-                              padding: EdgeInsets.symmetric(horizontal: appWidth * 0.02),
                               decoration: BoxDecoration(
-                                border: Border.all(
-                                  width: 2,
-                                  color: Colors.grey,
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: CustomTheme.lightTheme.dividerColor,
+                                  ),
                                 ),
-                                borderRadius: BorderRadius.circular(10),
                               ),
+                              padding: EdgeInsets.symmetric(horizontal: appWidth * 0.02),
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton<String>(
                                   isExpanded: true,
                                   value: selectedInstitution,
-                                  icon: const Icon(Icons.arrow_downward),
+                                  icon: Icon(
+                                    Icons.keyboard_arrow_down,
+                                    color: Theme.of(context).iconTheme.color,
+                                  ),
                                   items: registrationController
                                       .getInstitutions(selectedCounty, institutions)
                                       .map<DropdownMenuItem<String>>(
@@ -234,7 +255,7 @@ class _RegistrationState extends ConsumerState<Registration> {
                                 ),
                               ),
                             ),
-                            SizedBox(height: appHeight * 0.03),
+                            SizedBox(height: appHeight * 0.05),
                             ElevatedButton(
                               onPressed: (() {
                                 if (_formKey.currentState!.validate()) {
@@ -242,10 +263,21 @@ class _RegistrationState extends ConsumerState<Registration> {
                                 }
                               }),
                               style: ElevatedButton.styleFrom(
-                                minimumSize: Size(appWidth * 0.6, 40),
+                                minimumSize: Size(appWidth * 0.6, 45),
                               ),
                               child: Text(appLocale?.sign_up.toUpperCase() as String),
                             ),
+                            SizedBox(height: appHeight * 0.01),
+                            TextButton(
+                              child: Text(
+                                appLocale?.sign_in_from_here as String,
+                                style: TextStyle(color: Theme.of(context).primaryColor),
+                              ),
+                              onPressed: () {
+                                Navigator.pop(context);
+                                Navigator.pushNamed(context, 'login_route');
+                              },
+                            )
                           ],
                         ),
                       ),

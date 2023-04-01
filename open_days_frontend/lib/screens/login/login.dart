@@ -41,13 +41,15 @@ class Login extends ConsumerWidget {
       onTap: (() => FocusScope.of(context).requestFocus(FocusNode())),
       child: Scaffold(
         appBar: AppBar(
-          title: Text(AppLocalizations.of(context)?.login as String),
+          title: Text(
+            appLocale?.sign_in as String,
+          ),
         ),
         body: isLoading == true
             ? Center(
                 child: LoadingAnimationWidget.staggeredDotsWave(
                   size: appHeight * 0.1,
-                  color: const Color.fromRGBO(1, 30, 65, 1),
+                  color: const Color.fromRGBO(38, 70, 83, 1),
                 ),
               )
             : Container(
@@ -62,12 +64,15 @@ class Login extends ConsumerWidget {
                         initialValue: loginController.getUsername(),
                         decoration: InputDecoration(
                           labelText: appLocale?.username,
-                          prefixIcon: const Icon(Icons.person),
+                          prefixIcon: Icon(
+                            Icons.person,
+                            color: Theme.of(context).iconTheme.color,
+                          ),
                         ),
-                        onChanged: ((value) => loginController.setUsername(value)),
                         validator: (value) {
                           return loginController.validateUsername(value);
                         },
+                        onChanged: ((value) => loginController.setUsername(value)),
                       ),
                       TextFormField(
                         maxLength: 50,
@@ -75,18 +80,21 @@ class Login extends ConsumerWidget {
                         initialValue: loginController.getPassword(),
                         decoration: InputDecoration(
                           labelText: appLocale?.password,
-                          prefixIcon: const Icon(Icons.password),
+                          prefixIcon: Icon(
+                            Icons.password,
+                            color: Theme.of(context).iconTheme.color,
+                          ),
                         ),
-                        onChanged: ((value) => loginController.setPassword(value)),
                         validator: (value) {
                           return loginController.validatePassword(value);
                         },
+                        onChanged: ((value) => loginController.setPassword(value)),
                       ),
                       SizedBox(height: appHeight * 0.05),
                       ElevatedButton(
-                        child: Text(appLocale?.login.toUpperCase() as String),
+                        child: Text(appLocale?.sign_in.toUpperCase() as String),
                         style: ElevatedButton.styleFrom(
-                          minimumSize: Size(appWidth * 0.6, 40),
+                          minimumSize: Size(appWidth * 0.6, 45),
                         ),
                         onPressed: (() {
                           if (_formKey.currentState!.validate()) {

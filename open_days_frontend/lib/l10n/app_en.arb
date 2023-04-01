@@ -4,7 +4,6 @@
         "description": "The current language"
     },
 
-    "login": "Log in",
     "sign_up": "Sign up",
     "username": "Username",
     "password": "Password",
@@ -28,6 +27,9 @@
     "base_text_general_error_message": "Something went wrong",
     "base_text_general_try_again_message": "Something went wrong. Please try again!",
 
+    "sign_in": "Sign in",
+    "sign_in_from_here": "Sign in from here",
+
     "error_something_went_wrong": "Oops! Something went wrong. Please try again.",
 
     "connectivity_offline": "You're offline",
@@ -39,6 +41,7 @@
 
     "application_bar_scanner": "QR Code Scanner",
 
+    "events": "Events",
     "event_details_qr_code": "QR Code",
     "event_details_participate": "Participate",
     "event_details_create_qr_code": "Create QR",
@@ -46,6 +49,10 @@
 
     "event_creator_header": "Event Creator",
     "event_creator_online_event": "Online event?",
+
+    "order_by": "Order by",
+    "order_by_name": "Name",
+    "order_by_date": "Date",
 
     "event_modification_header": "Event Modification"
 }

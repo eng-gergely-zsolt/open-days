@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:open_days_frontend/screens/login/login.dart';
 import 'package:open_days_frontend/screens/registration/registration.dart';
 
 import './initial_page.dart';
@@ -13,6 +14,8 @@ class RouteGenerator {
     switch (settings.name) {
       case initialRoute:
         return MaterialPageRoute(builder: (_) => const InitialPage());
+      case loginRoute:
+        return MaterialPageRoute(builder: (_) => const Login());
       case guestModeRoute:
         return MaterialPageRoute(builder: (_) => const GuestMode());
       case registrationRoute:

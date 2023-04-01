@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "293686577950",
+    "project_id": "open-days-9f91c",
+    "storage_bucket": "open-days-9f91c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:293686577950:android:c5da8bd449c210d371970f",
+        "android_client_info": {
+          "package_name": "com.example.open_days_frontend"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "293686577950-3fonveitbq2gm6etug863ljbhsdtbama.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJ_dhjuvYFsORFwu9wgxMS51EZSgVT7AY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "293686577950-3fonveitbq2gm6etug863ljbhsdtbama.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

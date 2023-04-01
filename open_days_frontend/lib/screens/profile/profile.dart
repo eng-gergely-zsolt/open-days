@@ -31,7 +31,7 @@ class Profile extends ConsumerWidget {
     return isOperationInProgress
         ? LoadingAnimationWidget.staggeredDotsWave(
             size: appHeight * 0.1,
-            color: const Color.fromRGBO(1, 30, 65, 1),
+            color: const Color.fromRGBO(38, 70, 83, 1),
           )
         : Column(
             children: [

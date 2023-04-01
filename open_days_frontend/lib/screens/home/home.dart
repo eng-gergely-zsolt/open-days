@@ -55,7 +55,7 @@ class _HomeState extends ConsumerState<Home> {
                 margin: EdgeInsets.all(appWidth * 0.01),
                 child: Card(
                   elevation: 5,
-                  shadowColor: const Color.fromRGBO(1, 30, 65, 1),
+                  shadowColor: const Color.fromRGBO(38, 70, 83, 1),
                   child: Row(children: [
                     Container(
                       margin: EdgeInsets.only(left: appWidth * 0.05),

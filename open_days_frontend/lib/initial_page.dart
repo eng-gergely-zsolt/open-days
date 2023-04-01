@@ -40,8 +40,9 @@ class _InitialPageState extends State<InitialPage> {
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         systemNavigationBarColor: Colors.white,
+        // systemNavigationBarColor: Color.fromRGBO(234, 234, 234, 1),
         systemNavigationBarIconBrightness: Brightness.dark,
-        systemNavigationBarDividerColor: Color.fromRGBO(220, 220, 220, 0.4),
+        systemNavigationBarDividerColor: Color.fromRGBO(234, 234, 234, 1),
       ),
     );
 

@@ -1,6 +1,6 @@
 {
     "language": "Română",
-    "login": "Autentificare",
+    
     "sign_up": "Creare cont",
     "username": "Nume de utilizator",
     "password": "Parolă",
@@ -24,6 +24,9 @@
     "base_text_general_error_message": "Ceva n-a mers bine",
     "base_text_general_try_again_message": "Ceva n-a mers bine. Vă rugăm să încercați din nou!",
 
+    "sign_in": "Autentificare",
+    "sign_in_from_here": "Conectați-vă de aici",
+
     "error_something_went_wrong": "Oops! Ceva n-a mers bine. Vă rog încercați din nou.",
 
     "connectivity_offline": "Sunteți offline",
@@ -35,6 +38,7 @@
 
     "application_bar_scanner": "Scaner QR",
 
+    "events": "Evenimente",
     "event_details_qr_code": "Cod QR",
     "event_details_participate": "Participare",
     "event_details_create_qr_code": "Crearea QR",
@@ -42,6 +46,10 @@
 
     "event_creator_header": "Crearea evenimentelor",
     "event_creator_online_event": "Eveniment online?",
+
+    "order_by": "Sortarea după",
+    "order_by_name": "Nume",
+    "order_by_date": "Dată",
 
     "event_modification_header": "Modificarea evenimentului"
 }

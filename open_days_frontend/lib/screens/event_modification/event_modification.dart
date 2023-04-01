@@ -59,7 +59,7 @@ class EventModification extends ConsumerWidget {
             ? Center(
                 child: LoadingAnimationWidget.staggeredDotsWave(
                   size: appHeight * 0.1,
-                  color: const Color.fromRGBO(1, 30, 65, 1),
+                  color: const Color.fromRGBO(38, 70, 83, 1),
                 ),
               )
             : activities.when(
@@ -67,7 +67,7 @@ class EventModification extends ConsumerWidget {
                 loading: () => Center(
                       child: LoadingAnimationWidget.staggeredDotsWave(
                         size: appHeight * 0.1,
-                        color: const Color.fromRGBO(1, 30, 65, 1),
+                        color: const Color.fromRGBO(38, 70, 83, 1),
                       ),
                     ),
                 data: (activities) {

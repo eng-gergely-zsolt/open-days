@@ -15,92 +15,96 @@ class Lobby extends StatelessWidget {
     final appWidth = MediaQuery.of(context).size.width;
     final appHeight = MediaQuery.of(context).size.height;
 
-    return SizedBox(
-      width: double.infinity,
-      height: double.infinity,
-      child: Stack(
-        children: [
-          ClipPath(
-            clipper: LobbyTopCoverClipper(),
-            child: SizedBox(
-              width: appWidth,
-              height: appHeight * 0.69,
-              child: Image.asset(
-                'lib/assets/images/books-cover3.jpg',
-                fit: BoxFit.fill,
-              ),
-            ),
-          ),
-          Positioned(
-            top: appHeight * 0.55,
-            child: ClipPath(
-              clipper: LobbyBottomCoverClipper(),
-              child: Container(
+    return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      body: SizedBox(
+        width: double.infinity,
+        height: double.infinity,
+        child: Stack(
+          children: [
+            ClipPath(
+              clipper: LobbyTopCoverClipper(),
+              child: SizedBox(
                 width: appWidth,
-                height: appHeight * 0.45,
-                color: Colors.white,
-              ),
-            ),
-          ),
-          Positioned(
-            top: appHeight * 0.04,
-            left: appWidth * 0.79,
-            child: TextButton(
-              child: Text(
-                appLocale?.base_text_guest as String,
-                style: Theme.of(context).textTheme.bodyText1?.copyWith(color: Colors.white),
-              ),
-              onPressed: () {
-                Navigator.pushNamed(context, guestModeRoute);
-              },
-            ),
-          ),
-          Positioned(
-            top: appHeight * 0.75,
-            width: appWidth,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: Size(appWidth * 0.6, 45),
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        // builder: (context) => const HomeBase(),
-                        builder: (context) => const Login(),
-                      ),
-                    );
-                  },
-                  child: Text(AppLocalizations.of(context)?.login.toUpperCase() as String),
+                height: appHeight * 0.69,
+                child: Image.asset(
+                  'lib/assets/images/books-cover3.jpg',
+                  fit: BoxFit.fill,
                 ),
-                SizedBox(height: appHeight * 0.03),
-                OutlinedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const Registration(),
-                      ),
-                    );
-                  },
-                  child: Text(
-                    AppLocalizations.of(context)?.sign_up.toUpperCase() as String,
-                    style: const TextStyle(
-                      color: Color.fromRGBO(1, 30, 65, 1),
+              ),
+            ),
+            Positioned(
+              top: appHeight * 0.55,
+              child: ClipPath(
+                clipper: LobbyBottomCoverClipper(),
+                child: Container(
+                  width: appWidth,
+                  height: appHeight * 0.45,
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                ),
+              ),
+            ),
+            Positioned(
+              top: appHeight * 0.04,
+              left: appWidth * 0.79,
+              child: TextButton(
+                child: Text(
+                  appLocale?.base_text_guest as String,
+                ),
+                onPressed: () {
+                  Navigator.pushNamed(context, guestModeRoute);
+                },
+              ),
+            ),
+            Positioned(
+              top: appHeight * 0.75,
+              width: appWidth,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    child: Text(
+                      appLocale?.sign_in.toUpperCase() as String,
                     ),
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: Size(appWidth * 0.6, 45),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          // builder: (context) => const HomeBase(),
+                          builder: (context) => const Login(),
+                        ),
+                      );
+                    },
                   ),
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: const Color.fromRGBO(254, 251, 236, 1),
-                    minimumSize: Size(appWidth * 0.6, 45),
+                  SizedBox(height: appHeight * 0.03),
+                  OutlinedButton(
+                    child: Text(
+                      appLocale?.sign_up.toUpperCase() as String,
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: const Color.fromRGBO(254, 251, 236, 1),
+                      minimumSize: Size(appWidth * 0.6, 45),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const Registration(),
+                        ),
+                      );
+                    },
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

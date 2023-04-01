@@ -1,3 +1,4 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import './models/is_user_applied_for_event.dart';
@@ -5,6 +6,7 @@ import '../../models/base_response_model.dart';
 import '../../repositories/event_details_repository.dart';
 
 class EventDetailsController {
+  var _imageURL = '';
   var _qrImageText = '';
 
   final ProviderRef _ref;
@@ -19,6 +21,10 @@ class EventDetailsController {
       'https://open-days-thesis.herokuapp.com/open-days/event/user_participates_in_event/';
 
   EventDetailsController(this._ref, this._eventDetailsRepository);
+
+  String getImageURL() {
+    return _imageURL;
+  }
 
   String getQrImageText() {
     return _qrImageText;
@@ -42,6 +48,11 @@ class EventDetailsController {
 
   void deleteEventParticipatonResponse() {
     _eventParticipatonResponse = null;
+  }
+
+  Future<bool> invalidateControllerProvider() {
+    _ref.invalidate(eventDetailsControllerProvider);
+    return Future.value(true);
   }
 
   void applyUserForEvent() async {
@@ -91,27 +102,20 @@ class EventDetailsController {
     });
   }
 
-  FutureProvider<IsUserAppliedForEvent> createInitialDataProvider(int? eventId) {
+  /// Gathers the requested data before showing the page to the user.
+  FutureProvider<IsUserAppliedForEvent> createInitialDataProvider(int? eventId, String? imagePath) {
+    setEventId(eventId);
+
     if (_eventId != null && _eventId != eventId && _initialDataProvider != null) {
       _ref.invalidate(_initialDataProvider!);
-
-      setEventId(eventId);
-
-      return _initialDataProvider = FutureProvider((ref) async {
-        var response = IsUserAppliedForEvent();
-
-        if (eventId != null) {
-          response = await _eventDetailsRepository.isUserAppliedForEventRepo(eventId);
-        }
-
-        return response;
-      });
     }
-
-    setEventId(eventId);
 
     return _initialDataProvider ??= FutureProvider((ref) async {
       var response = IsUserAppliedForEvent();
+
+      if (imagePath != null) {
+        _imageURL = await _getDownloadURL(imagePath);
+      }
 
       if (eventId != null) {
         response = await _eventDetailsRepository.isUserAppliedForEventRepo(eventId);
@@ -119,6 +123,12 @@ class EventDetailsController {
 
       return response;
     });
+  }
+
+  /// Gets the URL link from the connected Firebase Storage by the given path.
+  Future<String> _getDownloadURL(String imagePath) async {
+    final ref = FirebaseStorage.instance.ref().child(imagePath);
+    return await ref.getDownloadURL();
   }
 }
 

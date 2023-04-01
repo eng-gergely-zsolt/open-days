@@ -6,7 +6,14 @@ import '../screens/home_base/models/get_all_event_model.dart';
 final guestModeRepositoryProvider = Provider((_) => GuestModeRepository());
 
 class GuestModeRepository {
+  GetAllEventModel savedEvents = GetAllEventModel();
+
+  GetAllEventModel getSavedEventsRepo() {
+    return savedEvents;
+  }
+
   Future<GetAllEventModel> getEventsRepo() async {
-    return await getAllEventSvc();
+    savedEvents = await getAllEventSvc();
+    return savedEvents;
   }
 }

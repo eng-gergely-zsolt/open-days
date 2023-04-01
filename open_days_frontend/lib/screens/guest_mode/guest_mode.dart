@@ -4,11 +4,12 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:open_days_frontend/screens/home_base/models/get_all_event_model.dart';
 
+import '../../theme/theme.dart';
 import '../error/base_error.dart';
 import './guest_mode_controller.dart';
 import '../../constants/constants.dart';
+import './guest_mode_event_details.dart';
 import '../../constants/page_routes.dart';
-import '../event_details/event_details.dart';
 
 class GuestMode extends ConsumerWidget {
   const GuestMode({Key? key}) : super(key: key);
@@ -21,29 +22,102 @@ class GuestMode extends ConsumerWidget {
 
     final controller = ref.read(guestModeControllerProvider);
     final events = ref.watch(controller.getEventsProvider());
+    String? orderValue = ref.watch(controller.getOrderValueProvider());
 
     return WillPopScope(
       onWillPop: controller.invalidateGuestModeControllerProvider,
       child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            appLocale?.base_text_guest as String,
+          ),
+        ),
         body: events.when(
           error: (error, stackTrace) => const BaseError(),
           loading: () => Center(
             child: LoadingAnimationWidget.staggeredDotsWave(
               size: appHeight * 0.1,
-              color: const Color.fromRGBO(1, 30, 65, 1),
+              color: const Color.fromRGBO(38, 70, 83, 1),
             ),
           ),
           data: (data) {
+            orderValue = orderValue ?? appLocale?.order_by as String;
+
             return RefreshIndicator(
               onRefresh: () => controller.refreshEvents(),
               child: data.operationResult == operationResultSuccess
                   ? Column(
                       children: [
                         Container(
-                            height: appHeight * 0.9,
-                            color: const Color.fromRGBO(220, 220, 220, 0.7),
-                            child: getEventsListView(appWidth, appHeight, data)),
-                        getSignUpSection(appWidth, appHeight, context, appLocale)
+                          height: appHeight * 0.08,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: CustomTheme.lightTheme.dividerColor,
+                            ),
+                          ),
+                          padding: EdgeInsets.only(
+                            left: appWidth * 0.1,
+                            right: appWidth * 0.1,
+                            top: appHeight * 0.02,
+                          ),
+                          child: Row(
+                            children: [
+                              Text(
+                                appLocale?.events as String,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    ?.copyWith(color: Theme.of(context).iconTheme.color),
+                              ),
+                              const Spacer(),
+                              DropdownButtonHideUnderline(
+                                child: DropdownButton<String>(
+                                  value: orderValue,
+                                  icon: Icon(
+                                    Icons.keyboard_arrow_down,
+                                    color: Theme.of(context).iconTheme.color,
+                                  ),
+                                  items: [
+                                    appLocale?.order_by as String,
+                                    appLocale?.order_by_name as String,
+                                    appLocale?.order_by_date as String,
+                                  ].map<DropdownMenuItem<String>>(
+                                    (String value) {
+                                      return DropdownMenuItem<String>(
+                                        value: value,
+                                        child: Text(
+                                          value,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText1
+                                              ?.copyWith(color: Theme.of(context).iconTheme.color),
+                                        ),
+                                      );
+                                    },
+                                  ).toList(),
+                                  onChanged: (String? newOrderValue) {
+                                    controller.orderEvents(newOrderValue);
+                                    controller.setOrderValue(newOrderValue);
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Stack(
+                          children: [
+                            Container(
+                              height: appHeight * 0.81,
+                              padding: EdgeInsets.only(top: appHeight * 0.0),
+                              child: getEventsListView(appWidth, appHeight, data),
+                            ),
+                            Positioned(
+                              top: appHeight * 0.72,
+                              left: appWidth * 0.2,
+                              child: getSignUpSection(appWidth, appHeight, context, appLocale),
+                            )
+                          ],
+                        ),
                       ],
                     )
                   : const BaseError(),
@@ -63,32 +137,42 @@ class GuestMode extends ConsumerWidget {
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: ((context) => EventDetails(
+                builder: ((context) => GuestModeEventDetails(
                       data.events[index],
-                      "",
                     )),
               ),
             ),
             child: Container(
-              width: appWidth * 0.8,
               height: appHeight * 0.2,
-              margin: EdgeInsets.all(appWidth * 0.01),
+              margin: EdgeInsets.all(appWidth * 0.02),
               child: Card(
-                elevation: 5,
-                shadowColor: const Color.fromRGBO(1, 30, 65, 1),
+                elevation: 10,
+                shadowColor: const Color.fromRGBO(38, 70, 83, 1),
                 child: Row(children: [
                   Container(
-                    margin: EdgeInsets.only(left: appWidth * 0.05),
+                    height: double.infinity,
+                    width: 10,
+                    color: index % 3 == 0
+                        ? const Color.fromRGBO(231, 111, 81, 1)
+                        : index % 3 == 1
+                            ? const Color.fromRGBO(42, 157, 143, 1)
+                            : const Color.fromRGBO(233, 196, 106, 1),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(left: appWidth * 0.1),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          event.activityName,
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline6
-                              ?.copyWith(fontWeight: FontWeight.bold),
+                        SizedBox(
+                          width: appWidth * 0.6,
+                          child: Text(
+                            event.activityName.toUpperCase(),
+                            style: Theme.of(context).textTheme.headline5?.copyWith(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                          ),
                         ),
                         const SizedBox(
                           height: 10,
@@ -97,26 +181,23 @@ class GuestMode extends ConsumerWidget {
                           event.dateTime,
                           style: Theme.of(context)
                               .textTheme
-                              .headline6
-                              ?.copyWith(fontWeight: FontWeight.bold),
+                              .bodyText1
+                              ?.copyWith(color: Theme.of(context).iconTheme.color),
                         ),
                         const SizedBox(
                           height: 10,
-                        ),
-                        Text(
-                          (event.organizerFirstName) + ' ' + (event.organizerFirstName),
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline6
-                              ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
                   ),
                   const Spacer(),
                   Container(
-                    margin: EdgeInsets.only(right: appWidth * 0.04),
-                    child: const Icon(Icons.arrow_forward_ios),
+                    margin: EdgeInsets.only(right: appWidth * 0.1),
+                    child: Icon(
+                      Icons.arrow_forward_ios,
+                      size: 27,
+                      color: Theme.of(context).iconTheme.color,
+                    ),
                   )
                 ]),
               ),
@@ -127,26 +208,22 @@ class GuestMode extends ConsumerWidget {
 
   Widget getSignUpSection(
       double appWidth, double appHeight, BuildContext context, AppLocalizations? appLocale) {
-    return SizedBox(
-      height: appHeight * 0.1,
-      width: double.infinity,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(
-            height: 45.0,
-            width: appWidth * 0.6,
-            child: ElevatedButton(
-              child: Text(
-                appLocale?.sign_up.toUpperCase() as String,
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-                Navigator.pushNamed(context, registrationRoute);
-              },
-            ),
-          ),
-        ],
+    return Container(
+      padding: EdgeInsets.only(
+        top: appHeight * 0.01,
+      ),
+      color: Theme.of(context).primaryColor.withOpacity(0),
+      child: ElevatedButton(
+        child: Text(
+          appLocale?.sign_up.toUpperCase() as String,
+        ),
+        style: ElevatedButton.styleFrom(
+          minimumSize: Size(appWidth * 0.6, appWidth * 0.12),
+        ),
+        onPressed: () {
+          Navigator.pop(context);
+          Navigator.pushNamed(context, registrationRoute);
+        },
       ),
     );
   }
