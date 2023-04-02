@@ -89,199 +89,253 @@ class EventDetails extends ConsumerWidget {
     final appWidth = MediaQuery.of(context).size.width;
     final appHeight = MediaQuery.of(context).size.height;
 
-    return Stack(
-      children: [
-        SizedBox(
-          width: double.infinity,
-          height: appHeight * 0.2,
-          child: Image.network(
-            controller.getImageURL(),
-            fit: BoxFit.fill,
-            loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-              if (loadingProgress == null) return child;
-              return Center(
-                child: CircularProgressIndicator(
-                  value: loadingProgress.expectedTotalBytes != null
-                      ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
-                      : null,
-                ),
-              );
-            },
-          ),
-        ),
-        Positioned(
-          child: Container(
-            color: Colors.amber,
-            height: appHeight * 0.5,
-            padding: EdgeInsets.symmetric(
-              vertical: appWidth * 0.05,
-              horizontal: appWidth * 0.05,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  appLocale?.base_text_date as String,
-                  style: TextStyle(
-                    fontSize: appHeight * 0.024,
-                    color: CustomTheme.lightTheme.hintColor,
+    return SizedBox(
+      width: double.infinity,
+      height: double.infinity,
+      child: Stack(
+        children: [
+          SizedBox(
+            width: appWidth * 1,
+            height: appHeight * 0.25,
+            child: Image.network(
+              controller.getImageURL(),
+              fit: BoxFit.fill,
+              loadingBuilder:
+                  (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                if (loadingProgress == null) return child;
+                return Center(
+                  child: CircularProgressIndicator(
+                    value: loadingProgress.expectedTotalBytes != null
+                        ? loadingProgress.cumulativeBytesLoaded /
+                            loadingProgress.expectedTotalBytes!
+                        : null,
                   ),
-                ),
-                SizedBox(height: appHeight * 0.01),
-                Text(
-                  _event?.dateTime as String,
-                  style: TextStyle(
-                    fontSize: appHeight * 0.024,
-                    color: CustomTheme.lightTheme.primaryColor,
-                  ),
-                ),
-                SizedBox(height: appHeight * 0.02),
-                Container(
-                  height: 1,
-                  width: double.infinity,
-                  color: CustomTheme.lightTheme.dividerColor,
-                ),
-                SizedBox(height: appHeight * 0.03),
-                Text(
-                  Utils.getString(appLocale?.base_text_organizer),
-                  style: TextStyle(
-                    fontSize: appHeight * 0.024,
-                    color: CustomTheme.lightTheme.hintColor,
-                  ),
-                ),
-                SizedBox(height: appHeight * 0.01),
-                Text(
-                  ('${_event?.organizerFirstName}, ${_event?.organizerFirstName}'),
-                  style: TextStyle(
-                    fontSize: appHeight * 0.024,
-                    color: CustomTheme.lightTheme.primaryColor,
-                  ),
-                ),
-                SizedBox(height: appHeight * 0.02),
-                Container(
-                  height: 1,
-                  width: double.infinity,
-                  color: CustomTheme.lightTheme.dividerColor,
-                ),
-                SizedBox(height: appHeight * 0.03),
-                _event?.isOnline == true
-                    ? Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            Utils.getString(appLocale?.base_text_link),
-                            style: TextStyle(
-                              fontSize: appHeight * 0.024,
-                              color: CustomTheme.lightTheme.hintColor,
-                            ),
-                          ),
-                          SizedBox(height: appHeight * 0.01),
-                          Text(
-                            (_event?.meetingLink as String),
-                            style: TextStyle(
-                              fontSize: appHeight * 0.024,
-                              color: CustomTheme.lightTheme.primaryColor,
-                            ),
-                          ),
-                          SizedBox(height: appHeight * 0.02),
-                          Container(
-                            height: 1,
-                            width: double.infinity,
-                            color: CustomTheme.lightTheme.dividerColor,
-                          )
-                        ],
-                      )
-                    : Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            Utils.getString(appLocale?.base_text_location),
-                            style: TextStyle(
-                              fontSize: appHeight * 0.024,
-                              color: CustomTheme.lightTheme.hintColor,
-                            ),
-                          ),
-                          SizedBox(height: appHeight * 0.01),
-                          Text(
-                            (_event?.location as String),
-                            style: TextStyle(
-                              fontSize: appHeight * 0.024,
-                              color: CustomTheme.lightTheme.primaryColor,
-                            ),
-                          ),
-                          SizedBox(height: appHeight * 0.02),
-                          Container(
-                            height: 1,
-                            width: double.infinity,
-                            color: CustomTheme.lightTheme.dividerColor,
-                          )
-                        ],
-                      ),
-                SizedBox(height: appHeight * 0.05),
-                _roleName == roleUser
-                    ? SizedBox(
-                        width: appWidth * 0.6,
-                        height: appHeight * 0.07,
-                        child: initialData.isUserAppliedForEvent
-                            ? OutlinedButton(
-                                child: Text(
-                                  Utils.getString(appLocale?.event_details_cancel_participation),
-                                  style: TextStyle(
-                                    fontSize: appHeight * 0.025,
-                                  ),
-                                ),
-                                onPressed: () => controller.deleteUserFromEvent(),
-                              )
-                            : ElevatedButton(
-                                child: Text(
-                                  Utils.getString(appLocale?.event_details_participate),
-                                  style: TextStyle(
-                                    fontSize: appHeight * 0.025,
-                                  ),
-                                ),
-                                onPressed: () => controller.applyUserForEvent(),
-                              ),
-                      )
-                    : const SizedBox.shrink(),
-                SizedBox(height: appHeight * 0.04),
-                _roleName == roleAdmin || _roleName == roleOrganizer
-                    ? SizedBox(
-                        width: appWidth * 0.6,
-                        height: appHeight * 0.07,
-                        child: OutlinedButton(
-                          child: Text(
-                            Utils.getString(appLocale?.event_details_create_qr_code),
-                            style: TextStyle(
-                              fontSize: appHeight * 0.025,
-                            ),
-                          ),
-                          onPressed: () {
-                            showModalBottomSheet(
-                                context: context,
-                                isScrollControlled: true,
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(20),
-                                  ),
-                                ),
-                                builder: (BuildContext context) {
-                                  return buildModalBottomSheet(context, controller);
-                                });
-                          },
-                        ),
-                      )
-                    : const SizedBox.shrink(),
-              ],
+                );
+              },
             ),
           ),
-        ),
-      ],
+          Positioned(
+            top: appHeight * 0.22,
+            child: Container(
+              width: appWidth * 1,
+              height: appHeight * 0.7,
+              padding: EdgeInsets.symmetric(
+                vertical: appWidth * 0.05,
+                horizontal: appWidth * 0.05,
+              ),
+              decoration: BoxDecoration(
+                color: Theme.of(context).scaffoldBackgroundColor,
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(30),
+                ),
+              ),
+              child: SingleChildScrollView(
+                child: buildDataHolderColumn(
+                    appWidth, appHeight, context, appLocale, initialData, controller),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
-  // Widget buildButton() {
-  //   return
-  // }
+  Widget buildDataHolderColumn(
+    double appWidth,
+    double appHeight,
+    BuildContext context,
+    AppLocalizations? appLocale,
+    IsUserAppliedForEvent initialData,
+    EventDetailsController controller,
+  ) {
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      // Date
+      Text(
+        appLocale?.base_text_date as String,
+        style: CustomTheme.lightTheme.textTheme.bodyText2?.copyWith(
+          fontWeight: FontWeight.w600,
+          color: CustomTheme.lightTheme.hintColor,
+        ),
+      ),
+      SizedBox(height: appHeight * 0.01),
+      Text(
+        _event?.dateTime as String,
+        style: CustomTheme.lightTheme.textTheme.bodyText1?.copyWith(
+          fontSize: 18,
+        ),
+      ),
+      SizedBox(height: appHeight * 0.02),
+      Container(
+        height: 1,
+        width: double.infinity,
+        color: CustomTheme.lightTheme.dividerColor,
+      ),
+      // Location / Link
+      SizedBox(height: appHeight * 0.03),
+      _event?.isOnline == true
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  Utils.getString(appLocale?.base_text_link),
+                  style: CustomTheme.lightTheme.textTheme.bodyText2?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: CustomTheme.lightTheme.hintColor,
+                  ),
+                ),
+                SizedBox(height: appHeight * 0.01),
+                Text(
+                  (_event?.meetingLink as String),
+                  style: CustomTheme.lightTheme.textTheme.bodyText1?.copyWith(
+                    fontSize: 18,
+                  ),
+                ),
+                SizedBox(height: appHeight * 0.02),
+                Container(
+                  height: 1,
+                  width: double.infinity,
+                  color: CustomTheme.lightTheme.dividerColor,
+                )
+              ],
+            )
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  Utils.getString(appLocale?.base_text_location),
+                  style: CustomTheme.lightTheme.textTheme.bodyText2?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: CustomTheme.lightTheme.hintColor,
+                  ),
+                ),
+                SizedBox(height: appHeight * 0.01),
+                Text(
+                  (_event?.location as String),
+                  style: CustomTheme.lightTheme.textTheme.bodyText1?.copyWith(
+                    fontSize: 18,
+                  ),
+                ),
+                SizedBox(height: appHeight * 0.02),
+                Container(
+                  height: 1,
+                  width: double.infinity,
+                  color: CustomTheme.lightTheme.dividerColor,
+                )
+              ],
+            ),
+      // Organizer
+      SizedBox(height: appHeight * 0.03),
+      Text(
+        Utils.getString(appLocale?.base_text_organizer),
+        style: CustomTheme.lightTheme.textTheme.bodyText2?.copyWith(
+          fontWeight: FontWeight.w600,
+          color: CustomTheme.lightTheme.hintColor,
+        ),
+      ),
+      SizedBox(height: appHeight * 0.01),
+      Text(
+        ('${_event?.organizerFirstName}, ${_event?.organizerLastName}'),
+        style: CustomTheme.lightTheme.textTheme.bodyText1?.copyWith(
+          fontSize: 18,
+        ),
+      ),
+      SizedBox(height: appHeight * 0.02),
+      Container(
+        height: 1,
+        width: double.infinity,
+        color: CustomTheme.lightTheme.dividerColor,
+      ),
+      // Description
+      SizedBox(height: appHeight * 0.03),
+      Text(
+        appLocale?.event_details_description as String,
+        style: CustomTheme.lightTheme.textTheme.bodyText2?.copyWith(
+          fontWeight: FontWeight.w600,
+          color: CustomTheme.lightTheme.hintColor,
+        ),
+      ),
+      SizedBox(height: appHeight * 0.01),
+      Text(
+        _event?.description as String,
+        style: CustomTheme.lightTheme.textTheme.bodyText1?.copyWith(
+          fontSize: 18,
+          wordSpacing: 5.0,
+        ),
+      ),
+
+      SizedBox(height: appHeight * 0.03),
+      buildCreateQRButton(appWidth, appHeight, context, appLocale, controller),
+      buildEntollButton(appWidth, appHeight, appLocale, initialData, controller),
+    ]);
+  }
+
+  Widget buildEntollButton(double appWidth, double appHeight, AppLocalizations? appLocale,
+      IsUserAppliedForEvent initialData, EventDetailsController controller) {
+    return _roleName == roleUser
+        ? Container(
+            margin: EdgeInsets.only(bottom: appHeight * 0.03),
+            child: Row(children: [
+              initialData.isUserAppliedForEvent
+                  ? ElevatedButton(
+                      child: Text(
+                        Utils.getString(appLocale?.event_details_unenroll),
+                        style: TextStyle(
+                          fontSize: appHeight * 0.025,
+                        ),
+                      ),
+                      onPressed: () => controller.deleteUserFromEvent(),
+                    )
+                  : ElevatedButton(
+                      child: Text(
+                        Utils.getString(appLocale?.event_details_enroll),
+                        style: TextStyle(
+                          fontSize: appHeight * 0.025,
+                        ),
+                      ),
+                      onPressed: () => controller.applyUserForEvent(),
+                    )
+            ]),
+          )
+        : const SizedBox.shrink();
+  }
+
+  Widget buildCreateQRButton(double appWidth, double appHeight, BuildContext context,
+      AppLocalizations? appLocale, EventDetailsController controller) {
+    return _roleName == roleAdmin || _roleName == roleOrganizer
+        ? Container(
+            margin: EdgeInsets.only(bottom: appHeight * 0.03),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  child: Text(
+                    Utils.getString(appLocale?.event_details_create_qr_code).toUpperCase(),
+                    style: TextStyle(
+                      fontSize: appHeight * 0.025,
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size(appWidth * 0.6, 45),
+                  ),
+                  onPressed: () {
+                    showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(20),
+                          ),
+                        ),
+                        builder: (BuildContext context) {
+                          return buildModalBottomSheet(context, controller);
+                        });
+                  },
+                ),
+              ],
+            ),
+          )
+        : const SizedBox.shrink();
+  }
 
   Widget buildModalBottomSheet(
       BuildContext context, EventDetailsController eventDetailsController) {

@@ -39,17 +39,22 @@
     "application_bar_scanner": "Scaner QR",
 
     "events": "Evenimente",
+    "event_details_enroll": "Înscrie",
     "event_details_qr_code": "Cod QR",
-    "event_details_participate": "Participare",
+    "event_details_unenroll": "Anulare",
+    "event_details_description": "Descriere",
     "event_details_create_qr_code": "Crearea QR",
-    "event_details_cancel_participation": "Anulare",
 
     "event_creator_header": "Crearea evenimentelor",
-    "event_creator_online_event": "Eveniment online?",
+    "event_creator_online_event": "Eveniment online",
 
     "order_by": "Sortarea după",
     "order_by_name": "Nume",
     "order_by_date": "Dată",
 
-    "event_modification_header": "Modificarea evenimentului"
+    "event_modification_save": "Salvați",
+    "event_modification_image": "Imagine",
+    "event_modification_activity": "Activitate",
+    "event_modification_header": "Modificarea evenimentului",
+    "event_modification_upload_image": "Alege imaginea de încărcat"
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../theme/theme.dart';
 import './home_controller.dart';
 import '../../constants/constants.dart';
 import '../event_details/event_details.dart';
@@ -34,11 +35,12 @@ class _HomeState extends ConsumerState<Home> {
     final homeBaseController = ref.read(homeBaseControllerProvider);
 
     return Container(
-      color: const Color.fromRGBO(220, 220, 220, 0.7),
+      color: CustomTheme.lightTheme.scaffoldBackgroundColor,
       child: ListView.builder(
           itemCount: widget._initialData?.events?.events.length,
           itemBuilder: (context, index) {
             final event = widget._initialData?.events?.events[index];
+
             return GestureDetector(
               onTap: () => Navigator.push(
                 context,
@@ -52,81 +54,89 @@ class _HomeState extends ConsumerState<Home> {
               child: Container(
                 width: appWidth * 0.8,
                 height: appHeight * 0.2,
-                margin: EdgeInsets.all(appWidth * 0.01),
+                margin: EdgeInsets.all(appWidth * 0.02),
                 child: Card(
                   elevation: 5,
-                  shadowColor: const Color.fromRGBO(38, 70, 83, 1),
+                  color: Colors.white,
+                  shadowColor: CustomTheme.lightTheme.primaryColor,
                   child: Row(children: [
                     Container(
-                      margin: EdgeInsets.only(left: appWidth * 0.05),
+                      height: double.infinity,
+                      width: 10,
+                      color: index % 3 == 0
+                          ? const Color.fromRGBO(231, 111, 81, 1)
+                          : index % 3 == 1
+                              ? const Color.fromRGBO(42, 157, 143, 1)
+                              : const Color.fromRGBO(233, 196, 106, 1),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(left: appWidth * 0.1),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            event?.activityName as String,
-                            style: TextStyle(
-                              fontSize: appHeight * 0.025,
-                              fontWeight: FontWeight.bold,
+                          SizedBox(
+                            width: appWidth * 0.60,
+                            child: Text(
+                              event?.activityName as String,
+                              style: Theme.of(context).textTheme.headline5?.copyWith(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                             ),
                           ),
+                          const SizedBox(height: 10),
                           Text(
                             event?.dateTime as String,
-                            style: TextStyle(
-                              fontSize: appHeight * 0.025,
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText1
+                                ?.copyWith(color: Theme.of(context).iconTheme.color),
                           ),
-                          Text(
-                            (event?.organizerFirstName as String) +
-                                ' ' +
-                                (event?.organizerFirstName as String),
-                            style: TextStyle(
-                              fontSize: appHeight * 0.025,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                          const SizedBox(height: 10),
                         ],
                       ),
                     ),
                     const Spacer(),
                     widget._initialData?.user?.roleName == roleOrganizer
-                        ? Row(children: [
-                            IconButton(
-                              icon: const Icon(
-                                Icons.edit,
+                        ? Container(
+                            margin: EdgeInsets.only(right: appWidth * 0.05),
+                            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                              IconButton(
+                                icon: const Icon(
+                                  Icons.edit,
+                                ),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => EventModification(
+                                          widget._initialData?.events?.events[index]),
+                                    ),
+                                  );
+                                },
                               ),
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => EventModification(
-                                        widget._initialData?.events?.events[index]),
-                                  ),
-                                );
-                              },
-                            ),
-                            IconButton(
-                              icon: const Icon(
-                                Icons.delete,
+                              IconButton(
+                                icon: const Icon(
+                                  Icons.delete,
+                                ),
+                                onPressed: () {
+                                  homeController.deleteEvent(
+                                      widget._initialData?.events?.events[index].id as int,
+                                      homeBaseController);
+                                  setState(() {
+                                    widget._initialData?.events?.events.removeWhere((element) =>
+                                        element.id ==
+                                        widget._initialData?.events?.events[index].id);
+                                  });
+                                },
                               ),
-                              onPressed: () {
-                                homeController.deleteEvent(
-                                    widget._initialData?.events?.events[index].id as int,
-                                    homeBaseController);
-                                setState(() {
-                                  widget._initialData?.events?.events.removeWhere((element) =>
-                                      element.id == widget._initialData?.events?.events[index].id);
-                                });
-                              },
-                            ),
-                            SizedBox(width: appWidth * 0.05),
-                          ])
-                        : const SizedBox.shrink(),
-                    Container(
-                      margin: EdgeInsets.only(right: appWidth * 0.04),
-                      child: const Icon(Icons.arrow_forward_ios),
-                    )
+                            ]),
+                          )
+                        : Container(
+                            margin: EdgeInsets.only(right: appWidth * 0.04),
+                            child: const Icon(Icons.arrow_forward_ios),
+                          )
                   ]),
                 ),
               ),

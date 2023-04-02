@@ -8,6 +8,7 @@ class CustomTheme {
       scaffoldBackgroundColor: Colors.white,
       hintColor: const Color.fromRGBO(191, 191, 191, 1),
       primaryColor: const Color.fromRGBO(38, 70, 83, 1),
+      cardColor: const Color.fromRGBO(234, 234, 234, 1),
       dividerColor: const Color.fromRGBO(38, 70, 83, 0.2),
       primarySwatch: CustomMaterialColor(38, 70, 83).getColor,
 

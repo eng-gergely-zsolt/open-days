@@ -4,8 +4,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import './login_controller.dart';
-import '../home_base/home_base.dart';
 import '../../constants/constants.dart';
+import '../../constants/page_routes.dart';
 
 class Login extends ConsumerWidget {
   const Login({Key? key}) : super(key: key);
@@ -22,10 +22,10 @@ class Login extends ConsumerWidget {
 
     if (loginController.getLoginResponse() != null) {
       if (loginController.getLoginResponse()?.operationResult == operationResultSuccess) {
-        Future.microtask(() => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const HomeBase()),
-            ));
+        Future.microtask(() {
+          Navigator.pop(context);
+          Navigator.pushNamed(context, homeBaseRoute);
+        });
       } else {
         const snackBar = SnackBar(
           content: Text('Something went wrong. Please try again!'),

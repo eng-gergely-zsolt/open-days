@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:open_days_frontend/screens/home_base/models/get_all_event_model.dart';
 
 import '../../theme/theme.dart';
 import '../error/base_error.dart';
@@ -10,6 +9,7 @@ import './guest_mode_controller.dart';
 import '../../constants/constants.dart';
 import './guest_mode_event_details.dart';
 import '../../constants/page_routes.dart';
+import '../home_base/models/get_all_event_model.dart';
 
 class GuestMode extends ConsumerWidget {
   const GuestMode({Key? key}) : super(key: key);
@@ -146,8 +146,8 @@ class GuestMode extends ConsumerWidget {
               height: appHeight * 0.2,
               margin: EdgeInsets.all(appWidth * 0.02),
               child: Card(
-                elevation: 10,
-                shadowColor: const Color.fromRGBO(38, 70, 83, 1),
+                elevation: 5,
+                shadowColor: CustomTheme.lightTheme.primaryColor,
                 child: Row(children: [
                   Container(
                     height: double.infinity,

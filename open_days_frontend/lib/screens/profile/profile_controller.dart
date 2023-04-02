@@ -24,6 +24,10 @@ class ProfileController {
     _ref.read(_isOperationInProgress.notifier).state = newState;
   }
 
+  void invalidateProfileControllerProvider() {
+    _ref.invalidate(profileControllerProvider);
+  }
+
   void logOut() async {
     setIsOperationInProgress(true);
 

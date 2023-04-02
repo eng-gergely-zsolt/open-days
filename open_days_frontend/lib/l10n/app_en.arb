@@ -42,17 +42,22 @@
     "application_bar_scanner": "QR Code Scanner",
 
     "events": "Events",
+    "event_details_enroll": "Enroll",
     "event_details_qr_code": "QR Code",
-    "event_details_participate": "Participate",
+    "event_details_unenroll": "Unenroll",
+    "event_details_description": "Description",
     "event_details_create_qr_code": "Create QR",
-    "event_details_cancel_participation": "Cancel",
 
     "event_creator_header": "Event Creator",
-    "event_creator_online_event": "Online event?",
+    "event_creator_online_event": "Online event",
 
     "order_by": "Order by",
     "order_by_name": "Name",
     "order_by_date": "Date",
 
-    "event_modification_header": "Event Modification"
+    "event_modification_save": "Save",
+    "event_modification_image": "Image",
+    "event_modification_activity": "Activity",
+    "event_modification_header": "Edit Event",
+    "event_modification_upload_image": "Choose image to upload"
 }

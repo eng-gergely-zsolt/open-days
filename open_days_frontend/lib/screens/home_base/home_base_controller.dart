@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constants/constants.dart';
@@ -27,6 +29,11 @@ class HomeBaseController {
 
   FutureProvider<InitialDataModel> getInitialDataProvider() {
     return _initialDataProvider;
+  }
+
+  Future<bool> closeApplication(BuildContext context) {
+    SystemChannels.platform.invokeListMethod('SystemNavigator.pop');
+    return Future.value(true);
   }
 
   void invalidateInitialDataProviderNow() {

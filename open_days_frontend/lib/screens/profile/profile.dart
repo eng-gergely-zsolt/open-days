@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:open_days_frontend/screens/lobby/lobby.dart';
 
+import '../../constants/page_routes.dart';
 import './profile_controller.dart';
 
 class Profile extends ConsumerWidget {
@@ -20,12 +20,12 @@ class Profile extends ConsumerWidget {
     final isOperationInProgress = ref.watch(controller.getIsOperationInProgress());
 
     if (isClosingPageRequired == true) {
-      Future.microtask(
-        () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const Lobby()),
-        ),
-      );
+      Future.microtask((() {
+        controller.invalidateProfileControllerProvider();
+
+        Navigator.pop(context);
+        Navigator.pushNamed(context, lobbyRoute);
+      }));
     }
 
     return isOperationInProgress

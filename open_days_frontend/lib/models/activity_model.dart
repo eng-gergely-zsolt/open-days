@@ -1,3 +1,5 @@
+import '../utils/utils.dart';
+
 class ActivityModel {
   int id;
   String name;
@@ -10,7 +12,7 @@ class ActivityModel {
   factory ActivityModel.fromJson(Map<String, dynamic> json) {
     return ActivityModel(
       id: json['id'] ?? -1,
-      name: json['name'] ?? '',
+      name: Utils.getDecodedString(json['name'] ?? ''),
     );
   }
 }
