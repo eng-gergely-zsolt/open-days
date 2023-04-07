@@ -175,7 +175,7 @@ public class UserController {
 	/**
 	 * Authenticates the email by the code that was sent to the user via email.
 	 */
-	@GetMapping("/email-verification-otp-code")
+	@PutMapping("/email-verification-otp-code")
 	public void verifyEmailByOtpCode(@RequestBody VerifyEmailByOtpCodeReq payload) {
 		userService.verifyEmailByOtpCode(payload);
 	}

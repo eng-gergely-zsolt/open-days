@@ -233,7 +233,11 @@ public class UserServiceImpl implements UserService {
 		user.setOtpCode(null);
 		user.setEmailVerificationStatus(true);
 
-		userRepository.save(user);
+		try {
+			userRepository.save(user);
+		} catch (Exception error) {
+			throw new BaseException(ErrorCode.UNSPECIFIED_ERROR.getErrorCode(), error.getMessage());
+		}
 	}
 
 	@Override

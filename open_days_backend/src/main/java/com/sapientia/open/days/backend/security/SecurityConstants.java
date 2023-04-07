@@ -18,9 +18,9 @@ public class SecurityConstants {
 
 	public static final String PASSWORD_RESET_URL = "/users/password-reset";
 
-	public static final String EMAIL_VERIFICATION_URL = "/users/email-verification";
-
 	public static final String PASSWORD_RESET_REQUEST_URL = "/users/password-reset-request";
+
+	public static final String EMAIL_VERIFICATION_BY_OTP_CODE_URL = "/users/email-verification-otp-code";
 
 	// Institution controller
 	public static final String INSTITUTION_ALL_NAME_WITH_COUNTY = "/institution//all-name-with-county";
