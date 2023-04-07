@@ -4,33 +4,33 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClientBuilder;
 import com.amazonaws.services.simpleemail.model.*;
-import com.sapientia.open.days.backend.shared.dto.UserDTO;
+import org.springframework.stereotype.Service;
 
+@Service
 public class EmailService {
 
 	String charset = "UTF-8";
 	String senderEmail = "geergely.zsolt@gmail.com";
 
-	public void verifyEmail(UserDTO userDto) {
+	public void sendOtpCodeViaEmail(String email, int otpCode) {
 
-		String emailSubject = "Open Days email verification";
+		String emailSubject = "Open Days verification code";
 
 		final String textBody = "Please verify your email address. "
 				+ " Thank you for your registration! To be able to log in,"
-				+ " please complete the process by opening the following link in you browser: "
-				+ " https://open-days-thesis.herokuapp.com/open-days/users/email-verification?token=$tokenValue";
+				+ " please complete the process by giving the following code in the app: $otpCode";
 
 		final String htmlBody = "<h2>Please verify your email address</h2>"
-				+ "<p>Thank you for your registration! To be able to log in, please complete the process by clicking on this "
-				+ "<a href='https://open-days-thesis.herokuapp.com/open-days/users/email-verification?token=$tokenValue'>"
-				+ "link" + "</a><br/><bt/>";
+				+ "<p>Thank you for your registration! \n To be able to log in, please complete the process by giving the "
+				+ "following code in the app: $otpCode"
+				+ "</a><br/><bt/>";
 
 		AmazonSimpleEmailService emailService = AmazonSimpleEmailServiceClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).build();
 
-		String htmlBodyWithToken = htmlBody.replace("$tokenValue", userDto.getEmailVerificationToken());
-		String textBodyWithToken = textBody.replace("$tokenValue", userDto.getEmailVerificationToken());
+		String htmlBodyWithToken = htmlBody.replace("$otpCode", String.valueOf(otpCode));
+		String textBodyWithToken = textBody.replace("$otpCode", String.valueOf(otpCode));
 
-		SendEmailRequest request = new SendEmailRequest().withDestination(new Destination().withToAddresses(userDto.getEmail()))
+		SendEmailRequest request = new SendEmailRequest().withDestination(new Destination().withToAddresses(email))
 				.withMessage(new Message().withBody(new Body().withHtml(new Content().withCharset(charset)
 						.withData(htmlBodyWithToken)).withText(new Content().withCharset(charset)
 						.withData(textBodyWithToken))).withSubject(new Content().withCharset(charset)

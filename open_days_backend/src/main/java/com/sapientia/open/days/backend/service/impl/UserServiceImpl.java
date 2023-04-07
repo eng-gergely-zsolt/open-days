@@ -15,9 +15,9 @@ import com.sapientia.open.days.backend.service.UserService;
 import com.sapientia.open.days.backend.shared.EmailService;
 import com.sapientia.open.days.backend.shared.Utils;
 import com.sapientia.open.days.backend.shared.dto.UserDTO;
+import com.sapientia.open.days.backend.ui.model.request.VerifyEmailByOtpCodeReq;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorCode;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorMessage;
-import com.sapientia.open.days.backend.ui.model.response.BaseResponse;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -55,6 +55,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	PasswordResetTokenRepository passwordResetTokenRepository;
+
+	@Autowired
+	EmailService emailService;
 
 	@Override
 	public UserDTO getUserByUsername(String username) {
@@ -154,14 +157,17 @@ public class UserServiceImpl implements UserService {
 		userEntity.setInstitution(institution);
 		userEntity.setEmailVerificationStatus(false);
 		userEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-		userEntity.setEmailVerificationToken(utils.generateEmailVerificationToken(publicId));
 
-		UserEntity storedUserDetails = userRepository.save(userEntity);
+		int otpCode = Utils.generateSixDigitNumber();
+		userEntity.setOtpCode(otpCode);
 
-		UserDTO result = new UserDTO();
-		BeanUtils.copyProperties(storedUserDetails, result);
-
-		new EmailService().verifyEmail(result);
+		try {
+			new EmailService().sendOtpCodeViaEmail(user.getEmail(), otpCode);
+			UserEntity storedUserDetails = userRepository.save(userEntity);
+		} catch (Exception e) {
+			throw new BaseException(ErrorCode.REGISTRATION_EMAIL_NOT_SENT.getErrorCode(),
+					ErrorMessage.REGISTRATION_EMAIL_NOT_SENT.getErrorMessage());
+		}
 	}
 
 	@Override
@@ -203,34 +209,31 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/**
-	 * It verifies the token that was sent to check the user's email.
-	 *
-	 * @param emailVerificationToken The token that was sent to the user.
-	 * @return It returns a base response.
+	 * Authenticates the email by the code that was sent to the user via email.
 	 */
 	@Override
-	public BaseResponse verifyEmail(String emailVerificationToken) {
+	public void verifyEmailByOtpCode(VerifyEmailByOtpCodeReq payload) {
+		UserEntity user = userRepository.findByEmail(payload.getEmail());
 
-		BaseResponse result = new BaseResponse();
-		UserEntity userEntity = userRepository.findUserByEmailVerificationToken(emailVerificationToken);
-
-		if (userEntity != null) {
-			boolean hasTokenExpired = Utils.hasTokenExpired(emailVerificationToken);
-			if (!hasTokenExpired) {
-				userEntity.setEmailVerificationToken(null);
-				userEntity.setEmailVerificationStatus(Boolean.TRUE);
-				userRepository.save(userEntity);
-				result.setIsOperationSuccessful(true);
-			} else {
-				result.setErrorCode(ErrorCode.EMAIL_VERIFICATION_TOKEN_EXPIRED.getErrorCode());
-				result.setErrorMessage(ErrorMessage.EMAIL_VERIFICATION_TOKEN_EXPIRED.getErrorMessage());
-			}
-		} else {
-			result.setErrorCode(ErrorCode.EMAIL_VERIFICATION_NO_USER.getErrorCode());
-			result.setErrorMessage(ErrorMessage.EMAIL_VERIFICATION_NO_USER.getErrorMessage());
+		if (user == null) {
+			throw new BaseException(ErrorCode.EMAIL_VERIFICATION_INVALID_EMAIL.getErrorCode(),
+					ErrorMessage.EMAIL_VERIFICATION_INVALID_EMAIL.getErrorMessage());
 		}
 
-		return result;
+		if (user.getEmailVerificationStatus()) {
+			throw new BaseException(ErrorCode.EMAIL_VERIFICATION_EMAIL_ALREADY_VERIFIED.getErrorCode(),
+					ErrorMessage.EMAIL_VERIFICATION_EMAIL_ALREADY_VERIFIED.getErrorMessage());
+		}
+
+		if (user.getOtpCode() != payload.getOtpCode()) {
+			throw new BaseException(ErrorCode.EMAIL_VERIFICATION_INVALID_OTP_CODE.getErrorCode(),
+					ErrorMessage.EMAIL_VERIFICATION_INVALID_OTP_CODE.getErrorMessage());
+		}
+
+		user.setOtpCode(null);
+		user.setEmailVerificationStatus(true);
+
+		userRepository.save(user);
 	}
 
 	@Override

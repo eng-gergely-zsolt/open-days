@@ -1,13 +1,10 @@
 package com.sapientia.open.days.backend.ui.model.resource;
 
 public enum ErrorMessage {
-    MISSING_REQUIRED_FIELD("Missing required field. Please check documentation for required fields"),
-    NO_RECORD_FOUND("Record with provided id is not found"),
-
     UNSPECIFIED_ERROR("Something went wrong"),
 
+    //Registration
     EMAIL_ALREADY_REGISTERED("Email address already registered"),
-
     INSTITUTION_NOT_EXISTS("Institution does not exist"),
     MISSING_LAST_NAME("Missing last name"),
     MISSING_FIRST_NAME("Missing first name"),
@@ -18,6 +15,12 @@ public enum ErrorMessage {
     INVALID_PUBLIC_ID("Invalid public id"),
     USER_NOT_FOUND_WITH_USERNAME("No user found with given username"),
     USER_NOT_FOUND_WITH_ID("No user found with given id"),
+    REGISTRATION_EMAIL_NOT_SENT("Sending the email with the OTP code has failed."),
+
+    // Email verification
+    EMAIL_VERIFICATION_INVALID_EMAIL("There is no user with the given email address."),
+    EMAIL_VERIFICATION_INVALID_OTP_CODE("The given OTP code is invalid."),
+    EMAIL_VERIFICATION_EMAIL_ALREADY_VERIFIED("The given email address is already verified."),
 
     ACTIVITY_MISSING_NAME("Activity name is missing"),
     ACTIVITY_MISSING_LOCATION("Activity location is missing"),

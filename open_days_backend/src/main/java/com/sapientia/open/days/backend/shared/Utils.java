@@ -4,6 +4,7 @@ import com.sapientia.open.days.backend.security.SecurityConstants;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import net.bytebuddy.utility.RandomString;
 import org.springframework.stereotype.Component;
 
 import java.security.SecureRandom;
@@ -12,6 +13,11 @@ import java.util.Random;
 
 @Component
 public class Utils {
+
+	public static int generateSixDigitNumber() {
+		Random random = new Random(System.currentTimeMillis());
+		return random.nextInt(1000, 10000);
+	}
 
 	public static boolean hasTokenExpired(String token) {
 		Claims claims = Jwts.parser()

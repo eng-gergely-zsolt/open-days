@@ -1,7 +1,7 @@
 package com.sapientia.open.days.backend.service;
 
 import com.sapientia.open.days.backend.shared.dto.UserDTO;
-import com.sapientia.open.days.backend.ui.model.response.BaseResponse;
+import com.sapientia.open.days.backend.ui.model.request.VerifyEmailByOtpCodeReq;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
@@ -12,6 +12,8 @@ public interface UserService extends UserDetailsService {
 
 	void deleteUser(String publicId);
 
+	void verifyEmailByOtpCode(VerifyEmailByOtpCodeReq payload);
+
 	boolean requestPasswordReset(String emailAddress);
 
 	boolean resetPassword(String token, String password);
@@ -21,8 +23,6 @@ public interface UserService extends UserDetailsService {
 	UserDTO getUserByPublicId(String publicId);
 
 	UserDTO updateUser(UserDTO user, String publicId);
-
-	BaseResponse verifyEmail(String emailVerificationToken);
 
 	List<UserDTO> getUsers(int pageNumber, int recordPerPage);
 }

@@ -13,6 +13,9 @@ public class UserEntity implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
+	@Column
+	private Integer otpCode;
+
 	@Column(length = 100, unique = true, nullable = false)
 	private String email;
 
@@ -62,17 +65,13 @@ public class UserEntity implements Serializable {
 	This creates a new table in cases of ManyToManyRelationships.
 	 */
 	@ManyToMany(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
-	@JoinTable(name = "users_roles",
-			joinColumns = @JoinColumn(name = "users_id", referencedColumnName = "id"),
-			inverseJoinColumns = @JoinColumn(name = "roles_id", referencedColumnName = "id"))
+	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "users_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "roles_id", referencedColumnName = "id"))
 	private Set<RoleEntity> roles;
 
 	public UserEntity() {
 	}
 
-	public UserEntity(String email, String userName, String firstName, String lastName, String publicId,
-	                  String encryptedPassword, Set<RoleEntity> roles, InstitutionEntity institution,
-	                  boolean emailVerificationStatus) {
+	public UserEntity(String email, String userName, String firstName, String lastName, String publicId, String encryptedPassword, Set<RoleEntity> roles, InstitutionEntity institution, boolean emailVerificationStatus) {
 		this.email = email;
 		this.roles = roles;
 		this.username = userName;
@@ -90,6 +89,10 @@ public class UserEntity implements Serializable {
 
 	public long getId() {
 		return id;
+	}
+
+	public Integer getOtpCode() {
+		return otpCode;
 	}
 
 	public String getEmail() {
@@ -134,6 +137,10 @@ public class UserEntity implements Serializable {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public void setOtpCode(Integer otpCode) {
+		this.otpCode = otpCode;
 	}
 
 	public void setEmail(String email) {

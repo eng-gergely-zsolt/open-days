@@ -5,10 +5,7 @@ import com.sapientia.open.days.backend.io.repository.OrganizerEmailRepository;
 import com.sapientia.open.days.backend.service.UserService;
 import com.sapientia.open.days.backend.shared.Roles;
 import com.sapientia.open.days.backend.shared.dto.UserDTO;
-import com.sapientia.open.days.backend.ui.model.request.UserCreateRequestModel;
-import com.sapientia.open.days.backend.ui.model.request.PasswordResetModel;
-import com.sapientia.open.days.backend.ui.model.request.PasswordResetRequestModel;
-import com.sapientia.open.days.backend.ui.model.request.UserUpdateRequestModel;
+import com.sapientia.open.days.backend.ui.model.request.*;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorCode;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorMessage;
 import com.sapientia.open.days.backend.ui.model.resource.OperationStatus;
@@ -24,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 
 @RestController
 @RequestMapping("users")
@@ -34,6 +32,12 @@ public class UserController {
 
 	@Autowired
 	OrganizerEmailRepository organizerEmailRepository;
+
+	@GetMapping(path = "/test")
+	public int getTest() {
+		Random r = new Random(System.currentTimeMillis());
+		return r.nextInt(1000, 10000);
+	}
 
 	@PostAuthorize("hasRole('ADMIN') or returnObject.publicId == principal.publicId")
 	@GetMapping(path = "/{publicId}")
@@ -161,7 +165,7 @@ public class UserController {
 	}
 
 	/**
-	 * It verifies if the given authorization token is valid or not.
+	 * Verifies if the given authorization token is valid or not.
 	 */
 	@GetMapping(path = "/token-verification")
 	public BaseResponse verifyAuthorizationToken() {
@@ -169,14 +173,11 @@ public class UserController {
 	}
 
 	/**
-	 * It verifies the token that was sent to check the user's email.
-	 *
-	 * @param emailVerificationToken The token that was sent to the user.
-	 * @return It returns a base response.
+	 * Authenticates the email by the code that was sent to the user via email.
 	 */
-	@GetMapping(path = "/email-verification")
-	public BaseResponse verifyEmail(@RequestParam(value = "token") String emailVerificationToken) {
-		return userService.verifyEmail(emailVerificationToken);
+	@GetMapping("/email-verification-otp-code")
+	public void verifyEmailByOtpCode(@RequestBody VerifyEmailByOtpCodeReq payload) {
+		userService.verifyEmailByOtpCode(payload);
 	}
 
 	/*
