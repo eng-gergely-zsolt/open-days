@@ -76,6 +76,10 @@ public class EventServiceImpl implements EventService {
 			event.setLocation(updateEventPayload.getLocation());
 		}
 
+		if (updateEventPayload.getImageLink() != null) {
+			event.setImageLink(updateEventPayload.getImageLink());
+		}
+
 		try {
 			eventRepository.save(event);
 		} catch (Exception exception) {
