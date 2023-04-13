@@ -15,6 +15,9 @@ DELETE FROM settlements
 DELETE FROM counties
 DELETE FROM organizer_emails
 
+--Organizer emails
+INSERT INTO organizer_emails (id, email) VALUES (1, 'anomakyr@gmail.com')
+
 --Counties
 INSERT INTO counties (id, name) VALUES (1, 'Kovászna')
 INSERT INTO counties (id, name) VALUES (2, 'Hargita')
@@ -80,9 +83,6 @@ INSERT INTO institutions (id, name, settlement_id) VALUES (35, 'Dr. P. Boros For
 
 INSERT INTO institutions (id, name, settlement_id) VALUES (36, 'Bólyai Farkas Líceum', 18)
 
---Organizer emails
-INSERT INTO organizer_emails (id, email) VALUES (1, 'anomakyr@gmail.com')
-
 --Roles
 INSERT INTO roles (id, name) VALUES (1, 'ROLE_USER')
 INSERT INTO roles (id, name) VALUES (2, 'ROLE_ORGANIZER')
@@ -116,3 +116,17 @@ INSERT INTO events (id, date_time, image_link, is_online, location, meeting_link
 INSERT INTO events (id, date_time, image_link, is_online, location, meeting_link, activity_id, organizer_id, description) VALUES (6, '2024-04-22 19:45', 'event/placeholder.jpg', false, 'Aula', NULL, 6, 2, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. LoremIpsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took agalley of type and scrambled it to make a type specimen book.')
 INSERT INTO events (id, date_time, image_link, is_online, location, meeting_link, activity_id, organizer_id, description) VALUES (7, '2024-05-26 07:12', 'event/placeholder.jpg', false, '1. emelet', NULL, 7, 2, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. LoremIpsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took agalley of type and scrambled it to make a type specimen book.')
 INSERT INTO events (id, date_time, image_link, is_online, location, meeting_link, activity_id, organizer_id, description) VALUES (8, '2024-05-08 09:10', 'event/placeholder.jpg', true, '2. emelet', 'https://meeting.com', 1, 2, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. LoremIpsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took agalley of type and scrambled it to make a type specimen book.')
+
+--Roles-authorities
+INSERT INTO roles_authorities (roles_id, authorities_id) VALUES (1, 1)
+INSERT INTO roles_authorities (roles_id, authorities_id) VALUES (1, 2)
+INSERT INTO roles_authorities (roles_id, authorities_id) VALUES (2, 1)
+INSERT INTO roles_authorities (roles_id, authorities_id) VALUES (2, 2)
+INSERT INTO roles_authorities (roles_id, authorities_id) VALUES (3, 1)
+INSERT INTO roles_authorities (roles_id, authorities_id) VALUES (3, 2)
+INSERT INTO roles_authorities (roles_id, authorities_id) VALUES (3, 3)
+
+--Users-roles
+INSERT INTO users_roles (users_id, roles_id) VALUES (1, 3)
+INSERT INTO users_roles (users_id, roles_id) VALUES (2, 2)
+INSERT INTO users_roles (users_id, roles_id) VALUES (3, 1)
