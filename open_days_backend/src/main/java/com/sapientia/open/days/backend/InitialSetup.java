@@ -57,14 +57,14 @@ public class InitialSetup {
 	@Transactional
 	@SuppressWarnings("unused")
 	public void onApplicationEvent(ApplicationReadyEvent event) {
-		createCounties();
-		createSettlements();
-		createInstitutions();
-		createOrganizerEmails();
-		createRolesAndAuthorities();
-		createUsers();
-		createActivities();
-		createEvents();
+//		createCounties();
+//		createSettlements();
+//		createInstitutions();
+//		createOrganizerEmails();
+//		createRolesAndAuthorities();
+//		createUsers();
+//		createActivities();
+//		createEvents();
 	}
 
 	@Transactional
