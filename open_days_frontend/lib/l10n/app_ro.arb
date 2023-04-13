@@ -52,6 +52,11 @@
     "order_by_name": "Nume",
     "order_by_date": "Dată",
 
+    "email_verification_main_button": "Verificare",
+    "email_verification_header": "Cod de verificare",
+    "email_verification_title": "Verifică-ți adresa de email",
+    "email_verification_subtitle": "Introduceți aici codul dvs. OTP",
+
     "event_modification_save": "Salvați",
     "event_modification_image": "Imagine",
     "event_modification_activity": "Activitate",

@@ -24,10 +24,11 @@ Future<BaseResponseModel> updateEventSvc(
             'dateTime': updateEventPayload.dateTime,
             'isOnline': updateEventPayload.isOnline,
             'location': updateEventPayload.location,
+            'imageLink': updateEventPayload.imagePath,
             'meetingLink': updateEventPayload.meetingLink,
             'activityName': updateEventPayload.activityName,
           }))
-      .timeout(const Duration(seconds: 5));
+      .timeout(const Duration(seconds: 10));
 
   if (rawResponse.statusCode == 200) {
     response.isOperationSuccessful = true;

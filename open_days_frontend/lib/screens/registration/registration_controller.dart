@@ -27,6 +27,10 @@ class RegistrationController {
     return _user;
   }
 
+  String getEmail() {
+    return _user.email;
+  }
+
   UserResponseModel? getRegistrationResponse() {
     return _registrationResponse;
   }

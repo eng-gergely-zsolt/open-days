@@ -1,12 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:open_days_frontend/models/activities_response_model.dart';
 
 import '../../theme/theme.dart';
 import '../error/base_error.dart';
 import './event_modification_controller.dart';
+import '../../models/activities_response_model.dart';
 import '../home_base/models/event_response_model.dart';
 
 /// This class holds the event modification screen.
@@ -28,6 +30,7 @@ class EventModification extends ConsumerWidget {
     final activities = ref.watch(controller.createInitialDataProvider(_event?.imageLink));
     final selectedDateTime = ref.watch(controller.getSelectedDateTimeProvider(_event?.dateTime));
 
+    var imagePath = ref.watch(controller.getImagePathProvider());
     var isOnlineMeeting = ref.watch(controller.getIsOnlineMeetingProvider()!);
     var selectedActivityName = ref.watch(controller.getSelectedActivityProvider());
 
@@ -84,22 +87,27 @@ class EventModification extends ConsumerWidget {
                           SizedBox(
                             width: appWidth * 1,
                             height: appHeight * 0.25,
-                            child: Image.network(
-                              controller.getImageUrl(),
-                              fit: BoxFit.fill,
-                              loadingBuilder: (BuildContext context, Widget child,
-                                  ImageChunkEvent? loadingProgress) {
-                                if (loadingProgress == null) return child;
-                                return Center(
-                                  child: CircularProgressIndicator(
-                                    value: loadingProgress.expectedTotalBytes != null
-                                        ? loadingProgress.cumulativeBytesLoaded /
-                                            loadingProgress.expectedTotalBytes!
-                                        : null,
+                            child: imagePath == ""
+                                ? Image.network(
+                                    controller.getImageUrl(),
+                                    fit: BoxFit.fill,
+                                    loadingBuilder: (BuildContext context, Widget child,
+                                        ImageChunkEvent? loadingProgress) {
+                                      if (loadingProgress == null) return child;
+                                      return Center(
+                                        child: CircularProgressIndicator(
+                                          value: loadingProgress.expectedTotalBytes != null
+                                              ? loadingProgress.cumulativeBytesLoaded /
+                                                  loadingProgress.expectedTotalBytes!
+                                              : null,
+                                        ),
+                                      );
+                                    },
+                                  )
+                                : Image.file(
+                                    File(imagePath),
+                                    fit: BoxFit.fill,
                                   ),
-                                );
-                              },
-                            ),
                           ),
                           Positioned(
                             top: appHeight * 0.22,
@@ -260,8 +268,7 @@ class EventModification extends ConsumerWidget {
             style: CustomTheme.lightTheme.textTheme.button?.copyWith(color: Colors.black),
           ),
           onPressed: () {
-            // ImagePicker imagePicker = ImagePicker();
-            // imagePicker.pickImage(source: ImageSource.camera);
+            controller.selectImage();
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: CustomTheme.lightTheme.cardColor,

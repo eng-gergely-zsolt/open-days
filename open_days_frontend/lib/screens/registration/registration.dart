@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:open_days_frontend/theme/theme.dart';
+import 'package:open_days_frontend/utils/validatorUtils.dart';
 
+import '../../constants/page_routes.dart';
 import '../login/login.dart';
 import './registration_controller.dart';
 import '../../constants/constants.dart';
@@ -41,9 +43,10 @@ class _RegistrationState extends ConsumerState<Registration> {
       if (registrationController.getRegistrationResponse()?.operationResult ==
           operationResultSuccess) {
         Future.microtask(
-          () => Navigator.push(
+          () => Navigator.pushNamed(
             context,
-            MaterialPageRoute(builder: (context) => const Login()),
+            emailVerificationRoute,
+            arguments: registrationController.getEmail(),
           ),
         );
       } else {
@@ -159,7 +162,7 @@ class _RegistrationState extends ConsumerState<Registration> {
                                 registrationController.setEmail(value);
                               }),
                               initialValue: registrationController.getUser().email,
-                              validator: ((value) => registrationController.validateEmail(value)),
+                              validator: ((value) => ValidatorUtils.validateEmail(value)),
                             ),
                             TextFormField(
                               maxLength: 30,

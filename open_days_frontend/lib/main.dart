@@ -18,17 +18,20 @@ void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
-  runApp(ProviderScope(
+  runApp(
+    ProviderScope(
       child: MaterialApp(
-    supportedLocales: L10n.all,
-    initialRoute: initialRoute,
-    theme: CustomTheme.lightTheme,
-    onGenerateRoute: RouteGenerator.generateRoute,
-    localizationsDelegates: const [
-      AppLocalizations.delegate,
-      GlobalMaterialLocalizations.delegate,
-      GlobalCupertinoLocalizations.delegate,
-      GlobalWidgetsLocalizations.delegate,
-    ],
-  )));
+        supportedLocales: L10n.all,
+        initialRoute: initialRoute,
+        theme: CustomTheme.lightTheme,
+        onGenerateRoute: RouteGenerator.generateRoute,
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+      ),
+    ),
+  );
 }

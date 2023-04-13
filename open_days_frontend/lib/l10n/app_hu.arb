@@ -52,6 +52,11 @@
     "order_by_name": "Név szerint",
     "order_by_date": "Dátum szerint",
 
+    "email_verification_main_button": "Ellenőrzés",
+    "email_verification_header": "Ellenőrző kód",
+    "email_verification_title": "E-mail címed ellenőrzése",
+    "email_verification_subtitle": "Ide írd be a kapot OTP kódot.",
+
     "event_modification_save": "Mentés",
     "event_modification_image": "Kép",
     "event_modification_activity": "Tevékenység",

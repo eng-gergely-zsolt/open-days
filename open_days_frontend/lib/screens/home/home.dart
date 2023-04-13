@@ -11,14 +11,12 @@ import '../event_modification/event_modification.dart';
 
 class Home extends ConsumerStatefulWidget {
   final InitialDataModel? _initialData;
-  final HomeBaseController _homeBaseController;
 
   const Home(
       {Key? key,
       required InitialDataModel? initialDataModel,
       required HomeBaseController homeBaseController})
       : _initialData = initialDataModel,
-        _homeBaseController = homeBaseController,
         super(key: key);
 
   @override
@@ -107,6 +105,7 @@ class _HomeState extends ConsumerState<Home> {
                                   Icons.edit,
                                 ),
                                 onPressed: () {
+                                  homeBaseController.invalidateInitialDataProviderNow();
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(

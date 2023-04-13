@@ -31,6 +31,7 @@ Future<BaseResponse> verifyAuthorizationTokenSvc() async {
     if (rawResponse.statusCode == 200) {
       parsedResponse = jsonDecode(rawResponse.body);
       response = BaseResponse.fromJson(parsedResponse);
+      response.isOperationSuccessful = true;
     } else {
       response = BaseResponse();
     }

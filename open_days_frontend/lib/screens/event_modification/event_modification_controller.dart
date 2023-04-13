@@ -1,6 +1,10 @@
-import 'package:firebase_storage/firebase_storage.dart';
+import 'dart:io';
+
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart' as path;
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../models/activity_model.dart';
@@ -13,16 +17,22 @@ import '../../repositories/event_modification_repository.dart';
 class EventModificationController {
   String? _location;
   String? _meetingLink;
+  Reference? _imageToUploadRef;
   BaseResponseModel? _updateEventResponse;
   StateProvider<bool>? _isOnlineMeetingProvider;
   StateProvider<DateTime>? _selectedDateTimeProvider;
+
   FutureProvider<ActivitiesResponseModel>? _activitiesProvider;
 
   var _imageUrl = '';
+  var _imagePathInDB = '';
 
   final ProviderRef _ref;
   final BaseRepository _baseRepository;
   final EventModificationRepository _eventModificationRepository;
+
+  final _folderNameInStorage = 'event';
+  final _imagePathProvider = StateProvider<String>((ref) => "");
   final _isLoadingProvider = StateProvider<bool>((ref) => false);
   final _selectedActivityProvider = StateProvider<String?>(((ref) => null));
 
@@ -42,6 +52,10 @@ class EventModificationController {
 
   StateProvider<bool> getIsLoadinProvider() {
     return _isLoadingProvider;
+  }
+
+  StateProvider<String> getImagePathProvider() {
+    return _imagePathProvider;
   }
 
   BaseResponseModel? getUpdateEventResponse() {
@@ -124,8 +138,17 @@ class EventModificationController {
 
   /// Gets the URL link from the connected Firebase Storage by the given path.
   Future<String> _getDownloadURL(String imagePath) async {
-    final ref = FirebaseStorage.instance.ref().child(imagePath);
-    return await ref.getDownloadURL();
+    String response;
+    var imageRef = FirebaseStorage.instance.ref().child(imagePath);
+
+    try {
+      response = await imageRef.getDownloadURL();
+    } catch (_) {
+      imageRef = FirebaseStorage.instance.ref().child('event/placeholder.jpg');
+      response = await imageRef.getDownloadURL();
+    }
+
+    return response;
   }
 
   void initializeMeetingProvider(bool? isOnlineMeeting) {
@@ -186,6 +209,13 @@ class EventModificationController {
       updateEventPayload.meetingLink = _meetingLink;
     }
 
+    if (_imageToUploadRef != null) {
+      try {
+        await _imageToUploadRef?.putFile(File(_ref.read(_imagePathProvider)));
+        updateEventPayload.imagePath = _imagePathInDB;
+      } catch (error) {}
+    }
+
     if (eventId == null) {
       _updateEventResponse = BaseResponseModel();
     } else {
@@ -194,6 +224,26 @@ class EventModificationController {
     }
 
     _ref.read(_isLoadingProvider.notifier).state = false;
+  }
+
+  void selectImage() async {
+    ImagePicker imagePicker = ImagePicker();
+    XFile? xFile = await imagePicker.pickImage(source: ImageSource.gallery);
+
+    if (xFile != null) {
+      _ref.read(_imagePathProvider.notifier).state = xFile.path;
+    }
+
+    if (xFile != null) {
+      final imageExtension = path.extension(xFile.path);
+      final uniqueImageName = DateTime.now().millisecondsSinceEpoch.toString() + imageExtension;
+
+      _imagePathInDB = _folderNameInStorage + '/' + uniqueImageName;
+
+      Reference rootRef = FirebaseStorage.instance.ref();
+      Reference eventDirectoryRef = rootRef.child(_folderNameInStorage);
+      _imageToUploadRef = eventDirectoryRef.child(uniqueImageName);
+    }
   }
 }
 

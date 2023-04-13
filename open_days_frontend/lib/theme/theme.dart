@@ -108,6 +108,11 @@ class CustomTheme {
           color: Color.fromRGBO(38, 70, 83, 1),
         ),
 
+        headline4: TextStyle(
+          fontSize: 34.0,
+          fontFamily: 'Tahoma',
+        ),
+
         headline5: TextStyle(
           fontSize: 24.0,
           fontFamily: 'Tahoma',

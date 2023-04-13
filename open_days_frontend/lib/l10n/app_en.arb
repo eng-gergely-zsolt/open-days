@@ -55,6 +55,11 @@
     "order_by_name": "Name",
     "order_by_date": "Date",
 
+    "email_verification_main_button": "Verify",
+    "email_verification_header": "Verification Code",
+    "email_verification_title": "Verify your email address",
+    "email_verification_subtitle": "Enter your OTP code here.",
+
     "event_modification_save": "Save",
     "event_modification_image": "Image",
     "event_modification_activity": "Activity",

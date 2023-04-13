@@ -1,3 +1,5 @@
+import '../../../utils/utils.dart';
+
 class Institution {
   final String countyName;
   final String settlementName;
@@ -13,7 +15,7 @@ class Institution {
     return Institution(
       countyName: json['countyName'] ?? '',
       settlementName: json['settlementName'] ?? '',
-      institutionName: json['institutionName'] ?? '',
+      institutionName: Utils.getDecodedString(json['institutionName'] ?? ''),
     );
   }
 }

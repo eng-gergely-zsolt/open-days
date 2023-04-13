@@ -1,7 +1,7 @@
 class BaseResponse {
   int? errorCode;
-  String? errorMessage;
-  bool isOperationSuccessful;
+  String? errorMessage = "";
+  bool isOperationSuccessful = false;
 
   BaseResponse({
     this.isOperationSuccessful = false,
@@ -15,6 +15,5 @@ class BaseResponse {
 
   BaseResponse.fromJson(Map<String, dynamic> json)
       : errorCode = json['errorCode'],
-        errorMessage = json['errorMessage'],
-        isOperationSuccessful = json['isOperationSuccessful'];
+        errorMessage = json['errorMessage'];
 }
