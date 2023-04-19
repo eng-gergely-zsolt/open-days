@@ -2,14 +2,8 @@ package com.sapientia.open.days.backend.service.impl;
 
 import com.sapientia.open.days.backend.exceptions.BaseException;
 import com.sapientia.open.days.backend.exceptions.GeneralServiceException;
-import com.sapientia.open.days.backend.io.entity.InstitutionEntity;
-import com.sapientia.open.days.backend.io.entity.PasswordResetTokenEntity;
-import com.sapientia.open.days.backend.io.entity.RoleEntity;
-import com.sapientia.open.days.backend.io.entity.UserEntity;
-import com.sapientia.open.days.backend.io.repository.InstitutionRepository;
-import com.sapientia.open.days.backend.io.repository.PasswordResetTokenRepository;
-import com.sapientia.open.days.backend.io.repository.RoleRepository;
-import com.sapientia.open.days.backend.io.repository.UserRepository;
+import com.sapientia.open.days.backend.io.entity.*;
+import com.sapientia.open.days.backend.io.repository.*;
 import com.sapientia.open.days.backend.security.UserPrincipal;
 import com.sapientia.open.days.backend.service.UserService;
 import com.sapientia.open.days.backend.shared.EmailService;
@@ -18,6 +12,7 @@ import com.sapientia.open.days.backend.shared.dto.UserDTO;
 import com.sapientia.open.days.backend.ui.model.request.VerifyEmailByOtpCodeReq;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorCode;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorMessage;
+import com.sapientia.open.days.backend.ui.model.response.UserResponse;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -42,22 +37,25 @@ public class UserServiceImpl implements UserService {
 	Utils utils;
 
 	@Autowired
+	EmailService emailService;
+
+	@Autowired
 	UserRepository userRepository;
 
 	@Autowired
 	RoleRepository roleRepository;
 
 	@Autowired
-	BCryptPasswordEncoder bCryptPasswordEncoder;
+	SettlementRepository settlementRepository;
 
 	@Autowired
 	InstitutionRepository institutionRepository;
 
 	@Autowired
-	PasswordResetTokenRepository passwordResetTokenRepository;
+	BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	@Autowired
-	EmailService emailService;
+	PasswordResetTokenRepository passwordResetTokenRepository;
 
 	@Override
 	public UserDTO getUserByUsername(String username) {
@@ -75,19 +73,30 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserDTO getUserByPublicId(String publicId) {
-		List<String> userRoles = new ArrayList<>();
-		UserEntity userEntity = userRepository.findByPublicId(publicId);
+	public UserResponse getUserByPublicId(String publicId) {
+		SettlementEntity settlement;
+		InstitutionEntity institution;
 
-		if (userEntity == null) {
-			throw new GeneralServiceException(ErrorCode.USER_NOT_FOUND_WITH_ID.getErrorCode(),
+		UserResponse result = new UserResponse();
+		List<String> userRoles = new ArrayList<>();
+		UserEntity user = userRepository.findByPublicId(publicId);
+
+		if (publicId.length() != 15) {
+			throw new BaseException(ErrorCode.INVALID_PUBLIC_ID.getErrorCode(),
+					ErrorMessage.INVALID_PUBLIC_ID.getErrorMessage());
+		}
+
+		if (user == null) {
+			throw new BaseException(ErrorCode.USER_NOT_FOUND_WITH_ID.getErrorCode(),
 					ErrorMessage.USER_NOT_FOUND_WITH_ID.getErrorMessage());
 		}
 
-		UserDTO result = new UserDTO();
-		BeanUtils.copyProperties(userEntity, result);
+		BeanUtils.copyProperties(user, result);
 
-		for (RoleEntity userRole : userEntity.getRoles()) {
+		result.setInstitution(user.getInstitution().getName());
+		result.setCounty(user.getInstitution().getSettlement().getCounty().getName());
+
+		for (RoleEntity userRole : user.getRoles()) {
 			userRoles.add(userRole.getName());
 		}
 

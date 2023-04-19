@@ -2,6 +2,7 @@ package com.sapientia.open.days.backend.service;
 
 import com.sapientia.open.days.backend.shared.dto.UserDTO;
 import com.sapientia.open.days.backend.ui.model.request.VerifyEmailByOtpCodeReq;
+import com.sapientia.open.days.backend.ui.model.response.UserResponse;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public interface UserService extends UserDetailsService {
 
 	UserDTO getUserByUsername(String email);
 
-	UserDTO getUserByPublicId(String publicId);
+	UserResponse getUserByPublicId(String publicId);
 
 	UserDTO updateUser(UserDTO user, String publicId);
 

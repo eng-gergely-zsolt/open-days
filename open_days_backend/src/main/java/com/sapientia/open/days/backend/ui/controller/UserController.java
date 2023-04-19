@@ -11,7 +11,7 @@ import com.sapientia.open.days.backend.ui.model.resource.ErrorMessage;
 import com.sapientia.open.days.backend.ui.model.resource.OperationStatus;
 import com.sapientia.open.days.backend.ui.model.response.BaseResponse;
 import com.sapientia.open.days.backend.ui.model.response.OperationStatusModel;
-import com.sapientia.open.days.backend.ui.model.response.UserResponseModel;
+import com.sapientia.open.days.backend.ui.model.response.UserResponse;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
@@ -41,31 +41,20 @@ public class UserController {
 
 	@PostAuthorize("hasRole('ADMIN') or returnObject.publicId == principal.publicId")
 	@GetMapping(path = "/{publicId}")
-	public UserResponseModel getUser(@PathVariable String publicId) {
-
-		if (publicId.length() != 15) {
-			throw new GeneralServiceException(ErrorCode.INVALID_PUBLIC_ID.getErrorCode(),
-					ErrorMessage.INVALID_PUBLIC_ID.getErrorMessage());
-		}
-
-		UserResponseModel response = new UserResponseModel();
-
-		UserDTO userDTO = userService.getUserByPublicId(publicId);
-		BeanUtils.copyProperties(userDTO, response);
-
-		return response;
+	public UserResponse getUser(@PathVariable String publicId) {
+		return userService.getUserByPublicId(publicId);
 	}
 
 	@GetMapping
-	public List<UserResponseModel> getUsers(
+	public List<UserResponse> getUsers(
 			@RequestParam(value = "page", defaultValue = "0") int page,
 			@RequestParam(value = "limit", defaultValue = "25") int limit) {
 
-		List<UserResponseModel> response = new ArrayList<>();
+		List<UserResponse> response = new ArrayList<>();
 		List<UserDTO> users = userService.getUsers(page, limit);
 
 		for (UserDTO user : users) {
-			UserResponseModel userModel = new UserResponseModel();
+			UserResponse userModel = new UserResponse();
 			BeanUtils.copyProperties(user, userModel);
 			response.add(userModel);
 		}
@@ -126,14 +115,14 @@ public class UserController {
 	}
 
 	@PutMapping(path = "/{publicId}")
-	public UserResponseModel updateUser(@PathVariable String publicId, @RequestBody UserUpdateRequestModel updateUserRequest) {
+	public UserResponse updateUser(@PathVariable String publicId, @RequestBody UserUpdateRequestModel updateUserRequest) {
 
 		if (publicId.length() != 15) {
 			throw new GeneralServiceException(ErrorCode.INVALID_PUBLIC_ID.getErrorCode(),
 					ErrorMessage.INVALID_PUBLIC_ID.getErrorMessage());
 		}
 
-		UserResponseModel response = new UserResponseModel();
+		UserResponse response = new UserResponse();
 
 		UserDTO userDTO = new UserDTO();
 		BeanUtils.copyProperties(updateUserRequest, userDTO);

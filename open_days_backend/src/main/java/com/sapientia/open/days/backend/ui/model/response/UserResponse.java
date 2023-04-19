@@ -1,16 +1,22 @@
 package com.sapientia.open.days.backend.ui.model.response;
 
 @SuppressWarnings("unused")
-public class UserResponseModel {
+public class UserResponse {
     private String email;
+    private String county;
     private String publicId;
     private String username;
     private String lastName;
     private String roleName;
     private String firstName;
+    private String institution;
 
     public String getEmail() {
         return email;
+    }
+
+    public String getCounty() {
+        return county;
     }
 
     public String getPublicId() {
@@ -33,8 +39,16 @@ public class UserResponseModel {
         return firstName;
     }
 
+    public String getInstitution() {
+        return institution;
+    }
+
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public void setCounty(String county) {
+        this.county = county;
     }
 
     public void setPublicId(String publicId) {
@@ -55,5 +69,9 @@ public class UserResponseModel {
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
+    }
+
+    public void setInstitution(String institution) {
+        this.institution = institution;
     }
 }
