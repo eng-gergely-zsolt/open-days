@@ -45,6 +45,7 @@
     "event_details_description": "Leírás",
     "event_details_create_qr_code": "QR Készítése",
 
+    "event_creator_main_button": "Mentés",
     "event_creator_header": "Eseménykészítő",
     "event_creator_online_event": "Online esemény",
 
@@ -61,5 +62,6 @@
     "event_modification_image": "Kép",
     "event_modification_activity": "Tevékenység",
     "event_modification_header": "Esemény módosítása",
+    "event_modification_description": "Leírás",
     "event_modification_upload_image": "Kép feltöltése"
 }

@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:open_days_frontend/theme/theme.dart';
-import 'package:open_days_frontend/utils/validatorUtils.dart';
+import 'package:open_days_frontend/utils/validator_utils.dart';
 
 import '../../constants/page_routes.dart';
 import '../login/login.dart';

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../theme/theme.dart';
 import './home_controller.dart';
@@ -28,119 +29,194 @@ class _HomeState extends ConsumerState<Home> {
   Widget build(BuildContext context) {
     final appWidth = MediaQuery.of(context).size.width;
     final appHeight = MediaQuery.of(context).size.height;
+    final appLocale = AppLocalizations.of(context);
 
     final homeController = ref.read(homeControllerProvider);
     final homeBaseController = ref.read(homeBaseControllerProvider);
+    String? orderValue = ref.watch(homeBaseController.getOrderValueProvider());
+
+    orderValue = orderValue ?? appLocale?.order_by as String;
 
     return Container(
+      width: appWidth * 1,
+      height: appHeight * 1,
       color: CustomTheme.lightTheme.scaffoldBackgroundColor,
-      child: ListView.builder(
-          itemCount: widget._initialData?.events?.events.length,
-          itemBuilder: (context, index) {
-            final event = widget._initialData?.events?.events[index];
-
-            return GestureDetector(
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: ((context) => EventDetails(
-                        widget._initialData?.events?.events[index],
-                        widget._initialData?.user?.roleName,
-                      )),
-                ),
+      child: Column(
+        children: [
+          Container(
+            height: appHeight * 0.08,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: CustomTheme.lightTheme.dividerColor,
               ),
-              child: Container(
-                width: appWidth * 0.8,
-                height: appHeight * 0.2,
-                margin: EdgeInsets.all(appWidth * 0.02),
-                child: Card(
-                  elevation: 5,
-                  color: Colors.white,
-                  shadowColor: CustomTheme.lightTheme.primaryColor,
-                  child: Row(children: [
-                    Container(
-                      height: double.infinity,
-                      width: 10,
-                      color: index % 3 == 0
-                          ? const Color.fromRGBO(231, 111, 81, 1)
-                          : index % 3 == 1
-                              ? const Color.fromRGBO(42, 157, 143, 1)
-                              : const Color.fromRGBO(233, 196, 106, 1),
+            ),
+            padding: EdgeInsets.only(
+              left: appWidth * 0.1,
+              right: appWidth * 0.1,
+              top: appHeight * 0.02,
+            ),
+            child: Row(
+              children: [
+                Text(
+                  appLocale?.events as String,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText1
+                      ?.copyWith(color: Theme.of(context).iconTheme.color),
+                ),
+                const Spacer(),
+                DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    value: orderValue,
+                    icon: Icon(
+                      Icons.keyboard_arrow_down,
+                      color: Theme.of(context).iconTheme.color,
                     ),
-                    Container(
-                      margin: EdgeInsets.only(left: appWidth * 0.1),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            width: appWidth * 0.60,
-                            child: Text(
-                              event?.activityName as String,
-                              style: Theme.of(context).textTheme.headline5?.copyWith(
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            event?.dateTime as String,
+                    items: [
+                      appLocale?.order_by as String,
+                      appLocale?.order_by_name as String,
+                      appLocale?.order_by_date as String,
+                    ].map<DropdownMenuItem<String>>(
+                      (String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(
+                            value,
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyText1
                                 ?.copyWith(color: Theme.of(context).iconTheme.color),
                           ),
-                          const SizedBox(height: 10),
-                        ],
+                        );
+                      },
+                    ).toList(),
+                    onChanged: (String? newOrderValue) {
+                      homeBaseController.orderEvents(newOrderValue);
+                      homeBaseController.setOrderValue(newOrderValue);
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            width: appWidth * 1,
+            height: appHeight * 0.744,
+            child: ListView.builder(
+                itemCount: widget._initialData?.events?.events.length,
+                itemBuilder: (context, index) {
+                  final event = widget._initialData?.events?.events[index];
+
+                  return GestureDetector(
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: ((context) => EventDetails(
+                              widget._initialData?.events?.events[index],
+                              widget._initialData?.user?.roleName,
+                            )),
                       ),
                     ),
-                    const Spacer(),
-                    widget._initialData?.user?.roleName == roleOrganizer
-                        ? Container(
-                            margin: EdgeInsets.only(right: appWidth * 0.05),
-                            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                              IconButton(
-                                icon: const Icon(
-                                  Icons.edit,
+                    child: Container(
+                      width: appWidth * 0.8,
+                      height: appHeight * 0.2,
+                      margin: EdgeInsets.all(appWidth * 0.02),
+                      child: Card(
+                        elevation: 5,
+                        color: const Color.fromRGBO(250, 250, 250, 1),
+                        shadowColor: CustomTheme.lightTheme.primaryColor,
+                        child: Row(children: [
+                          Container(
+                            height: double.infinity,
+                            width: 10,
+                            color: index % 3 == 0
+                                ? const Color.fromRGBO(231, 111, 81, 1)
+                                : index % 3 == 1
+                                    ? const Color.fromRGBO(42, 157, 143, 1)
+                                    : const Color.fromRGBO(233, 196, 106, 1),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(left: appWidth * 0.1),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  width: appWidth * 0.60,
+                                  child: Text(
+                                    event?.activityName as String,
+                                    style: Theme.of(context).textTheme.headline5?.copyWith(
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                  ),
                                 ),
-                                onPressed: () {
-                                  homeBaseController.invalidateInitialDataProviderNow();
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => EventModification(
-                                          widget._initialData?.events?.events[index]),
-                                    ),
-                                  );
-                                },
-                              ),
-                              IconButton(
-                                icon: const Icon(
-                                  Icons.delete,
+                                const SizedBox(height: 10),
+                                Text(
+                                  event?.dateTime as String,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1
+                                      ?.copyWith(color: Theme.of(context).iconTheme.color),
                                 ),
-                                onPressed: () {
-                                  homeController.deleteEvent(
-                                      widget._initialData?.events?.events[index].id as int,
-                                      homeBaseController);
-                                  setState(() {
-                                    widget._initialData?.events?.events.removeWhere((element) =>
-                                        element.id ==
-                                        widget._initialData?.events?.events[index].id);
-                                  });
-                                },
-                              ),
-                            ]),
-                          )
-                        : Container(
-                            margin: EdgeInsets.only(right: appWidth * 0.04),
-                            child: const Icon(Icons.arrow_forward_ios),
-                          )
-                  ]),
-                ),
-              ),
-            );
-          }),
+                                const SizedBox(height: 10),
+                              ],
+                            ),
+                          ),
+                          const Spacer(),
+                          widget._initialData?.user?.roleName == roleOrganizer
+                              ? Container(
+                                  margin: EdgeInsets.only(right: appWidth * 0.05),
+                                  child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        IconButton(
+                                          icon: const Icon(
+                                            Icons.edit,
+                                          ),
+                                          onPressed: () {
+                                            homeBaseController.invalidateInitialDataProviderNow();
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) => EventModification(
+                                                    widget._initialData?.events?.events[index]),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                        IconButton(
+                                          icon: const Icon(
+                                            Icons.delete,
+                                          ),
+                                          onPressed: () {
+                                            homeController.deleteEvent(
+                                                widget._initialData?.events?.events[index].id
+                                                    as int,
+                                                homeBaseController);
+                                            setState(() {
+                                              widget._initialData?.events?.events.removeWhere(
+                                                  (element) =>
+                                                      element.id ==
+                                                      widget
+                                                          ._initialData?.events?.events[index].id);
+                                            });
+                                          },
+                                        ),
+                                      ]),
+                                )
+                              : Container(
+                                  margin: EdgeInsets.only(right: appWidth * 0.04),
+                                  child: const Icon(Icons.arrow_forward_ios),
+                                )
+                        ]),
+                      ),
+                    ),
+                  );
+                }),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -6,6 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../../theme/theme.dart';
+import '../../utils/helper_widget_utils.dart';
 import '../error/base_error.dart';
 import './event_modification_controller.dart';
 import '../../models/activities_response_model.dart';
@@ -24,7 +25,7 @@ class EventModification extends ConsumerWidget {
     final appHeight = MediaQuery.of(context).size.height;
     final controller = ref.read(eventModificationControllerProvider);
 
-    controller.initializeMeetingProvider(_event?.isOnline);
+    controller.initializeMeetingProvider(_event?.isOnline, _event?.meetingLink);
 
     final isLoading = ref.watch(controller.getIsLoadinProvider());
     final activities = ref.watch(controller.createInitialDataProvider(_event?.imageLink));
@@ -87,20 +88,15 @@ class EventModification extends ConsumerWidget {
                           SizedBox(
                             width: appWidth * 1,
                             height: appHeight * 0.25,
-                            child: imagePath == ""
+                            child: imagePath == ''
                                 ? Image.network(
                                     controller.getImageUrl(),
                                     fit: BoxFit.fill,
                                     loadingBuilder: (BuildContext context, Widget child,
                                         ImageChunkEvent? loadingProgress) {
-                                      if (loadingProgress == null) return child;
-                                      return Center(
-                                        child: CircularProgressIndicator(
-                                          value: loadingProgress.expectedTotalBytes != null
-                                              ? loadingProgress.cumulativeBytesLoaded /
-                                                  loadingProgress.expectedTotalBytes!
-                                              : null,
-                                        ),
+                                      return HelperWidgetUtils.getImageCircularProgressIndicator(
+                                        child,
+                                        loadingProgress,
                                       );
                                     },
                                   )
@@ -125,18 +121,19 @@ class EventModification extends ConsumerWidget {
                                 ),
                               ),
                               child: SingleChildScrollView(
-                                  child: buildDataHolderColumn(
-                                ref,
-                                appWidth,
-                                appHeight,
-                                isOnlineMeeting,
-                                context,
-                                selectedDateTime,
-                                appLocale,
-                                selectedActivityName,
-                                activities,
-                                controller,
-                              )),
+                                child: buildDataHolderColumn(
+                                  ref,
+                                  appWidth,
+                                  appHeight,
+                                  isOnlineMeeting,
+                                  context,
+                                  selectedDateTime,
+                                  appLocale,
+                                  selectedActivityName,
+                                  activities,
+                                  controller,
+                                ),
+                              ),
                             ),
                           ),
                         ],
@@ -161,7 +158,7 @@ class EventModification extends ConsumerWidget {
     EventModificationController controller,
   ) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      // Location textfield
+      // Location
       Text(
         appLocale?.base_text_location as String,
         style: CustomTheme.lightTheme.textTheme.bodyText2?.copyWith(
@@ -174,6 +171,23 @@ class EventModification extends ConsumerWidget {
         initialValue: _event?.location,
         keyboardType: TextInputType.multiline,
         onChanged: (location) => controller.setLocation(location),
+      ),
+
+      // Description
+      SizedBox(height: appHeight * 0.03),
+      Text(
+        appLocale?.event_modification_description as String,
+        style: CustomTheme.lightTheme.textTheme.bodyText2?.copyWith(
+          fontWeight: FontWeight.w600,
+          color: CustomTheme.lightTheme.hintColor,
+        ),
+      ),
+      TextFormField(
+        maxLines: null,
+        maxLength: 255,
+        initialValue: _event?.description,
+        keyboardType: TextInputType.multiline,
+        onChanged: (description) => controller.setDescription(description),
       ),
 
       // Activity
@@ -296,15 +310,13 @@ class EventModification extends ConsumerWidget {
           controller.setSelectedDate(date);
         },
         child: SizedBox(
-          height: appHeight * 0.08,
+          height: appHeight * 0.07,
           child: Card(
             elevation: 5,
             margin: EdgeInsets.zero,
             child: Row(children: [
               SizedBox(width: appWidth * 0.03),
-              const Icon(
-                Icons.date_range,
-              ),
+              const Icon(Icons.date_range),
               SizedBox(width: appWidth * 0.03),
               Text(
                 '${selectedDateTime.year}/${selectedDateTime.month}/${selectedDateTime.day}',
@@ -336,9 +348,10 @@ class EventModification extends ConsumerWidget {
           controller.setSelectedTime(time);
         },
         child: SizedBox(
-          height: appHeight * 0.08,
+          height: appHeight * 0.07,
           child: Card(
             elevation: 5,
+            margin: EdgeInsets.zero,
             child: Row(children: [
               SizedBox(width: appWidth * 0.03),
               const Icon(
@@ -369,7 +382,7 @@ class EventModification extends ConsumerWidget {
                 appLocale?.event_modification_save.toUpperCase() as String,
               ),
               style: ElevatedButton.styleFrom(
-                minimumSize: Size(appWidth * 0.6, 45),
+                minimumSize: Size(appWidth * 0.9, 45),
               ),
               onPressed: () {
                 controller.saveChanges(_event?.id, selectedActivityName);
@@ -380,17 +393,42 @@ class EventModification extends ConsumerWidget {
     ]);
   }
 
-  Future<TimeOfDay?> pickTime(context, DateTime selectedDateTime) => showTimePicker(
-      context: context,
-      initialTime: TimeOfDay(
-        hour: selectedDateTime.hour,
-        minute: selectedDateTime.minute,
-      ));
-
   Future<DateTime?> pickDate(context, selectedDateTime) => showDatePicker(
         context: context,
         initialDate: selectedDateTime,
         firstDate: DateTime.now(),
         lastDate: DateTime(2100),
+        builder: (context, child) {
+          return Theme(
+            child: child as Widget,
+            data: Theme.of(context).copyWith(
+              textButtonTheme: TextButtonThemeData(
+                style: TextButton.styleFrom(
+                  textStyle: CustomTheme.lightTheme.textTheme.bodyText1,
+                ),
+              ),
+            ),
+          );
+        },
+      );
+
+  Future<TimeOfDay?> pickTime(context, DateTime selectedDateTime) => showTimePicker(
+        context: context,
+        initialTime: TimeOfDay(
+          hour: selectedDateTime.hour,
+          minute: selectedDateTime.minute,
+        ),
+        builder: (context, child) {
+          return Theme(
+            child: child as Widget,
+            data: Theme.of(context).copyWith(
+              textButtonTheme: TextButtonThemeData(
+                style: TextButton.styleFrom(
+                  textStyle: CustomTheme.lightTheme.textTheme.bodyText1,
+                ),
+              ),
+            ),
+          );
+        },
       );
 }

@@ -5,7 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../../theme/theme.dart';
-import '../../utils/validatorUtils.dart';
+import '../../utils/validator_utils.dart';
 import '../../constants/page_routes.dart';
 import './email_verification_controller.dart';
 

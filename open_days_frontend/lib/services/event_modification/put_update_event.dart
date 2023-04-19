@@ -25,6 +25,7 @@ Future<BaseResponseModel> updateEventSvc(
             'isOnline': updateEventPayload.isOnline,
             'location': updateEventPayload.location,
             'imageLink': updateEventPayload.imagePath,
+            'description': updateEventPayload.description,
             'meetingLink': updateEventPayload.meetingLink,
             'activityName': updateEventPayload.activityName,
           }))

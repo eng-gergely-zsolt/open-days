@@ -20,7 +20,7 @@ Future<BaseResponseModel> createEventSvc(CreateEventModel payload) async {
         headers: headers,
         body: body,
       )
-      .timeout(const Duration(seconds: 5));
+      .timeout(const Duration(seconds: 10));
 
   if (httpResponse.statusCode == 200) {
     response.isOperationSuccessful = true;

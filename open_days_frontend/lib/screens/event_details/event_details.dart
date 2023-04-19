@@ -263,7 +263,7 @@ class EventDetails extends ConsumerWidget {
         ),
       ),
 
-      SizedBox(height: appHeight * 0.03),
+      SizedBox(height: appHeight * 0.05),
       buildCreateQRButton(appWidth, appHeight, context, appLocale, controller),
       buildEntollButton(appWidth, appHeight, appLocale, initialData, controller),
     ]);

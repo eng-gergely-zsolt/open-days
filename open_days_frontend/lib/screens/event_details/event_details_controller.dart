@@ -1,8 +1,9 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import './models/is_user_applied_for_event.dart';
+import '../constants/constants.dart';
 import '../../models/base_response_model.dart';
+import './models/is_user_applied_for_event.dart';
 import '../../repositories/event_details_repository.dart';
 
 class EventDetailsController {
@@ -127,8 +128,18 @@ class EventDetailsController {
 
   /// Gets the URL link from the connected Firebase Storage by the given path.
   Future<String> _getDownloadURL(String imagePath) async {
-    final ref = FirebaseStorage.instance.ref().child(imagePath);
-    return await ref.getDownloadURL();
+    String response;
+    Reference firebaseRef;
+
+    try {
+      firebaseRef = FirebaseStorage.instance.ref().child(imagePath);
+      response = await firebaseRef.getDownloadURL();
+    } catch (error) {
+      firebaseRef = FirebaseStorage.instance.ref().child(placeholderImagePath);
+      response = await firebaseRef.getDownloadURL();
+    }
+
+    return response;
   }
 }
 

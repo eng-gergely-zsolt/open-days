@@ -13,6 +13,7 @@ import '../../repositories/base_repository.dart';
 import '../../models/activities_response_model.dart';
 import '../../models/event_modification_request.dart';
 import '../../repositories/event_modification_repository.dart';
+import '../../utils/firebase_utils.dart';
 
 class EventModificationController {
   String? _location;
@@ -25,6 +26,7 @@ class EventModificationController {
   FutureProvider<ActivitiesResponseModel>? _activitiesProvider;
 
   var _imageUrl = '';
+  var _description = '';
   var _imagePathInDB = '';
 
   final ProviderRef _ref;
@@ -50,6 +52,10 @@ class EventModificationController {
     return _location;
   }
 
+  String getDescription() {
+    return _description;
+  }
+
   StateProvider<bool> getIsLoadinProvider() {
     return _isLoadingProvider;
   }
@@ -72,6 +78,10 @@ class EventModificationController {
 
   void setLocation(String location) {
     _location = location;
+  }
+
+  void setDescription(String description) {
+    _description = description;
   }
 
   void deleteUpdateEventResponse() {
@@ -127,7 +137,7 @@ class EventModificationController {
       var response = ActivitiesResponseModel();
 
       if (imagePath != null) {
-        _imageUrl = await _getDownloadURL(imagePath);
+        _imageUrl = await FirebaseUtils.getDownloadURL(imagePath);
       }
 
       response = await _baseRepository.getAllActivityRepo();
@@ -136,22 +146,9 @@ class EventModificationController {
     });
   }
 
-  /// Gets the URL link from the connected Firebase Storage by the given path.
-  Future<String> _getDownloadURL(String imagePath) async {
-    String response;
-    var imageRef = FirebaseStorage.instance.ref().child(imagePath);
+  void initializeMeetingProvider(bool? isOnlineMeeting, String? meetingLink) {
+    _meetingLink ??= meetingLink;
 
-    try {
-      response = await imageRef.getDownloadURL();
-    } catch (_) {
-      imageRef = FirebaseStorage.instance.ref().child('event/placeholder.jpg');
-      response = await imageRef.getDownloadURL();
-    }
-
-    return response;
-  }
-
-  void initializeMeetingProvider(bool? isOnlineMeeting) {
     if (isOnlineMeeting != null && _isOnlineMeetingProvider == null) {
       _isOnlineMeetingProvider = StateProvider<bool>(((ref) => isOnlineMeeting));
     } else if (isOnlineMeeting == null && _isOnlineMeetingProvider == null) {
@@ -198,6 +195,7 @@ class EventModificationController {
     EventModificationRequest updateEventPayload = EventModificationRequest();
 
     updateEventPayload.location = _location;
+    updateEventPayload.description = _description;
     updateEventPayload.activityName = selectedActivityName;
     updateEventPayload.isOnline = _ref.read(_isOnlineMeetingProvider!);
     updateEventPayload.dateTime =

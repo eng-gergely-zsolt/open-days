@@ -147,6 +147,7 @@ class GuestMode extends ConsumerWidget {
               margin: EdgeInsets.all(appWidth * 0.02),
               child: Card(
                 elevation: 5,
+                color: const Color.fromRGBO(250, 250, 250, 1),
                 shadowColor: CustomTheme.lightTheme.primaryColor,
                 child: Row(children: [
                   Container(
