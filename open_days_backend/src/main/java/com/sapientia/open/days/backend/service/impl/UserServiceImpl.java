@@ -9,8 +9,9 @@ import com.sapientia.open.days.backend.service.UserService;
 import com.sapientia.open.days.backend.shared.EmailService;
 import com.sapientia.open.days.backend.shared.Utils;
 import com.sapientia.open.days.backend.shared.dto.UserDTO;
-import com.sapientia.open.days.backend.ui.model.request.ChangeNameReq;
+import com.sapientia.open.days.backend.ui.model.request.user.ChangeNameReq;
 import com.sapientia.open.days.backend.ui.model.request.VerifyEmailByOtpCodeReq;
+import com.sapientia.open.days.backend.ui.model.request.user.ChangeUsernameReq;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorCode;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorMessage;
 import com.sapientia.open.days.backend.ui.model.response.UserResponse;
@@ -249,6 +250,40 @@ public class UserServiceImpl implements UserService {
 
 		user.setLastName(payload.getLastName());
 		user.setFirstName(payload.getFirstName());
+
+		try {
+			userRepository.save(user);
+		} catch (Exception error) {
+			throw new BaseException(ErrorCode.DB_USER_NOT_SAVED.getErrorCode(),
+					ErrorMessage.DB_USER_NOT_SAVED.getErrorMessage());
+		}
+	}
+
+	/**
+	 * Updates the first and last name of the user identified by the given public id.
+	 */
+	@Override
+	public void updateUsername(ChangeUsernameReq payload) {
+		UserEntity user;
+
+		if (payload.getPublicId() == null || payload.getPublicId().length() != 15) {
+			throw new BaseException(ErrorCode.USER_INVALID_PUBLIC_ID.getErrorCode(),
+					ErrorMessage.USER_INVALID_PUBLIC_ID.getErrorMessage());
+		}
+
+		if (payload.getUsername() == null || payload.getUsername().length() < 3 || payload.getUsername().length() > 50) {
+			throw new BaseException(ErrorCode.USER_INVALID_USERNAME.getErrorCode(),
+					ErrorMessage.USER_INVALID_USERNAME.getErrorMessage());
+		}
+
+		user = userRepository.findByPublicId(payload.getPublicId());
+
+		if (user == null) {
+			throw new BaseException(ErrorCode.USER_NOT_FOUND_WITH_PUBLIC_ID.getErrorCode(),
+					ErrorMessage.USER_NOT_FOUND_WITH_PUBLIC_ID.getErrorMessage());
+		}
+
+		user.setUsername(payload.getUsername());
 
 		try {
 			userRepository.save(user);

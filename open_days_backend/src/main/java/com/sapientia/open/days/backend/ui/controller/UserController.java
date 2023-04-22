@@ -6,6 +6,8 @@ import com.sapientia.open.days.backend.service.UserService;
 import com.sapientia.open.days.backend.shared.Roles;
 import com.sapientia.open.days.backend.shared.dto.UserDTO;
 import com.sapientia.open.days.backend.ui.model.request.*;
+import com.sapientia.open.days.backend.ui.model.request.user.ChangeNameReq;
+import com.sapientia.open.days.backend.ui.model.request.user.ChangeUsernameReq;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorCode;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorMessage;
 import com.sapientia.open.days.backend.ui.model.resource.OperationStatus;
@@ -139,6 +141,14 @@ public class UserController {
 	@PutMapping(path = "/update-name")
 	public void updateName(@RequestBody ChangeNameReq payload) {
 		userService.updateName(payload);
+	}
+
+	/**
+	 * Updates the username of the user identified by the given public id.
+	 */
+	@PutMapping(path = "/update-username")
+	public void updateUsername(@RequestBody ChangeUsernameReq payload) {
+		userService.updateUsername(payload);
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN') or #publicId == principal.publicId")
