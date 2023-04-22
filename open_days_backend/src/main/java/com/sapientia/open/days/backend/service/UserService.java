@@ -1,6 +1,7 @@
 package com.sapientia.open.days.backend.service;
 
 import com.sapientia.open.days.backend.shared.dto.UserDTO;
+import com.sapientia.open.days.backend.ui.model.request.ChangeNameReq;
 import com.sapientia.open.days.backend.ui.model.request.VerifyEmailByOtpCodeReq;
 import com.sapientia.open.days.backend.ui.model.response.UserResponse;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,6 +13,8 @@ public interface UserService extends UserDetailsService {
 	void createUser(UserDTO user);
 
 	void deleteUser(String publicId);
+
+	void updateName(ChangeNameReq payload);
 
 	void verifyEmailByOtpCode(VerifyEmailByOtpCodeReq payload);
 

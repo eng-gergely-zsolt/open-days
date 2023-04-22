@@ -118,8 +118,8 @@ public class UserController {
 	public UserResponse updateUser(@PathVariable String publicId, @RequestBody UserUpdateRequestModel updateUserRequest) {
 
 		if (publicId.length() != 15) {
-			throw new GeneralServiceException(ErrorCode.INVALID_PUBLIC_ID.getErrorCode(),
-					ErrorMessage.INVALID_PUBLIC_ID.getErrorMessage());
+			throw new GeneralServiceException(ErrorCode.USER_INVALID_PUBLIC_ID.getErrorCode(),
+					ErrorMessage.USER_INVALID_PUBLIC_ID.getErrorMessage());
 		}
 
 		UserResponse response = new UserResponse();
@@ -133,6 +133,14 @@ public class UserController {
 		return response;
 	}
 
+	/**
+	 * Updates the first and last name of the user identified by the given public id.
+	 */
+	@PutMapping(path = "/update-name")
+	public void updateName(@RequestBody ChangeNameReq payload) {
+		userService.updateName(payload);
+	}
+
 	@PreAuthorize("hasRole('ROLE_ADMIN') or #publicId == principal.publicId")
 //    @Secured("ROLE_ADMIN")
 //    @PreAuthorize("hasAuthority('DELETE_AUTHORITY')")
@@ -140,8 +148,8 @@ public class UserController {
 	public OperationStatusModel deleteUser(@PathVariable String publicId) {
 
 		if (publicId.length() != 15) {
-			throw new GeneralServiceException(ErrorCode.INVALID_PUBLIC_ID.getErrorCode(),
-					ErrorMessage.INVALID_PUBLIC_ID.getErrorMessage());
+			throw new GeneralServiceException(ErrorCode.USER_INVALID_PUBLIC_ID.getErrorCode(),
+					ErrorMessage.USER_INVALID_PUBLIC_ID.getErrorMessage());
 		}
 
 		OperationStatusModel result = new OperationStatusModel();

@@ -2,6 +2,10 @@ package com.sapientia.open.days.backend.exceptions;
 
 import java.io.Serial;
 
+/**
+ * Contains basic information about an error. Throw this every time if no additional information is needed. It returns
+ * a BaseErrorResponse object to the client.
+ */
 @SuppressWarnings("unused")
 public class BaseException extends RuntimeException {
 

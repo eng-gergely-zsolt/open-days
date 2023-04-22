@@ -9,6 +9,7 @@ import com.sapientia.open.days.backend.service.UserService;
 import com.sapientia.open.days.backend.shared.EmailService;
 import com.sapientia.open.days.backend.shared.Utils;
 import com.sapientia.open.days.backend.shared.dto.UserDTO;
+import com.sapientia.open.days.backend.ui.model.request.ChangeNameReq;
 import com.sapientia.open.days.backend.ui.model.request.VerifyEmailByOtpCodeReq;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorCode;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorMessage;
@@ -82,13 +83,13 @@ public class UserServiceImpl implements UserService {
 		UserEntity user = userRepository.findByPublicId(publicId);
 
 		if (publicId.length() != 15) {
-			throw new BaseException(ErrorCode.INVALID_PUBLIC_ID.getErrorCode(),
-					ErrorMessage.INVALID_PUBLIC_ID.getErrorMessage());
+			throw new BaseException(ErrorCode.USER_INVALID_PUBLIC_ID.getErrorCode(),
+					ErrorMessage.USER_INVALID_PUBLIC_ID.getErrorMessage());
 		}
 
 		if (user == null) {
-			throw new BaseException(ErrorCode.USER_NOT_FOUND_WITH_ID.getErrorCode(),
-					ErrorMessage.USER_NOT_FOUND_WITH_ID.getErrorMessage());
+			throw new BaseException(ErrorCode.USER_NOT_FOUND_WITH_PUBLIC_ID.getErrorCode(),
+					ErrorMessage.USER_NOT_FOUND_WITH_PUBLIC_ID.getErrorMessage());
 		}
 
 		BeanUtils.copyProperties(user, result);
@@ -184,8 +185,8 @@ public class UserServiceImpl implements UserService {
 		UserEntity userEntity = userRepository.findByPublicId(publicId);
 
 		if (userEntity == null) {
-			throw new GeneralServiceException(ErrorCode.USER_NOT_FOUND_WITH_ID.getErrorCode(),
-					ErrorMessage.USER_NOT_FOUND_WITH_ID.getErrorMessage());
+			throw new GeneralServiceException(ErrorCode.USER_NOT_FOUND_WITH_PUBLIC_ID.getErrorCode(),
+					ErrorMessage.USER_NOT_FOUND_WITH_PUBLIC_ID.getErrorMessage());
 		}
 
 		if (user.getLastName().length() >= 3 && user.getLastName().length() <= 50) {
@@ -210,11 +211,51 @@ public class UserServiceImpl implements UserService {
 		UserEntity userEntity = userRepository.findByPublicId(publicId);
 
 		if (userEntity == null) {
-			throw new GeneralServiceException(ErrorCode.USER_NOT_FOUND_WITH_ID.getErrorCode(),
-					ErrorMessage.USER_NOT_FOUND_WITH_ID.getErrorMessage());
+			throw new GeneralServiceException(ErrorCode.USER_NOT_FOUND_WITH_PUBLIC_ID.getErrorCode(),
+					ErrorMessage.USER_NOT_FOUND_WITH_PUBLIC_ID.getErrorMessage());
 		}
 
 		userRepository.delete(userEntity);
+	}
+
+	/**
+	 * Updates the first and last name of the user identified by the given public id.
+	 */
+	@Override
+	public void updateName(ChangeNameReq payload) {
+		UserEntity user;
+
+		if (payload.getPublicId() == null || payload.getPublicId().length() != 15) {
+			throw new BaseException(ErrorCode.USER_INVALID_PUBLIC_ID.getErrorCode(),
+					ErrorMessage.USER_INVALID_PUBLIC_ID.getErrorMessage());
+		}
+
+		if (payload.getLastName() == null || payload.getLastName().length() < 3 || payload.getLastName().length() > 50) {
+			throw new BaseException(ErrorCode.USER_INVALID_LAST_NAME.getErrorCode(),
+					ErrorMessage.USER_INVALID_LAST_NAME.getErrorMessage());
+		}
+
+		if (payload.getFirstName() == null || payload.getFirstName().length() < 3 || payload.getFirstName().length() > 50) {
+			throw new BaseException(ErrorCode.USER_INVALID_FIRST_NAME.getErrorCode(),
+					ErrorMessage.USER_INVALID_FIRST_NAME.getErrorMessage());
+		}
+
+		user = userRepository.findByPublicId(payload.getPublicId());
+
+		if (user == null) {
+			throw new BaseException(ErrorCode.USER_NOT_FOUND_WITH_PUBLIC_ID.getErrorCode(),
+					ErrorMessage.USER_NOT_FOUND_WITH_PUBLIC_ID.getErrorMessage());
+		}
+
+		user.setLastName(payload.getLastName());
+		user.setFirstName(payload.getFirstName());
+
+		try {
+			userRepository.save(user);
+		} catch (Exception error) {
+			throw new BaseException(ErrorCode.DB_USER_NOT_SAVED.getErrorCode(),
+					ErrorMessage.DB_USER_NOT_SAVED.getErrorMessage());
+		}
 	}
 
 	/**

@@ -1,5 +1,10 @@
 package com.sapientia.open.days.backend.ui.model.response;
 
+/**
+ * A basic model to return a response to the client. Do not use this type aa return type in the future. Throw instead
+ * a BaseException in the future.
+ */
+@SuppressWarnings("unused")
 public class BaseResponse {
 	private int errorCode;
 

@@ -1,5 +1,8 @@
 package com.sapientia.open.days.backend.ui.model.response;
 
+/**
+ * A basic model to return an error to the client. The BaseException uses this as return type.
+ */
 @SuppressWarnings("unused")
 public class BaseErrorResponse {
 
@@ -20,10 +23,6 @@ public class BaseErrorResponse {
 
 	public String getErrorMessage() {
 		return errorMessage;
-	}
-
-	public boolean getIsOperationSuccessful() {
-		return false;
 	}
 
 	public void setErrorCode(int errorCode) {
