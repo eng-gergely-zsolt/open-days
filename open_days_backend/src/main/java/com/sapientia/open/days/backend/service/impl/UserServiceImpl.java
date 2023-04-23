@@ -33,6 +33,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
+import static com.sapientia.open.days.backend.security.SecurityConstants.TOKEN_PREFIX;
 import static com.sapientia.open.days.backend.shared.Roles.*;
 
 @Service
@@ -269,7 +270,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public String updateUsername(ChangeUsernameReq payload) {
 		UserEntity user;
-		String authorizationToken = "";
+		String authorizationToken;
 
 		if (payload.getPublicId() == null || payload.getPublicId().length() != 15) {
 			throw new BaseException(ErrorCode.USER_INVALID_PUBLIC_ID.getErrorCode(),
@@ -293,8 +294,8 @@ public class UserServiceImpl implements UserService {
 		try {
 			userRepository.save(user);
 
-			authorizationToken = Jwts.builder()
-					.setSubject(user.getUsername())
+			authorizationToken = TOKEN_PREFIX + Jwts.builder()
+					.setSubject(payload.getUsername())
 					.setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
 					.signWith(SignatureAlgorithm.HS512, SecurityConstants.getJwtSecretKey())
 					.compact();
