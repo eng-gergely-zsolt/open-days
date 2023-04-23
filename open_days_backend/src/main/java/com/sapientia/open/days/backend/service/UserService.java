@@ -17,7 +17,7 @@ public interface UserService extends UserDetailsService {
 
 	void updateName(ChangeNameReq payload);
 
-	void updateUsername(ChangeUsernameReq payload);
+	String updateUsername(ChangeUsernameReq payload);
 
 	void verifyEmailByOtpCode(VerifyEmailByOtpCodeReq payload);
 

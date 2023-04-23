@@ -2,6 +2,7 @@ package com.sapientia.open.days.backend.ui.controller;
 
 import com.sapientia.open.days.backend.exceptions.GeneralServiceException;
 import com.sapientia.open.days.backend.io.repository.OrganizerEmailRepository;
+import com.sapientia.open.days.backend.security.SecurityConstants;
 import com.sapientia.open.days.backend.service.UserService;
 import com.sapientia.open.days.backend.shared.Roles;
 import com.sapientia.open.days.backend.shared.dto.UserDTO;
@@ -14,16 +15,18 @@ import com.sapientia.open.days.backend.ui.model.resource.OperationStatus;
 import com.sapientia.open.days.backend.ui.model.response.BaseResponse;
 import com.sapientia.open.days.backend.ui.model.response.OperationStatusModel;
 import com.sapientia.open.days.backend.ui.model.response.UserResponse;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @RestController
 @RequestMapping("users")
@@ -147,8 +150,12 @@ public class UserController {
 	 * Updates the username of the user identified by the given public id.
 	 */
 	@PutMapping(path = "/update-username")
-	public void updateUsername(@RequestBody ChangeUsernameReq payload) {
-		userService.updateUsername(payload);
+	public ResponseEntity<Void> updateUsername(@RequestBody ChangeUsernameReq payload) {
+		HttpHeaders headers = new HttpHeaders();
+		String authorizationToken = userService.updateUsername(payload);
+
+		headers.add("Authorization", authorizationToken);
+		return new ResponseEntity<>(headers, HttpStatus.OK);
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN') or #publicId == principal.publicId")

@@ -4,6 +4,7 @@ import com.sapientia.open.days.backend.exceptions.BaseException;
 import com.sapientia.open.days.backend.exceptions.GeneralServiceException;
 import com.sapientia.open.days.backend.io.entity.*;
 import com.sapientia.open.days.backend.io.repository.*;
+import com.sapientia.open.days.backend.security.SecurityConstants;
 import com.sapientia.open.days.backend.security.UserPrincipal;
 import com.sapientia.open.days.backend.service.UserService;
 import com.sapientia.open.days.backend.shared.EmailService;
@@ -15,6 +16,8 @@ import com.sapientia.open.days.backend.ui.model.request.user.ChangeUsernameReq;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorCode;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorMessage;
 import com.sapientia.open.days.backend.ui.model.response.UserResponse;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,6 +29,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
@@ -263,8 +267,9 @@ public class UserServiceImpl implements UserService {
 	 * Updates the first and last name of the user identified by the given public id.
 	 */
 	@Override
-	public void updateUsername(ChangeUsernameReq payload) {
+	public String updateUsername(ChangeUsernameReq payload) {
 		UserEntity user;
+		String authorizationToken = "";
 
 		if (payload.getPublicId() == null || payload.getPublicId().length() != 15) {
 			throw new BaseException(ErrorCode.USER_INVALID_PUBLIC_ID.getErrorCode(),
@@ -287,10 +292,18 @@ public class UserServiceImpl implements UserService {
 
 		try {
 			userRepository.save(user);
+
+			authorizationToken = Jwts.builder()
+					.setSubject(user.getUsername())
+					.setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
+					.signWith(SignatureAlgorithm.HS512, SecurityConstants.getJwtSecretKey())
+					.compact();
 		} catch (Exception error) {
 			throw new BaseException(ErrorCode.DB_USER_NOT_SAVED.getErrorCode(),
 					ErrorMessage.DB_USER_NOT_SAVED.getErrorMessage());
 		}
+
+		return authorizationToken;
 	}
 
 	/**
