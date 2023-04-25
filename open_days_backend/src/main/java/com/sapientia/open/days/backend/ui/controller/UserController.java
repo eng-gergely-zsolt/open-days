@@ -2,21 +2,19 @@ package com.sapientia.open.days.backend.ui.controller;
 
 import com.sapientia.open.days.backend.exceptions.GeneralServiceException;
 import com.sapientia.open.days.backend.io.repository.OrganizerEmailRepository;
-import com.sapientia.open.days.backend.security.SecurityConstants;
 import com.sapientia.open.days.backend.service.UserService;
 import com.sapientia.open.days.backend.shared.Roles;
 import com.sapientia.open.days.backend.shared.dto.UserDTO;
 import com.sapientia.open.days.backend.ui.model.request.*;
-import com.sapientia.open.days.backend.ui.model.request.user.ChangeNameReq;
-import com.sapientia.open.days.backend.ui.model.request.user.ChangeUsernameReq;
+import com.sapientia.open.days.backend.ui.model.request.user.UpdateInstitutionReq;
+import com.sapientia.open.days.backend.ui.model.request.user.UpdateNameReq;
+import com.sapientia.open.days.backend.ui.model.request.user.UpdateUsernameReq;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorCode;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorMessage;
 import com.sapientia.open.days.backend.ui.model.resource.OperationStatus;
 import com.sapientia.open.days.backend.ui.model.response.BaseResponse;
 import com.sapientia.open.days.backend.ui.model.response.OperationStatusModel;
 import com.sapientia.open.days.backend.ui.model.response.UserResponse;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -142,15 +140,23 @@ public class UserController {
 	 * Updates the first and last name of the user identified by the given public id.
 	 */
 	@PutMapping(path = "/update-name")
-	public void updateName(@RequestBody ChangeNameReq payload) {
+	public void updateName(@RequestBody UpdateNameReq payload) {
 		userService.updateName(payload);
+	}
+
+	/**
+	 * Updates the institution of the user identified by the given public id.
+	 */
+	@PutMapping(path = "/update-institution")
+	public void updateInstitution(@RequestBody UpdateInstitutionReq payload) {
+		userService.updateInstitution(payload);
 	}
 
 	/**
 	 * Updates the username of the user identified by the given public id.
 	 */
 	@PutMapping(path = "/update-username")
-	public ResponseEntity<Void> updateUsername(@RequestBody ChangeUsernameReq payload) {
+	public ResponseEntity<Void> updateUsername(@RequestBody UpdateUsernameReq payload) {
 		HttpHeaders headers = new HttpHeaders();
 		String authorizationToken = userService.updateUsername(payload);
 

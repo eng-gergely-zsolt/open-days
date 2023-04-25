@@ -10,9 +10,10 @@ import com.sapientia.open.days.backend.service.UserService;
 import com.sapientia.open.days.backend.shared.EmailService;
 import com.sapientia.open.days.backend.shared.Utils;
 import com.sapientia.open.days.backend.shared.dto.UserDTO;
-import com.sapientia.open.days.backend.ui.model.request.user.ChangeNameReq;
+import com.sapientia.open.days.backend.ui.model.request.user.UpdateInstitutionReq;
+import com.sapientia.open.days.backend.ui.model.request.user.UpdateNameReq;
 import com.sapientia.open.days.backend.ui.model.request.VerifyEmailByOtpCodeReq;
-import com.sapientia.open.days.backend.ui.model.request.user.ChangeUsernameReq;
+import com.sapientia.open.days.backend.ui.model.request.user.UpdateUsernameReq;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorCode;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorMessage;
 import com.sapientia.open.days.backend.ui.model.response.UserResponse;
@@ -28,10 +29,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 import static com.sapientia.open.days.backend.security.SecurityConstants.TOKEN_PREFIX;
 import static com.sapientia.open.days.backend.shared.Roles.*;
@@ -51,6 +49,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	RoleRepository roleRepository;
+
+	@Autowired
+	CountyRepository countyRepository;
 
 	@Autowired
 	SettlementRepository settlementRepository;
@@ -228,7 +229,7 @@ public class UserServiceImpl implements UserService {
 	 * Updates the first and last name of the user identified by the given public id.
 	 */
 	@Override
-	public void updateName(ChangeNameReq payload) {
+	public void updateName(UpdateNameReq payload) {
 		UserEntity user;
 
 		if (payload.getPublicId() == null || payload.getPublicId().length() != 15) {
@@ -265,10 +266,10 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/**
-	 * Updates the first and last name of the user identified by the given public id.
+	 * Updates the username of the user identified by the given public id.
 	 */
 	@Override
-	public String updateUsername(ChangeUsernameReq payload) {
+	public String updateUsername(UpdateUsernameReq payload) {
 		UserEntity user;
 		String authorizationToken;
 
@@ -280,6 +281,13 @@ public class UserServiceImpl implements UserService {
 		if (payload.getUsername() == null || payload.getUsername().length() < 3 || payload.getUsername().length() > 50) {
 			throw new BaseException(ErrorCode.USER_INVALID_USERNAME.getErrorCode(),
 					ErrorMessage.USER_INVALID_USERNAME.getErrorMessage());
+		}
+
+		user = userRepository.findByUsername(payload.getUsername());
+
+		if (user != null) {
+			throw new BaseException(ErrorCode.USER_USERNAME_ALREADY_TAKEN.getErrorCode(),
+					ErrorMessage.USER_USERNAME_ALREADY_TAKEN.getErrorMessage());
 		}
 
 		user = userRepository.findByPublicId(payload.getPublicId());
@@ -305,6 +313,50 @@ public class UserServiceImpl implements UserService {
 		}
 
 		return authorizationToken;
+	}
+
+	/**
+	 * Updates the institution of the user identified by the given public id.
+	 */
+	@Override
+	public void updateInstitution(UpdateInstitutionReq payload) {
+		UserEntity user;
+		InstitutionEntity institution = null;
+		List<InstitutionEntity> institutions;
+
+		if (payload.getPublicId() == null || payload.getPublicId().length() != 15) {
+			throw new BaseException(ErrorCode.USER_INVALID_PUBLIC_ID.getErrorCode(),
+					ErrorMessage.USER_INVALID_PUBLIC_ID.getErrorMessage());
+		}
+
+		user = userRepository.findByPublicId(payload.getPublicId());
+
+		if (user == null) {
+			throw new BaseException(ErrorCode.USER_NOT_FOUND_WITH_PUBLIC_ID.getErrorCode(),
+					ErrorMessage.USER_NOT_FOUND_WITH_PUBLIC_ID.getErrorMessage());
+		}
+
+		institutions = institutionRepository.findAllByName(payload.getInstitution());
+
+		for (InstitutionEntity institutionTemp : institutions) {
+			if (Objects.equals(institutionTemp.getSettlement().getCounty().getName(), payload.getCounty())) {
+				institution = institutionTemp;
+			}
+		}
+
+		if (institution == null) {
+			throw new BaseException(ErrorCode.USER_INSTITUTION_NOT_FOUND.getErrorCode(),
+					ErrorMessage.USER_INSTITUTION_NOT_FOUND.getErrorMessage());
+		}
+
+		user.setInstitution(institution);
+
+		try {
+			userRepository.save(user);
+		} catch (Exception error) {
+			throw new BaseException(ErrorCode.DB_USER_NOT_SAVED.getErrorCode(),
+					ErrorMessage.DB_USER_NOT_SAVED.getErrorMessage());
+		}
 	}
 
 	/**

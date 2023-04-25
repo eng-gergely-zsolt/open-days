@@ -1,7 +1,7 @@
 package com.sapientia.open.days.backend.ui.model.request.user;
 
 @SuppressWarnings("unused")
-public class ChangeNameReq {
+public class UpdateNameReq {
 	private String publicId;
 	private String lastName;
 	private String firstName;

@@ -1,9 +1,10 @@
 package com.sapientia.open.days.backend.service;
 
 import com.sapientia.open.days.backend.shared.dto.UserDTO;
-import com.sapientia.open.days.backend.ui.model.request.user.ChangeNameReq;
+import com.sapientia.open.days.backend.ui.model.request.user.UpdateInstitutionReq;
+import com.sapientia.open.days.backend.ui.model.request.user.UpdateNameReq;
 import com.sapientia.open.days.backend.ui.model.request.VerifyEmailByOtpCodeReq;
-import com.sapientia.open.days.backend.ui.model.request.user.ChangeUsernameReq;
+import com.sapientia.open.days.backend.ui.model.request.user.UpdateUsernameReq;
 import com.sapientia.open.days.backend.ui.model.response.UserResponse;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -15,9 +16,13 @@ public interface UserService extends UserDetailsService {
 
 	void deleteUser(String publicId);
 
-	void updateName(ChangeNameReq payload);
+	void updateName(UpdateNameReq payload);
 
-	String updateUsername(ChangeUsernameReq payload);
+	String updateUsername(UpdateUsernameReq payload);
+
+	void updateInstitution(UpdateInstitutionReq payload);
+
+	UserDTO updateUser(UserDTO user, String publicId);
 
 	void verifyEmailByOtpCode(VerifyEmailByOtpCodeReq payload);
 
@@ -28,8 +33,6 @@ public interface UserService extends UserDetailsService {
 	UserDTO getUserByUsername(String email);
 
 	UserResponse getUserByPublicId(String publicId);
-
-	UserDTO updateUser(UserDTO user, String publicId);
 
 	List<UserDTO> getUsers(int pageNumber, int recordPerPage);
 }

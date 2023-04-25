@@ -11,6 +11,8 @@ public enum ErrorMessage {
     USER_INVALID_FIRST_NAME("Invalid first name"),
     USER_NOT_FOUND_WITH_PUBLIC_ID("No user found with the given id"),
     USER_NOT_FOUND_WITH_USERNAME("No user found with the given username"),
+    USER_USERNAME_ALREADY_TAKEN("A user already exists with the given username"),
+    USER_INSTITUTION_NOT_FOUND("Institution not found"),
 
     // Event related
     EVENT_INVALID_ACTIVITY("The given activity is invalid"),
