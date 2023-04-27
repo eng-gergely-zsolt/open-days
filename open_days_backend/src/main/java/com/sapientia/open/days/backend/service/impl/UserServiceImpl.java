@@ -285,7 +285,7 @@ public class UserServiceImpl implements UserService {
 					ErrorMessage.USER_NOT_FOUND_WITH_PUBLIC_ID.getErrorMessage());
 		}
 
-		user.setLastName(payload.getImagePath());
+		user.setImagePath(payload.getImagePath());
 
 		try {
 			userRepository.save(user);
