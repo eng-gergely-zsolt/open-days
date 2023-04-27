@@ -6,6 +6,7 @@ import com.sapientia.open.days.backend.service.UserService;
 import com.sapientia.open.days.backend.shared.Roles;
 import com.sapientia.open.days.backend.shared.dto.UserDTO;
 import com.sapientia.open.days.backend.ui.model.request.*;
+import com.sapientia.open.days.backend.ui.model.request.user.UpdateImagePathReq;
 import com.sapientia.open.days.backend.ui.model.request.user.UpdateInstitutionReq;
 import com.sapientia.open.days.backend.ui.model.request.user.UpdateNameReq;
 import com.sapientia.open.days.backend.ui.model.request.user.UpdateUsernameReq;
@@ -142,6 +143,14 @@ public class UserController {
 	@PutMapping(path = "/update-name")
 	public void updateName(@RequestBody UpdateNameReq payload) {
 		userService.updateName(payload);
+	}
+
+	/**
+	 * Updates the image path of the user identified by the given public id.
+	 */
+	@PutMapping(path = "/update-image-path")
+	public void updateImagePath(@RequestBody UpdateImagePathReq payload) {
+		userService.updateImagePath(payload);
 	}
 
 	/**

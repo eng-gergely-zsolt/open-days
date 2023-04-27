@@ -1,6 +1,7 @@
 package com.sapientia.open.days.backend.service;
 
 import com.sapientia.open.days.backend.shared.dto.UserDTO;
+import com.sapientia.open.days.backend.ui.model.request.user.UpdateImagePathReq;
 import com.sapientia.open.days.backend.ui.model.request.user.UpdateInstitutionReq;
 import com.sapientia.open.days.backend.ui.model.request.user.UpdateNameReq;
 import com.sapientia.open.days.backend.ui.model.request.VerifyEmailByOtpCodeReq;
@@ -17,6 +18,8 @@ public interface UserService extends UserDetailsService {
 	void deleteUser(String publicId);
 
 	void updateName(UpdateNameReq payload);
+
+	void updateImagePath(UpdateImagePathReq payload);
 
 	String updateUsername(UpdateUsernameReq payload);
 
