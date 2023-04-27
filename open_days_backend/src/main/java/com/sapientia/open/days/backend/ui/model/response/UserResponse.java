@@ -9,6 +9,7 @@ public class UserResponse {
     private String lastName;
     private String roleName;
     private String firstName;
+    private String imagePath;
     private String institution;
 
     public String getEmail() {
@@ -37,6 +38,10 @@ public class UserResponse {
 
     public String getFirstName() {
         return firstName;
+    }
+
+    public String getImagePath() {
+        return imagePath;
     }
 
     public String getInstitution() {
@@ -69,6 +74,10 @@ public class UserResponse {
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
     public void setInstitution(String institution) {

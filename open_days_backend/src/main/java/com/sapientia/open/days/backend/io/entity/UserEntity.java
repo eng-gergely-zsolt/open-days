@@ -31,6 +31,9 @@ public class UserEntity implements Serializable {
 	@Column(length = 50, nullable = false)
 	private String firstName;
 
+	@Column(nullable = true)
+	private String imagePath;
+
 	@Column(nullable = false)
 	private String encryptedPassword;
 
@@ -71,7 +74,9 @@ public class UserEntity implements Serializable {
 	public UserEntity() {
 	}
 
-	public UserEntity(String email, String userName, String firstName, String lastName, String publicId, String encryptedPassword, Set<RoleEntity> roles, InstitutionEntity institution, boolean emailVerificationStatus) {
+	public UserEntity(String email, String userName, String firstName, String lastName, String publicId,
+	                  String encryptedPassword, Set<RoleEntity> roles, InstitutionEntity institution,
+	                  boolean emailVerificationStatus) {
 		this.email = email;
 		this.roles = roles;
 		this.username = userName;
@@ -113,6 +118,10 @@ public class UserEntity implements Serializable {
 
 	public String getFirstName() {
 		return firstName;
+	}
+
+	public String getImagePath() {
+		return imagePath;
 	}
 
 	public String getEncryptedPassword() {
@@ -161,6 +170,10 @@ public class UserEntity implements Serializable {
 
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
+	}
+
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
 	}
 
 	public void setEncryptedPassword(String encryptedPassword) {
