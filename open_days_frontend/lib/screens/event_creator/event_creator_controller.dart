@@ -12,9 +12,9 @@ import '../../utils/firebase_utils.dart';
 import './models/create_event_model.dart';
 import '../../models/activity_model.dart';
 import '../../shared/secure_storage.dart';
-import '../../models/base_response_model.dart';
 import '../../repositories/base_repository.dart';
-import '../../models/activities_response_model.dart';
+import '../../models/responses/base_response.dart';
+import '../../models/responses/activities_response.dart';
 import '../../repositories/event_creator_repository.dart';
 
 class EventCreatorController {
@@ -26,7 +26,7 @@ class EventCreatorController {
 
   String? _meetingLink;
   Reference? _imageToUploadRef;
-  BaseResponseModel? _createEventResponse;
+  BaseResponse? _createEventResponse;
 
   final ProviderRef _ref;
   final BaseRepository _baseRepository;
@@ -37,7 +37,7 @@ class EventCreatorController {
   final _selectedActivityProvider = StateProvider<String?>((ref) => null);
   final _selectedDateTimeProvider = StateProvider<DateTime>((ref) => DateTime.now());
 
-  late FutureProvider<ActivitiesResponseModel> _activitiesProvider;
+  late FutureProvider<ActivitiesResponse> _activitiesProvider;
 
   EventCreatorController(this._ref, this._baseRepository, this._eventCreatorRepository) {
     createInitialData();
@@ -67,7 +67,7 @@ class EventCreatorController {
     return _isLoadingProvider;
   }
 
-  BaseResponseModel? getCreateEventResponse() {
+  BaseResponse? getCreateEventResponse() {
     return _createEventResponse;
   }
 
@@ -83,7 +83,7 @@ class EventCreatorController {
     return _selectedDateTimeProvider;
   }
 
-  FutureProvider<ActivitiesResponseModel> getActivitiesProvider() {
+  FutureProvider<ActivitiesResponse> getActivitiesProvider() {
     return _activitiesProvider;
   }
 
@@ -223,7 +223,7 @@ class EventCreatorController {
     if (payload.event.location == '' ||
         payload.event.organizerId == '' ||
         payload.authorizationToken == '') {
-      _createEventResponse = BaseResponseModel();
+      _createEventResponse = BaseResponse();
     } else {
       _createEventResponse = await _eventCreatorRepository.createEventRepo(payload);
     }

@@ -1,10 +1,10 @@
-import 'activity_model.dart';
+import '../activity_model.dart';
 
-class ActivitiesResponseModel {
+class ActivitiesResponse {
   bool isOperationSuccessful;
   List<ActivityModel> activities = [];
 
-  ActivitiesResponseModel({
+  ActivitiesResponse({
     this.isOperationSuccessful = false,
   });
 }

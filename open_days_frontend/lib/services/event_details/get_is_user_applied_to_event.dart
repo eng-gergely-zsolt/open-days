@@ -23,7 +23,7 @@ Future<IsUserAppliedForEvent> isUserAppliedForEventSvc(int eventId) async {
         Uri.parse(uri),
         headers: headers,
       )
-      .timeout(const Duration(seconds: 5));
+      .timeout(const Duration(seconds: 10));
 
   if (rawResponse.statusCode == 200) {
     response.isOperationSuccessful = true;

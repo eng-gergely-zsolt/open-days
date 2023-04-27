@@ -8,7 +8,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import '../../utils/utils.dart';
 import './event_scanner_controller.dart';
 import '../home_base/home_base_controller.dart';
-import '../../models/base_response_model.dart';
+import '../../models/responses/base_response.dart';
 
 class EventScanner extends ConsumerStatefulWidget {
   const EventScanner({Key? key}) : super(key: key);
@@ -85,7 +85,7 @@ class _EventScannerState extends ConsumerState<EventScanner> {
     );
   }
 
-  Widget buildResult(AsyncValue<BaseResponseModel> eventParticipationProvider) {
+  Widget buildResult(AsyncValue<BaseResponse> eventParticipationProvider) {
     final appHeight = MediaQuery.of(context).size.height;
 
     return eventParticipationProvider.when(

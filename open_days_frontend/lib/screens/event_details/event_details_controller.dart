@@ -2,8 +2,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../constants/constants.dart';
-import '../../models/base_response_model.dart';
 import './models/is_user_applied_for_event.dart';
+import '../../models/responses/base_response.dart';
 import '../../repositories/event_details_repository.dart';
 
 class EventDetailsController {
@@ -15,7 +15,7 @@ class EventDetailsController {
   final _isLoadingProvider = StateProvider((ref) => false);
 
   int? _eventId;
-  BaseResponseModel? _eventParticipatonResponse;
+  BaseResponse? _eventParticipatonResponse;
   FutureProvider<IsUserAppliedForEvent>? _initialDataProvider;
 
   final _eventScannerUri =
@@ -35,7 +35,7 @@ class EventDetailsController {
     return _isLoadingProvider;
   }
 
-  BaseResponseModel? getEventParticipationResponse() {
+  BaseResponse? getEventParticipationResponse() {
     return _eventParticipatonResponse;
   }
 
@@ -57,7 +57,7 @@ class EventDetailsController {
   }
 
   void applyUserForEvent() async {
-    var response = BaseResponseModel();
+    var response = BaseResponse();
     _ref.read(_isLoadingProvider.notifier).state = true;
 
     if (_eventId != null) {
@@ -73,7 +73,7 @@ class EventDetailsController {
   }
 
   void deleteUserFromEvent() async {
-    var response = BaseResponseModel();
+    var response = BaseResponse();
     _ref.read(_isLoadingProvider.notifier).state = true;
 
     if (_eventId != null) {

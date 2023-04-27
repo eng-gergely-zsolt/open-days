@@ -1,11 +1,10 @@
-import 'package:open_days_frontend/constants/constants.dart';
-import 'package:open_days_frontend/screens/home_base/models/get_all_event_model.dart';
-
-import '../../../models/user_response_model.dart';
+import './get_all_event_model.dart';
+import '../../../constants/constants.dart';
+import '../../../models/responses/user_response.dart';
 
 class InitialDataModel {
   String operationResult;
-  UserResponseModel? user;
+  UserResponse user = UserResponse();
   GetAllEventModel? events;
 
   InitialDataModel({this.operationResult = operationResultFailure});

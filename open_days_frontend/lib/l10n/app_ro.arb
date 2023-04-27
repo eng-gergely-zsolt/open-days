@@ -8,7 +8,6 @@
     "last_name": "Nume de familie",
     "email": "E-mail",
     "home": "Acasă",
-    "profile": "Profil",
     "settings": "Setări",
 
     "base_text_date": "Data",
@@ -57,6 +56,18 @@
     "email_verification_header": "Cod de verificare",
     "email_verification_title": "Verifică-ți adresa de email",
     "email_verification_subtitle": "Introduceți aici codul dvs. OTP",
+
+    "profile": "Profil",
+    "profile_name": "Nume",
+    "profile_email": "E-mail",
+    "profile_county": "Județ",
+    "profile_confirm": "Confirmă",
+    "profile_username": "Nume de utilizator",
+    "profile_sign_out": "Deconectare",
+    "profile_institution": "Instituție",
+    "profile_what_is_your_name": "Cum te numești?",
+    "profile_institution_modification_title": "Alege-ți instituția!",
+    "profile_username_modification_title": "Ce nume de utilizator vrei să folosești?",
 
     "event_modification_save": "Salvați",
     "event_modification_image": "Imagine",

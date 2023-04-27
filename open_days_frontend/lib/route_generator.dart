@@ -9,6 +9,12 @@ import './screens/home_base/home_base.dart';
 import './screens/guest_mode/guest_mode.dart';
 import './screens/registration/registration.dart';
 import './screens/registration/email_verification.dart';
+import './screens/profile/modification/name_modification.dart';
+import './screens/profile/models/name_modification_payload.dart';
+import './screens/profile/modification/username_modification.dart';
+import './screens/profile/models/username_modification_payload.dart';
+import './screens/profile/modification/institution_modification.dart';
+import './screens/profile/models/institution_modification_payload.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -29,6 +35,15 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const Registration());
       case emailVerificationRoute:
         return MaterialPageRoute(builder: (_) => EmailVerification(args as String));
+      case usernameModificationRoute:
+        return MaterialPageRoute(
+            builder: (_) => UsernameModification(args as UsernameModificationPayload));
+      case institutionModificationRoute:
+        return MaterialPageRoute(
+            builder: (_) => InstitutionModification(args as InstitutionModificationPayload));
+      case nameModificationRoute:
+        return MaterialPageRoute(builder: (_) => NameModification(args as NameModificationPayload));
+
       default:
         return MaterialPageRoute(builder: (_) => const BaseError());
     }

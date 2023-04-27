@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:open_days_frontend/screens/registration/models/verify_email_by_otp_code_req.dart';
 
-import '../../models/base_response.dart';
+import '../../models/responses/base_response.dart';
 import '../../repositories/registration_repository.dart';
 
 class EmailVerificationController {

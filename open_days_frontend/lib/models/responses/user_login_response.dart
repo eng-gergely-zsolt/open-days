@@ -1,4 +1,4 @@
-class UserResponseModel {
+class UserLoginResponse {
   int operationResultCode;
 
   String id;
@@ -7,7 +7,7 @@ class UserResponseModel {
   String authorizationToken;
   String operationResultMessage;
 
-  UserResponseModel({
+  UserLoginResponse({
     this.operationResultCode = -1,
     this.id = '',
     this.roleName = '',
@@ -16,8 +16,8 @@ class UserResponseModel {
     this.operationResultMessage = '',
   });
 
-  factory UserResponseModel.fromJson(Map<String, dynamic> json) {
-    return UserResponseModel(
+  factory UserLoginResponse.fromJson(Map<String, dynamic> json) {
+    return UserLoginResponse(
       roleName: json['roleName'] ?? '',
       operationResultCode: json['code'] ?? -1,
       operationResultMessage: json['message'] ?? '',

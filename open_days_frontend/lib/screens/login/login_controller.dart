@@ -2,12 +2,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constants/constants.dart';
 import '../../shared/secure_storage.dart';
-import '../../models/user_request_model.dart';
-import '../../models/user_response_model.dart';
 import '../../repositories/login_repository.dart';
+import '../../models/requests/user_request_model.dart';
+import '../../models/responses/user_login_response.dart';
 
 class LoginController {
-  UserResponseModel? _loginResponse;
+  UserLoginResponse? _loginResponse;
 
   final ProviderRef _ref;
   final LoginRepository _loginRepository;
@@ -25,7 +25,7 @@ class LoginController {
     return _user.password;
   }
 
-  UserResponseModel? getLoginResponse() {
+  UserLoginResponse? getLoginResponse() {
     return _loginResponse;
   }
 

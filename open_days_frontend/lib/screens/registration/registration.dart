@@ -5,10 +5,10 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:open_days_frontend/theme/theme.dart';
 import 'package:open_days_frontend/utils/validator_utils.dart';
 
-import '../../constants/page_routes.dart';
-import '../login/login.dart';
+import '../../utils/user_data_utils.dart';
 import './registration_controller.dart';
 import '../../constants/constants.dart';
+import '../../constants/page_routes.dart';
 
 class Registration extends ConsumerStatefulWidget {
   const Registration({Key? key}) : super(key: key);
@@ -80,11 +80,9 @@ class _RegistrationState extends ConsumerState<Registration> {
             selectedCounty ??= registrationController.getFirstCounty(institutions);
 
             if (selectedInstitution == null ||
-                !registrationController
-                    .getInstitutions(selectedCounty, institutions)
+                !UserDataUtils.getInstitutions(selectedCounty, institutions)
                     .contains(selectedInstitution)) {
-              selectedInstitution =
-                  registrationController.getFirstInstitution(selectedCounty, institutions);
+              selectedInstitution = UserDataUtils.getFirstInstitution(selectedCounty, institutions);
             }
 
             registrationController.setInstitution(selectedInstitution);
@@ -199,8 +197,7 @@ class _RegistrationState extends ConsumerState<Registration> {
                                     Icons.keyboard_arrow_down,
                                     color: Theme.of(context).iconTheme.color,
                                   ),
-                                  items: registrationController
-                                      .getCounties(institutions)
+                                  items: UserDataUtils.getCounties(institutions)
                                       .map<DropdownMenuItem<String>>(
                                     (String value) {
                                       return DropdownMenuItem<String>(
@@ -237,8 +234,7 @@ class _RegistrationState extends ConsumerState<Registration> {
                                     Icons.keyboard_arrow_down,
                                     color: Theme.of(context).iconTheme.color,
                                   ),
-                                  items: registrationController
-                                      .getInstitutions(selectedCounty, institutions)
+                                  items: UserDataUtils.getInstitutions(selectedCounty, institutions)
                                       .map<DropdownMenuItem<String>>(
                                     (String value) {
                                       return DropdownMenuItem<String>(

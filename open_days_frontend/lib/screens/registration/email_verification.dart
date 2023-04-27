@@ -29,19 +29,19 @@ class EmailVerification extends ConsumerWidget {
     final fourthDigit = ref.watch(controller.getFourthDigitProvider());
 
     final isLoading = ref.watch(controller.getIsLoadinProvider());
-    final emailVerificationRespons = controller.getEmailVerificationResponse();
+    final emailVerificationResponse = controller.getEmailVerificationResponse();
 
-    if (emailVerificationRespons != null) {
-      if (emailVerificationRespons.isOperationSuccessful) {
+    if (emailVerificationResponse != null) {
+      if (emailVerificationResponse.isOperationSuccessful) {
         Future.microtask(() {
           Navigator.pop(context);
           Navigator.pushNamed(context, loginRoute);
         });
       } else {
         final snackBar = SnackBar(
-          content: emailVerificationRespons.errorMessage == null
+          content: emailVerificationResponse.error.errorMessage == ''
               ? Text(appLocale?.base_text_general_try_again_message as String)
-              : Text(emailVerificationRespons.errorMessage as String),
+              : Text(emailVerificationResponse.error.errorMessage),
         );
 
         Future.microtask(() {

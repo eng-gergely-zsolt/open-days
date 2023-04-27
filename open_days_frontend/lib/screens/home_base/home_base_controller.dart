@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../constants/constants.dart';
 import './models/initial_data_model.dart';
 import '../../repositories/home_base_repository.dart';
-import 'models/get_all_event_model.dart';
 
 class HomeBaseController {
   InitialDataModel? _initialData;
@@ -39,6 +38,42 @@ class HomeBaseController {
     return _initialDataProvider;
   }
 
+  void setCounty(String county) {
+    if (_initialData != null) {
+      _initialData?.user.county = county;
+    }
+  }
+
+  void setUsername(String username) {
+    if (_initialData != null) {
+      _initialData?.user.username = username;
+    }
+  }
+
+  void setLastName(String lastName) {
+    if (_initialData != null) {
+      _initialData?.user.lastName = lastName;
+    }
+  }
+
+  void setFirstName(String firstName) {
+    if (_initialData != null) {
+      _initialData?.user.firstName = firstName;
+    }
+  }
+
+  void setImagePath(String imagePath) {
+    if (_initialData != null) {
+      _initialData?.user.imagePath = imagePath;
+    }
+  }
+
+  void setInstitution(String institution) {
+    if (_initialData != null) {
+      _initialData?.user.institution = institution;
+    }
+  }
+
   void setOrderValue(String? newOrderValue) {
     if (newOrderValue != null) {
       _ref.read(_orderValueProvider.notifier).state = newOrderValue;
@@ -64,7 +99,7 @@ class HomeBaseController {
   }
 
   bool isParticipant(InitialDataModel initialData) {
-    return initialData.user?.roleName == roleUser;
+    return initialData.user.roleName == roleUser;
   }
 
   void orderEvents(String? sortingValue) {
@@ -104,7 +139,7 @@ class HomeBaseController {
       },
     );
 
-    if (savedUser.operationResult == operationResultSuccess &&
+    if (savedUser.isOperationSuccessful == true &&
         savedEvents.operationResult == operationResultSuccess) {
       result.operationResult = operationResultSuccess;
     } else {
@@ -131,7 +166,7 @@ class HomeBaseController {
       },
     );
 
-    if (savedUser.operationResult == operationResultSuccess &&
+    if (savedUser.isOperationSuccessful == true &&
         savedEvents.operationResult == operationResultSuccess) {
       result.operationResult = operationResultSuccess;
     } else {
@@ -148,7 +183,7 @@ class HomeBaseController {
   bool isFloatingButtonRequired(InitialDataModel initialData) {
     return _ref.read(_navigationBarIndexProvider) == 0 &&
         initialData.operationResult == operationResultSuccess &&
-        (initialData.user?.roleName == roleAdmin || initialData.user?.roleName == roleOrganizer);
+        (initialData.user.roleName == roleAdmin || initialData.user.roleName == roleOrganizer);
   }
 
   FutureProvider<InitialDataModel> createInitialDataProvider() {
@@ -161,7 +196,7 @@ class HomeBaseController {
       response.user = await userResponse;
       response.events = await eventResponse;
 
-      if (response.user?.operationResult == operationResultSuccess &&
+      if (response.user.isOperationSuccessful == true &&
           response.events?.operationResult == operationResultSuccess) {
         response.operationResult = operationResultSuccess;
       }

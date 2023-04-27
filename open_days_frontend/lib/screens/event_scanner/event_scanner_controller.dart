@@ -1,7 +1,7 @@
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../models/base_response_model.dart';
+import '../../models/responses/base_response.dart';
 import '../../repositories/event_scanner_repository.dart';
 
 class EventScannerController {
@@ -12,8 +12,8 @@ class EventScannerController {
   final EventScannerRepository _eventScannerRepository;
   final _isApplyingSuccessful = StateProvider<bool>((ref) => false);
 
-  FutureProvider<BaseResponseModel> _eventParticipationProvider = FutureProvider((ref) async {
-    return BaseResponseModel();
+  FutureProvider<BaseResponse> _eventParticipationProvider = FutureProvider((ref) async {
+    return BaseResponse();
   });
 
   EventScannerController(this._ref, this._eventScannerRepository);
@@ -30,7 +30,7 @@ class EventScannerController {
     return _isApplyingSuccessful;
   }
 
-  FutureProvider<BaseResponseModel> getEventParticipationProvider() {
+  FutureProvider<BaseResponse> getEventParticipationProvider() {
     return _eventParticipationProvider;
   }
 

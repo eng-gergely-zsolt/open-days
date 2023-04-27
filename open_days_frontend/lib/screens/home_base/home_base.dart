@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:open_days_frontend/models/responses/user_response.dart';
 
 import '../home/home.dart';
 import '../../theme/theme.dart';
@@ -25,15 +26,17 @@ class HomeBase extends ConsumerWidget {
     final initialData = ref.watch(controller.getInitialDataProvider());
     final navigationBarIndex = ref.watch(controller.getNavigationBarIndexProvider());
 
+    UserResponse user = controller.getInitialData()?.user ?? UserResponse();
+
     final screens = [
       Home(initialDataModel: controller.getInitialData(), homeBaseController: controller),
       const EventScanner(),
-      const Profile(),
+      Profile(user, controller),
     ];
 
     final organizerSreens = [
       Home(initialDataModel: controller.getInitialData(), homeBaseController: controller),
-      const Profile(),
+      Profile(user, controller),
     ];
 
     final appBarTitles = [
@@ -72,7 +75,7 @@ class HomeBase extends ConsumerWidget {
           data: (initialData) {
             return initialData.operationResult == operationResultSuccess
                 ? RefreshIndicator(
-                    child: initialData.user?.roleName == roleUser
+                    child: initialData.user.roleName == roleUser
                         ? screens[navigationBarIndex]
                         : organizerSreens[navigationBarIndex],
                     onRefresh: () => controller.invalidateInitialDataProvider(),
@@ -117,7 +120,7 @@ class HomeBase extends ConsumerWidget {
 
   Widget getBottomNavigationBar(int navigationBarIndex, HomeBaseController controller,
       AppLocalizations? appLocale, InitialDataModel initialData) {
-    return initialData.user?.roleName == roleUser
+    return initialData.user.roleName == roleUser
         ? BottomNavigationBar(
             showUnselectedLabels: false,
             currentIndex: navigationBarIndex,

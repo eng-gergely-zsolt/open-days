@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-import '../../models/user_response_model.dart';
+import '../../models/responses/user_login_response.dart';
 import '../../screens/registration/models/user.dart';
 
-Future<UserResponseModel> createUserSvc(User user) async {
+Future<UserLoginResponse> createUserSvc(User user) async {
   final body = jsonEncode(user);
   const uri = 'https://open-days-thesis.herokuapp.com/open-days/users';
 
@@ -14,5 +14,5 @@ Future<UserResponseModel> createUserSvc(User user) async {
     body: body,
   );
 
-  return UserResponseModel.fromJson(jsonDecode(rawResponse.body));
+  return UserLoginResponse.fromJson(jsonDecode(rawResponse.body));
 }

@@ -2,11 +2,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import './models/user.dart';
 import './models/institution.dart';
-import '../../models/user_response_model.dart';
+import '../../repositories/base_repository.dart';
+import '../../models/responses/user_login_response.dart';
 import '../../repositories/registration_repository.dart';
 
 class RegistrationController {
-  UserResponseModel? _registrationResponse;
+  UserLoginResponse? _registrationResponse;
 
   final ProviderRef _ref;
   final RegistrationRepository _registrationRepository;
@@ -17,8 +18,8 @@ class RegistrationController {
   final _selectedInstitutionProvider = StateProvider<String?>((ref) => null);
 
   final _institutionProvider = FutureProvider((ref) async {
-    final registrationRepository = ref.watch(registrationRepositoryProvider);
-    return registrationRepository.getAllInstitutionRepo();
+    final baseRepository = ref.watch(baseRepositoryProvider);
+    return baseRepository.getAllInstitutionRepo();
   });
 
   RegistrationController(this._ref, this._registrationRepository);
@@ -31,7 +32,7 @@ class RegistrationController {
     return _user.email;
   }
 
-  UserResponseModel? getRegistrationResponse() {
+  UserLoginResponse? getRegistrationResponse() {
     return _registrationResponse;
   }
 
@@ -118,19 +119,6 @@ class RegistrationController {
     }
   }
 
-  List<String> getCounties(List<Institution> institutions) {
-    List<String> countyNames = [];
-
-    for (Institution it in institutions) {
-      if (!countyNames.contains(it.countyName)) {
-        countyNames.add(it.countyName);
-      }
-    }
-
-    countyNames.sort();
-    return countyNames;
-  }
-
   String getFirstCounty(List<Institution> institutions) {
     List<String> countyNames = [];
 
@@ -142,32 +130,6 @@ class RegistrationController {
 
     countyNames.sort();
     return countyNames.isNotEmpty ? countyNames[0] : "";
-  }
-
-  List<String> getInstitutions(String? selectedCounty, List<Institution> institutions) {
-    List<String> institutionNames = [];
-
-    for (Institution it in institutions) {
-      if (it.countyName == selectedCounty && !institutionNames.contains(it.institutionName)) {
-        institutionNames.add(it.institutionName);
-      }
-    }
-
-    institutionNames.sort();
-    return institutionNames;
-  }
-
-  String getFirstInstitution(String? selectedCounty, List<Institution> institutions) {
-    List<String> institutionNames = [];
-
-    for (Institution it in institutions) {
-      if (it.countyName == selectedCounty && !institutionNames.contains(it.institutionName)) {
-        institutionNames.add(it.institutionName);
-      }
-    }
-
-    institutionNames.sort();
-    return institutionNames.isNotEmpty ? institutionNames[0] : "";
   }
 }
 

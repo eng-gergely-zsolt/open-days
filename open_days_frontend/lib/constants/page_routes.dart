@@ -4,4 +4,7 @@ const loginRoute = 'login_route';
 const homeBaseRoute = 'home_base_route';
 const guestModeRoute = 'guest_mode_route';
 const registrationRoute = 'registration_route';
+const nameModificationRoute = 'name_modification_route';
 const emailVerificationRoute = 'email_verification_route';
+const usernameModificationRoute = 'username_modification_route';
+const institutionModificationRoute = 'institution_modification_route';

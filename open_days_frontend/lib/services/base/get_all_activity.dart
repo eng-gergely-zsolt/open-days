@@ -3,10 +3,10 @@ import 'package:http/http.dart' as http;
 
 import '../../models/activity_model.dart';
 import '../../shared/secure_storage.dart';
-import '../../models/activities_response_model.dart';
+import '../../models/responses/activities_response.dart';
 
-Future<ActivitiesResponseModel> getAllActivitySvc() async {
-  final response = ActivitiesResponseModel();
+Future<ActivitiesResponse> getAllActivitySvc() async {
+  final response = ActivitiesResponse();
   final authorizationToken = await SecureStorage.getAuthorizationToken();
   const uri = 'https://open-days-thesis.herokuapp.com/open-days/activity/all-activity';
 
@@ -20,7 +20,7 @@ Future<ActivitiesResponseModel> getAllActivitySvc() async {
         Uri.parse(uri),
         headers: headers,
       )
-      .timeout(const Duration(seconds: 5));
+      .timeout(const Duration(seconds: 10));
 
   if (rawResponse.statusCode == 200) {
     Iterable decodedBody = jsonDecode(rawResponse.body);

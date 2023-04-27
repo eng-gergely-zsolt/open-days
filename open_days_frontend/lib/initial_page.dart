@@ -7,7 +7,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:open_days_frontend/screens/error/internet_connection_error_scaffold.dart';
 
-import 'package:open_days_frontend/models/base_response.dart';
+import 'package:open_days_frontend/models/responses/base_response.dart';
 import 'package:open_days_frontend/services/main/get_verify_authorization_token.dart';
 
 import './screens/lobby/lobby.dart';

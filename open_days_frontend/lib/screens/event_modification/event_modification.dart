@@ -9,7 +9,7 @@ import '../../theme/theme.dart';
 import '../../utils/helper_widget_utils.dart';
 import '../error/base_error.dart';
 import './event_modification_controller.dart';
-import '../../models/activities_response_model.dart';
+import '../../models/responses/activities_response.dart';
 import '../home_base/models/event_response_model.dart';
 
 /// This class holds the event modification screen.
@@ -154,7 +154,7 @@ class EventModification extends ConsumerWidget {
     DateTime selectedDateTime,
     AppLocalizations? appLocale,
     String? selectedActivityName,
-    ActivitiesResponseModel activities,
+    ActivitiesResponse activities,
     EventModificationController controller,
   ) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -378,15 +378,16 @@ class EventModification extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ElevatedButton(
-              child: Text(
-                appLocale?.event_modification_save.toUpperCase() as String,
-              ),
-              style: ElevatedButton.styleFrom(
-                minimumSize: Size(appWidth * 0.9, 45),
-              ),
-              onPressed: () {
-                controller.saveChanges(_event?.id, selectedActivityName);
-              }),
+            child: Text(
+              appLocale?.event_modification_save.toUpperCase() as String,
+            ),
+            style: ElevatedButton.styleFrom(
+              minimumSize: Size(appWidth * 0.9, 45),
+            ),
+            onPressed: () {
+              controller.saveChanges(_event?.id, selectedActivityName);
+            },
+          ),
         ],
       ),
       SizedBox(height: appHeight * 0.05),

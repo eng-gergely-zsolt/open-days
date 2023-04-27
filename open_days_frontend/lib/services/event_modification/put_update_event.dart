@@ -2,12 +2,12 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import '../../shared/secure_storage.dart';
-import '../../models/base_response_model.dart';
+import '../../models/responses/base_response.dart';
 import '../../models/event_modification_request.dart';
 
-Future<BaseResponseModel> updateEventSvc(
+Future<BaseResponse> updateEventSvc(
     int eventId, EventModificationRequest updateEventPayload) async {
-  final response = BaseResponseModel();
+  final response = BaseResponse();
   final authorizationToken = await SecureStorage.getAuthorizationToken();
   final uri =
       'https://open-days-thesis.herokuapp.com/open-days/event/update_event/' + eventId.toString();

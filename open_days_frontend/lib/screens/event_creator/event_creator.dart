@@ -8,7 +8,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import '../../theme/theme.dart';
 import './event_creator_controller.dart';
 import '../../utils/helper_widget_utils.dart';
-import '../../models/activities_response_model.dart';
+import '../../models/responses/activities_response.dart';
 
 class EventCreator extends ConsumerWidget {
   const EventCreator({Key? key}) : super(key: key);
@@ -150,7 +150,7 @@ class EventCreator extends ConsumerWidget {
     AppLocalizations? appLocale,
     String? selectedActivityName,
     EventCreatorController controller,
-    ActivitiesResponseModel activities,
+    ActivitiesResponse activities,
   ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

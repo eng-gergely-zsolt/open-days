@@ -8,7 +8,6 @@
     "last_name": "Vezetéknév",
     "email": "E-mail",
     "home": "Főmenü",
-    "profile": "Profil",
     "settings": "Beállítások",
 
     "base_text_date": "Dátum",
@@ -57,6 +56,18 @@
     "email_verification_header": "Ellenőrző kód",
     "email_verification_title": "E-mail címed ellenőrzése",
     "email_verification_subtitle": "Ide írd be a kapot OTP kódot.",
+
+    "profile": "Profil",
+    "profile_name": "Név",
+    "profile_email": "E-mail",
+    "profile_county": "Megye",
+    "profile_confirm": "Megerősít",
+    "profile_username": "Felhasználónév",
+    "profile_sign_out": "Kijelentkezés",
+    "profile_institution": "Intézmény",
+    "profile_what_is_your_name": "Mi a neved?",
+    "profile_institution_modification_title": "Válazd ki az intézményed!",
+    "profile_username_modification_title": "Milyen felhasználónevet szeretnél használni?",
 
     "event_modification_save": "Mentés",
     "event_modification_image": "Kép",

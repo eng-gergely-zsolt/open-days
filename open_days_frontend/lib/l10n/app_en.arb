@@ -11,7 +11,6 @@
     "last_name": "Last name",
     "email": "E-mail",
     "home": "Home",
-    "profile": "Profile",
     "settings": "Settings",
 
     "base_text_date": "Date",
@@ -60,6 +59,18 @@
     "email_verification_header": "Verification Code",
     "email_verification_title": "Verify your email address",
     "email_verification_subtitle": "Enter your OTP code here.",
+
+    "profile": "Profile",
+    "profile_name": "Name",
+    "profile_email": "Email",
+    "profile_county": "County",
+    "profile_confirm": "Confirm",
+    "profile_username": "Username",
+    "profile_sign_out": "Sign out",
+    "profile_institution": "Institution",
+    "profile_what_is_your_name": "What's your name?",
+    "profile_institution_modification_title": "Choose your institution!",
+    "profile_username_modification_title": "What username do you want to use?",
 
     "event_modification_save": "Save",
     "event_modification_image": "Image",

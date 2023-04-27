@@ -4,12 +4,13 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import '../../error/error_codes.dart';
-import '../../error/base_messages.dart';
-import '../../models/base_response.dart';
+import '../../error/error_messages.dart';
+import '../../models/responses/base_error_response.dart';
+import '../../models/responses/base_response.dart';
 import '../../shared/secure_storage.dart';
 
 Future<BaseResponse> verifyAuthorizationTokenSvc() async {
-  BaseResponse response;
+  BaseResponse response = BaseResponse();
   Map<String, dynamic> parsedResponse;
   final authorizationToken = await SecureStorage.getAuthorizationToken();
   const uri = 'https://open-days-thesis.herokuapp.com/open-days/users/token-verification';
@@ -30,21 +31,17 @@ Future<BaseResponse> verifyAuthorizationTokenSvc() async {
 
     if (rawResponse.statusCode == 200) {
       parsedResponse = jsonDecode(rawResponse.body);
-      response = BaseResponse.fromJson(parsedResponse);
+      response.error = BaseErrorResponse.fromJson(parsedResponse);
       response.isOperationSuccessful = true;
     } else {
       response = BaseResponse();
     }
   } on TimeoutException catch (_) {
-    response = BaseResponse.withError(
-      errorCode: timeoutExceptionCode,
-      errorMessage: timeoutExceptionMessage,
-    );
+    response.error.errorCode = timeoutExceptionCode;
+    response.error.errorMessage = timeoutExceptionMessage;
   } on Exception catch (message) {
-    response = BaseResponse.withError(
-      errorCode: generalExceptionCode,
-      errorMessage: message.toString(),
-    );
+    response.error.errorCode = generalExceptionCode;
+    response.error.errorMessage = message.toString();
   }
 
   return response;

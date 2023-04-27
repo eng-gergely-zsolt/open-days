@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-import '../../models/base_response_model.dart';
+import '../../models/responses/base_response.dart';
 import '../../screens/event_creator/models/create_event_model.dart';
 
-Future<BaseResponseModel> createEventSvc(CreateEventModel payload) async {
-  final response = BaseResponseModel();
+Future<BaseResponse> createEventSvc(CreateEventModel payload) async {
+  final response = BaseResponse();
   final body = jsonEncode(payload.event);
   const uri = 'https://open-days-thesis.herokuapp.com/open-days/event';
 

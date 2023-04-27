@@ -1,12 +1,14 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-import '../../constants/constants.dart';
+import '../../error/error_codes.dart';
+import '../../error/error_messages.dart';
 import '../../shared/secure_storage.dart';
-import '../../models/user_response_model.dart';
+import '../../models/responses/user_response.dart';
+import '../../models/responses/base_error_response.dart';
 
-Future<UserResponseModel> getUserByIdSvc() async {
-  var result = UserResponseModel();
+Future<UserResponse> getUserByIdSvc() async {
+  var result = UserResponse();
   final userId = await SecureStorage.getUserId() ?? '';
   final authorizationToken = await SecureStorage.getAuthorizationToken();
   final uri = 'https://open-days-thesis.herokuapp.com/open-days/users/' + userId;
@@ -21,14 +23,17 @@ Future<UserResponseModel> getUserByIdSvc() async {
         Uri.parse(uri),
         headers: headers,
       )
-      .timeout(const Duration(seconds: 5));
+      .timeout(const Duration(seconds: 10));
 
   if (rawResponse.statusCode == 200) {
-    result = UserResponseModel.fromJson(jsonDecode(rawResponse.body));
-    result.operationResult = operationResultSuccess;
-    return result;
+    result = UserResponse.fromJson(jsonDecode(rawResponse.body));
+    result.isOperationSuccessful = true;
+  } else if (rawResponse.statusCode == 500) {
+    result.error = BaseErrorResponse.fromJson(jsonDecode(rawResponse.body));
   } else {
-    result.operationResult = operationResultFailure;
-    return result;
+    result.error.errorCode = baseErrorCode;
+    result.error.errorMessage = baseErrorMessage;
   }
+
+  return result;
 }

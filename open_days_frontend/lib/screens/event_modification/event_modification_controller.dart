@@ -8,22 +8,22 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../models/activity_model.dart';
-import '../../models/base_response_model.dart';
-import '../../repositories/base_repository.dart';
-import '../../models/activities_response_model.dart';
-import '../../models/event_modification_request.dart';
-import '../../repositories/event_modification_repository.dart';
 import '../../utils/firebase_utils.dart';
+import '../../repositories/base_repository.dart';
+import '../../models/responses/base_response.dart';
+import '../../models/event_modification_request.dart';
+import '../../models/responses/activities_response.dart';
+import '../../repositories/event_modification_repository.dart';
 
 class EventModificationController {
   String? _location;
   String? _meetingLink;
   Reference? _imageToUploadRef;
-  BaseResponseModel? _updateEventResponse;
+  BaseResponse? _updateEventResponse;
   StateProvider<bool>? _isOnlineMeetingProvider;
   StateProvider<DateTime>? _selectedDateTimeProvider;
 
-  FutureProvider<ActivitiesResponseModel>? _activitiesProvider;
+  FutureProvider<ActivitiesResponse>? _activitiesProvider;
 
   var _imageUrl = '';
   var _description = '';
@@ -64,7 +64,7 @@ class EventModificationController {
     return _imagePathProvider;
   }
 
-  BaseResponseModel? getUpdateEventResponse() {
+  BaseResponse? getUpdateEventResponse() {
     return _updateEventResponse;
   }
 
@@ -132,9 +132,9 @@ class EventModificationController {
   }
 
   /// Creates the initial data that is required to draw the UI first time.
-  FutureProvider<ActivitiesResponseModel> createInitialDataProvider(String? imagePath) {
+  FutureProvider<ActivitiesResponse> createInitialDataProvider(String? imagePath) {
     return _activitiesProvider ??= FutureProvider((ref) async {
-      var response = ActivitiesResponseModel();
+      var response = ActivitiesResponse();
 
       if (imagePath != null) {
         _imageUrl = await FirebaseUtils.getDownloadURL(imagePath);
@@ -215,7 +215,7 @@ class EventModificationController {
     }
 
     if (eventId == null) {
-      _updateEventResponse = BaseResponseModel();
+      _updateEventResponse = BaseResponse();
     } else {
       _updateEventResponse =
           await _eventModificationRepository.updateEventRepo(eventId, updateEventPayload);

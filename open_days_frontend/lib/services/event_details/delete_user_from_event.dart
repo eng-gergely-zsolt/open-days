@@ -1,10 +1,10 @@
 import 'package:http/http.dart' as http;
 
 import '../../shared/secure_storage.dart';
-import '../../models/base_response_model.dart';
+import '../../models/responses/base_response.dart';
 
-Future<BaseResponseModel> deleteUserFromEventSvc(int eventId) async {
-  final response = BaseResponseModel();
+Future<BaseResponse> deleteUserFromEventSvc(int eventId) async {
+  final response = BaseResponse();
   final userPublicId = await SecureStorage.getUserId() ?? '';
   final authorizationToken = await SecureStorage.getAuthorizationToken();
   final uri = 'https://open-days-thesis.herokuapp.com/open-days/event/delete_user_from_event/' +
@@ -22,7 +22,7 @@ Future<BaseResponseModel> deleteUserFromEventSvc(int eventId) async {
         Uri.parse(uri),
         headers: headers,
       )
-      .timeout(const Duration(seconds: 5));
+      .timeout(const Duration(seconds: 10));
 
   if (rawResponse.statusCode == 200) {
     response.isOperationSuccessful = true;
