@@ -2,13 +2,12 @@ package com.sapientia.open.days.backend.shared.dto;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.HashSet;
 
 @SuppressWarnings("unused")
 public class UserDTO implements Serializable {
 
 	private long id;
-
+	private String role;
 	private String email;
 	private String publicId;
 	private String password;
@@ -19,9 +18,6 @@ public class UserDTO implements Serializable {
 	private String institution;
 	private String encryptedPassword;
 	private String emailVerificationToken;
-
-
-	private HashSet<String> roles;
 	private Boolean emailVerificationStatus = false;
 
 	@Serial
@@ -29,6 +25,10 @@ public class UserDTO implements Serializable {
 
 	public long getId() {
 		return id;
+	}
+
+	public String getRole() {
+		return role;
 	}
 
 	public String getEmail() {
@@ -71,16 +71,16 @@ public class UserDTO implements Serializable {
 		return emailVerificationToken;
 	}
 
-	public HashSet<String> getRoles() {
-		return roles;
-	}
-
 	public Boolean getEmailVerificationStatus() {
 		return emailVerificationStatus;
 	}
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 
 	public void setEmail(String email) {
@@ -121,10 +121,6 @@ public class UserDTO implements Serializable {
 
 	public void setEmailVerificationToken(String emailVerificationToken) {
 		this.emailVerificationToken = emailVerificationToken;
-	}
-
-	public void setRoles(HashSet<String> roles) {
-		this.roles = roles;
 	}
 
 	public void setEmailVerificationStatus(Boolean emailVerificationStatus) {

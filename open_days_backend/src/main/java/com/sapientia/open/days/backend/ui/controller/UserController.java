@@ -99,17 +99,17 @@ public class UserController {
 					ErrorMessage.MISSING_INSTITUTION.getErrorMessage());
 		}
 
+		String role;
 		UserDTO userDTO = new UserDTO();
 		BeanUtils.copyProperties(createUserRequest, userDTO);
 
-
-		HashSet<String> roles = new HashSet<>(List.of(Roles.ROLE_USER.name()));
-
-		if (organizerEmailRepository.findByEmail(createUserRequest.getEmail()) != null) {
-			roles.add(Roles.ROLE_ORGANIZER.name());
+		if (organizerEmailRepository.findByEmail(createUserRequest.getEmail()) == null) {
+			role = Roles.ROLE_USER.name();
+		} else {
+			role = Roles.ROLE_ORGANIZER.name();
 		}
 
-		userDTO.setRoles(roles);
+		userDTO.setRole(role);
 		userService.createUser(userDTO);
 
 		OperationStatusModel createUserResponse = new OperationStatusModel();

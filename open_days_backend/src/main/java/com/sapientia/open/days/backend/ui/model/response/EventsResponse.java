@@ -3,7 +3,7 @@ package com.sapientia.open.days.backend.ui.model.response;
 import java.io.Serial;
 
 @SuppressWarnings("unused")
-public class EventResponseModel {
+public class EventsResponse {
 	private long id;
 	private boolean isOnline;
 	private String location;

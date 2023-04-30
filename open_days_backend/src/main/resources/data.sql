@@ -1,4 +1,3 @@
-DELETE FROM users_roles
 DELETE FROM users_events
 DELETE FROM roles_authorities
 DELETE FROM participated_users
@@ -82,6 +81,7 @@ INSERT INTO institutions (id, name, settlement_id) VALUES (34, 'Gábor Áron Sza
 INSERT INTO institutions (id, name, settlement_id) VALUES (35, 'Dr. P. Boros Fortunát Elméleti Kozepiskola', 17)
 
 INSERT INTO institutions (id, name, settlement_id) VALUES (36, 'Bólyai Farkas Líceum', 18)
+INSERT INTO institutions (id, name, settlement_id) VALUES (37, 'Sapientia EMTE', 18)
 
 --Roles
 INSERT INTO roles (id, name) VALUES (1, 'ROLE_USER')
@@ -94,9 +94,16 @@ INSERT INTO authorities (id, name) VALUES (2, 'WRITE_AUTHORITY')
 INSERT INTO authorities (id, name) VALUES (3, 'DELETE_AUTHORITY')
 
 --Users
-INSERT INTO users (id, email, email_verification_status, email_verification_token, encrypted_password, first_name, last_name, otp_code, public_id, username, institution_id) VALUES (1, 'admin@mailinator.com', true, NULL, '$2a$10$z9BeqAxh0nY.kdpuvDi.xuP0mwIPgqK2WPtkTghwX3iAJJoHQ0MMm', 'John', 'Doe', NULL, 'qwertyuiopasdf1', 'admin', 4)
-INSERT INTO users (id, email, email_verification_status, email_verification_token, encrypted_password, first_name, last_name, otp_code, public_id, username, institution_id, image_path) VALUES (2, 'geergely.zsolt@gmail.com', true, NULL, '$2a$10$z9BeqAxh0nY.kdpuvDi.xuP0mwIPgqK2WPtkTghwX3iAJJoHQ0MMm', 'Zsolt', 'Gergely', NULL, 'qwertyuiopasdf2', 'organizer', 4, 'user/placeholder.jpg')
-INSERT INTO users (id, email, email_verification_status, email_verification_token, encrypted_password, first_name, last_name, otp_code, public_id, username, institution_id) VALUES (3, 'user@mailinator.com', true, NULL, '$2a$10$z9BeqAxh0nY.kdpuvDi.xuP0mwIPgqK2WPtkTghwX3iAJJoHQ0MMm', 'Marci', 'Puck', NULL, 'qwertyuiopasdf3', 'user', 4)
+--Admin
+INSERT INTO users (id, email, email_verification_status, email_verification_token, encrypted_password, first_name, last_name, otp_code, public_id, username, institution_id, image_path, role_id) VALUES (1, 'admin@mailinator.com', true, NULL, '$2a$10$z9BeqAxh0nY.kdpuvDi.xuP0mwIPgqK2WPtkTghwX3iAJJoHQ0MMm', 'John', 'Doe', NULL, 'qwertyuiopasdf1', 'admin', 37, NULL, 3)
+
+--Organizers
+INSERT INTO users (id, email, email_verification_status, email_verification_token, encrypted_password, first_name, last_name, otp_code, public_id, username, institution_id, image_path, role_id) VALUES (2, 'geergely.zsolt@gmail.com', true, NULL, '$2a$10$z9BeqAxh0nY.kdpuvDi.xuP0mwIPgqK2WPtkTghwX3iAJJoHQ0MMm', 'Zsolt', 'Gergely', NULL, 'qwertyuiopasdf2', 'organizer', 37, 'user/placeholder.jpg', 2)
+INSERT INTO users (id, email, email_verification_status, email_verification_token, encrypted_password, first_name, last_name, otp_code, public_id, username, institution_id, image_path, role_id) VALUES (3, 'csenge.albert.toth@mailinator.com', true, NULL, '$2a$10$z9BeqAxh0nY.kdpuvDi.xuP0mwIPgqK2WPtkTghwX3iAJJoHQ0MMm', 'Csenge', 'Albert-Tóth', NULL, 'qwertyuiopasdf3', 'csenge', 37, NULL, 2)
+
+--Users
+INSERT INTO users (id, email, email_verification_status, email_verification_token, encrypted_password, first_name, last_name, otp_code, public_id, username, institution_id, image_path, role_id) VALUES (4, 'user@mailinator.com', true, NULL, '$2a$10$z9BeqAxh0nY.kdpuvDi.xuP0mwIPgqK2WPtkTghwX3iAJJoHQ0MMm', 'Marci', 'Puck', NULL, 'qwertyuiopasdf4', 'user', 4, NULL, 1)
+
 
 --Activities
 INSERT INTO activities (id, name) VALUES (1, 'Kampusztúra')
@@ -116,6 +123,8 @@ INSERT INTO events (id, date_time, image_link, is_online, location, meeting_link
 INSERT INTO events (id, date_time, image_link, is_online, location, meeting_link, activity_id, organizer_id, description) VALUES (6, '2024-04-22 19:45', 'event/placeholder.jpg', false, 'Aula', NULL, 6, 2, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. LoremIpsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took agalley of type and scrambled it to make a type specimen book.')
 INSERT INTO events (id, date_time, image_link, is_online, location, meeting_link, activity_id, organizer_id, description) VALUES (7, '2024-05-26 07:12', 'event/placeholder.jpg', false, '1. emelet', NULL, 7, 2, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. LoremIpsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took agalley of type and scrambled it to make a type specimen book.')
 INSERT INTO events (id, date_time, image_link, is_online, location, meeting_link, activity_id, organizer_id, description) VALUES (8, '2024-05-08 09:10', 'event/placeholder.jpg', true, '2. emelet', 'https://meeting.com', 1, 2, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. LoremIpsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took agalley of type and scrambled it to make a type specimen book.')
+INSERT INTO events (id, date_time, image_link, is_online, location, meeting_link, activity_id, organizer_id, description) VALUES (9, '2022-05-08 09:10', 'event/placeholder.jpg', true, '2. emelet', 'https://meeting.com', 1, 3, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. LoremIpsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took agalley of type and scrambled it to make a type specimen book.')
+INSERT INTO events (id, date_time, image_link, is_online, location, meeting_link, activity_id, organizer_id, description) VALUES (10, '2024-08-08 09:10', 'event/placeholder.jpg', true, '2. emelet', 'https://meeting.com', 1, 3, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. LoremIpsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took agalley of type and scrambled it to make a type specimen book.')
 
 --Roles-authorities
 INSERT INTO roles_authorities (roles_id, authorities_id) VALUES (1, 1)
@@ -125,8 +134,3 @@ INSERT INTO roles_authorities (roles_id, authorities_id) VALUES (2, 2)
 INSERT INTO roles_authorities (roles_id, authorities_id) VALUES (3, 1)
 INSERT INTO roles_authorities (roles_id, authorities_id) VALUES (3, 2)
 INSERT INTO roles_authorities (roles_id, authorities_id) VALUES (3, 3)
-
---Users-roles
-INSERT INTO users_roles (users_id, roles_id) VALUES (1, 3)
-INSERT INTO users_roles (users_id, roles_id) VALUES (2, 2)
-INSERT INTO users_roles (users_id, roles_id) VALUES (3, 1)

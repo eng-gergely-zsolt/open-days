@@ -27,17 +27,14 @@ public class UserPrincipal implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-
-		Collection<RoleEntity> roles = userEntity.getRoles();
+		RoleEntity role = userEntity.getRole();
+		Collection<AuthorityEntity> authorityEntities;
 		Collection<GrantedAuthority> authorities = new HashSet<>();
-		Collection<AuthorityEntity> authorityEntities = new HashSet<>();
 
-		if (roles == null) return authorities;
+		if (role == null) return authorities;
 
-		roles.forEach((role) -> {
-			authorities.add(new SimpleGrantedAuthority(role.getName()));
-			authorityEntities.addAll(role.getAuthorities());
-		});
+		authorities.add(new SimpleGrantedAuthority(role.getName()));
+		authorityEntities = new HashSet<>(role.getAuthorities());
 
 		authorityEntities.forEach((authorityEntity) -> authorities.add(
 				new SimpleGrantedAuthority(authorityEntity.getName())));

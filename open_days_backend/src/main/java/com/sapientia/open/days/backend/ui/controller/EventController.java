@@ -3,13 +3,12 @@ package com.sapientia.open.days.backend.ui.controller;
 import com.sapientia.open.days.backend.exceptions.GeneralServiceException;
 import com.sapientia.open.days.backend.service.EventService;
 import com.sapientia.open.days.backend.shared.dto.CreateEventDto;
-import com.sapientia.open.days.backend.shared.dto.EventDto;
 import com.sapientia.open.days.backend.ui.model.request.CreateEventModel;
 import com.sapientia.open.days.backend.ui.model.request.UpdateEventRequestModel;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorCode;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorMessage;
 import com.sapientia.open.days.backend.ui.model.resource.OperationStatus;
-import com.sapientia.open.days.backend.ui.model.response.EventResponseModel;
+import com.sapientia.open.days.backend.ui.model.response.EventsResponse;
 import com.sapientia.open.days.backend.ui.model.response.OperationStatusModel;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -18,7 +17,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -28,27 +26,26 @@ public class EventController {
 	@Autowired
 	EventService eventService;
 
+	// Get
+
+	/**
+	 * Returns the events conform to the role of the user.
+	 *
+	 * @param userPublicId The public id of the user.
+	 * @return The list of the events.
+	 */
+	@GetMapping(path = "/events")
+	public List<EventsResponse> getEvents(@RequestHeader(value = "User-Public-ID") String userPublicId) {
+		return eventService.getEvents(userPublicId);
+	}
+
 	@ResponseBody
 	@GetMapping(path = "/is-user-applied-for-event/{eventId}/{userPublicId}")
 	public boolean isUserAppliedForEvent(@PathVariable long eventId, @PathVariable String userPublicId) {
 		return eventService.getIsUserAppliedForEvent(eventId, userPublicId);
 	}
 
-	@GetMapping(path = "/all-event")
-	public List<EventResponseModel> getAllEvent() {
-		List<EventResponseModel> response = new ArrayList<>();
-
-		List<EventDto> rawEvents = eventService.getAllEvent();
-
-		for (EventDto event : rawEvents) {
-			EventResponseModel eventTemp = new EventResponseModel();
-			BeanUtils.copyProperties(event, eventTemp);
-			response.add(eventTemp);
-		}
-
-		return response;
-	}
-
+	// Post
 	@PostMapping(path = "/apply_user_for_event/{eventId}/{userPublicId}")
 	public void applyUserForEvent(@PathVariable long eventId, @PathVariable String userPublicId) {
 		eventService.applyUserForEvent(eventId, userPublicId);
@@ -106,8 +103,24 @@ public class EventController {
 		return response;
 	}
 
+	// Put
+
+	/**
+	 * It updates the data of the event with the specified id in the path.
+	 *
+	 * @param eventId            The unique id of the event.
+	 * @param updateEventPayload It contains the data that we use to update the existing record in the database.
+	 */
+	@PutMapping(path = "/update_event/{eventId}")
+	public void updateEvent(@PathVariable long eventId, @RequestBody UpdateEventRequestModel updateEventPayload) {
+		eventService.updateEvent(eventId, updateEventPayload);
+	}
+
+	// Delete
+
 	/**
 	 * It deletes and event from the database by id.
+	 *
 	 * @param eventId The unique id of the event.
 	 */
 	@DeleteMapping(path = "/delete_event/{eventId}")
@@ -118,15 +131,5 @@ public class EventController {
 	@DeleteMapping(path = "/delete_user_from_event/{eventId}/{userPublicId}")
 	public void deleteUserFromEvent(@PathVariable long eventId, @PathVariable String userPublicId) {
 		eventService.deleteUserFromEvent(eventId, userPublicId);
-	}
-
-	/**
-	 * It updates the data of the event with the specified id in the path.
-	 * @param eventId The unique id of the event.
-	 * @param updateEventPayload It contains the data that we use to update the existing record in the database.
-	 */
-	@PutMapping(path = "/update_event/{eventId}")
-	public void updateEvent(@PathVariable long eventId, @RequestBody UpdateEventRequestModel updateEventPayload) {
-		eventService.updateEvent(eventId, updateEventPayload);
 	}
 }

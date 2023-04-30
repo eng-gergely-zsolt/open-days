@@ -33,7 +33,6 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 import static com.sapientia.open.days.backend.security.SecurityConstants.TOKEN_PREFIX;
-import static com.sapientia.open.days.backend.shared.Roles.*;
 
 @Service
 @SuppressWarnings("unused")
@@ -102,20 +101,9 @@ public class UserServiceImpl implements UserService {
 
 		BeanUtils.copyProperties(user, result);
 
+		result.setRoleName(user.getRole().getName());
 		result.setInstitution(user.getInstitution().getName());
 		result.setCounty(user.getInstitution().getSettlement().getCounty().getName());
-
-		for (RoleEntity userRole : user.getRoles()) {
-			userRoles.add(userRole.getName());
-		}
-
-		if (userRoles.contains(ROLE_ADMIN.name())) {
-			result.setRoleName(ROLE_ADMIN.name());
-		} else if (userRoles.contains(ROLE_ORGANIZER.name())) {
-			result.setRoleName(ROLE_ORGANIZER.name());
-		} else {
-			result.setRoleName(ROLE_USER.name());
-		}
 
 		return result;
 	}
@@ -160,18 +148,10 @@ public class UserServiceImpl implements UserService {
 		BeanUtils.copyProperties(user, userEntity);
 
 		String publicId = utils.generatePublicId(15);
+		RoleEntity role = roleRepository.findByName(user.getRole());
 
-		HashSet<RoleEntity> roleEntities = new HashSet<>();
-
-		for (String role : user.getRoles()) {
-			RoleEntity roleEntity = roleRepository.findByName(role);
-			if (roleEntity != null) {
-				roleEntities.add(roleEntity);
-			}
-		}
-
+		userEntity.setRoles(role);
 		userEntity.setPublicId(publicId);
-		userEntity.setRoles(roleEntities);
 		userEntity.setInstitution(institution);
 		userEntity.setEmailVerificationStatus(false);
 		userEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(user.getPassword()));

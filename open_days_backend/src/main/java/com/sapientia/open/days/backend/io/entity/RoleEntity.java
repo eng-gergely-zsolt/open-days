@@ -18,11 +18,17 @@ public class RoleEntity implements Serializable {
 	@Column(nullable = false, length = 20)
 	private String name;
 
-	@ManyToMany(mappedBy = "roles")
+	@OneToMany(mappedBy = "role")
 	private Collection<UserEntity> users;
 
 	@Serial
 	private static final long serialVersionUID = 1773859640689567294L;
+
+	@ManyToMany(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
+	@JoinTable(name = "roles_authorities",
+			joinColumns = @JoinColumn(name = "roles_id", referencedColumnName = "id"),
+			inverseJoinColumns = @JoinColumn(name = "authorities_id", referencedColumnName = "id"))
+	private Set<AuthorityEntity> authorities;
 
 	public RoleEntity() {
 	}
@@ -30,12 +36,6 @@ public class RoleEntity implements Serializable {
 	public RoleEntity(String name) {
 		this.name = name;
 	}
-
-	@ManyToMany(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
-	@JoinTable(name = "roles_authorities",
-			joinColumns = @JoinColumn(name = "roles_id", referencedColumnName = "id"),
-			inverseJoinColumns = @JoinColumn(name = "authorities_id", referencedColumnName = "id"))
-	private Set<AuthorityEntity> authorities;
 
 	public long getId() {
 		return id;

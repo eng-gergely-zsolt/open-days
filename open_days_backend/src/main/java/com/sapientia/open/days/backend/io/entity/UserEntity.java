@@ -13,9 +13,6 @@ public class UserEntity implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@Column
-	private Integer otpCode;
-
 	@Column(length = 100, unique = true, nullable = false)
 	private String email;
 
@@ -31,13 +28,16 @@ public class UserEntity implements Serializable {
 	@Column(length = 50, nullable = false)
 	private String firstName;
 
-	@Column(nullable = true)
+	@Column
+	private Integer otpCode;
+
+	@Column
 	private String imagePath;
 
 	@Column(nullable = false)
 	private String encryptedPassword;
 
-	@Column(nullable = true)
+	@Column
 	private String emailVerificationToken;
 
 	@Column(nullable = false)
@@ -50,35 +50,32 @@ public class UserEntity implements Serializable {
 	@OneToMany(mappedBy = "organizer")
 	private Set<EventEntity> events;
 
-	// Contains all the events thad the user applied for.
-	@ManyToMany(mappedBy = "users")
-	private Set<EventEntity> userEvents;
+	// It's the role that the use has.
+	@ManyToOne
+	@JoinColumn(name = "role_id", nullable = false)
+	private RoleEntity role;
 
 	// It's the institution the user belongs to.
 	@ManyToOne
 	@JoinColumn(name = "institution_id", nullable = false)
 	private InstitutionEntity institution;
 
+	// Contains all the events thad the user applied for.
+	@ManyToMany(mappedBy = "users")
+	private Set<EventEntity> userEvents;
+
 	// Contains all the events that the user participated in.
 	@ManyToMany(mappedBy = "participatedUsers")
 	private Set<EventEntity> participatedEvents;
-
-	/*
-	Contains all the roles the user has.
-	This creates a new table in cases of ManyToManyRelationships.
-	 */
-	@ManyToMany(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
-	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "users_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "roles_id", referencedColumnName = "id"))
-	private Set<RoleEntity> roles;
 
 	public UserEntity() {
 	}
 
 	public UserEntity(String email, String userName, String firstName, String lastName, String publicId,
-	                  String encryptedPassword, Set<RoleEntity> roles, InstitutionEntity institution,
+	                  String encryptedPassword, RoleEntity role, InstitutionEntity institution,
 	                  boolean emailVerificationStatus) {
+		this.role = role;
 		this.email = email;
-		this.roles = roles;
 		this.username = userName;
 		this.publicId = publicId;
 		this.lastName = lastName;
@@ -88,20 +85,20 @@ public class UserEntity implements Serializable {
 		this.emailVerificationStatus = emailVerificationStatus;
 	}
 
-	public String getEmailVerificationToken() {
-		return emailVerificationToken;
-	}
-
 	public long getId() {
 		return id;
+	}
+
+	public String getEmail() {
+		return email;
 	}
 
 	public Integer getOtpCode() {
 		return otpCode;
 	}
 
-	public String getEmail() {
-		return email;
+	public RoleEntity getRole() {
+		return role;
 	}
 
 	public String getPublicId() {
@@ -128,32 +125,32 @@ public class UserEntity implements Serializable {
 		return encryptedPassword;
 	}
 
-	public Boolean getEmailVerificationStatus() {
-		return emailVerificationStatus;
+	public String getEmailVerificationToken() {
+		return emailVerificationToken;
 	}
 
 	public InstitutionEntity getInstitution() {
 		return institution;
 	}
 
-	public Set<RoleEntity> getRoles() {
-		return roles;
-	}
-
-	public void setEmailVerificationToken(String emailVerificationToken) {
-		this.emailVerificationToken = emailVerificationToken;
+	public Boolean getEmailVerificationStatus() {
+		return emailVerificationStatus;
 	}
 
 	public void setId(long id) {
 		this.id = id;
 	}
 
-	public void setOtpCode(Integer otpCode) {
-		this.otpCode = otpCode;
-	}
-
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public void setRoles(RoleEntity role) {
+		this.role = role;
+	}
+
+	public void setOtpCode(Integer otpCode) {
+		this.otpCode = otpCode;
 	}
 
 	public void setPublicId(String publicId) {
@@ -176,19 +173,19 @@ public class UserEntity implements Serializable {
 		this.imagePath = imagePath;
 	}
 
-	public void setEncryptedPassword(String encryptedPassword) {
-		this.encryptedPassword = encryptedPassword;
-	}
-
-	public void setEmailVerificationStatus(Boolean emailVerificationStatus) {
-		this.emailVerificationStatus = emailVerificationStatus;
-	}
-
 	public void setInstitution(InstitutionEntity institution) {
 		this.institution = institution;
 	}
 
-	public void setRoles(Set<RoleEntity> roles) {
-		this.roles = roles;
+	public void setEncryptedPassword(String encryptedPassword) {
+		this.encryptedPassword = encryptedPassword;
+	}
+
+	public void setEmailVerificationToken(String emailVerificationToken) {
+		this.emailVerificationToken = emailVerificationToken;
+	}
+
+	public void setEmailVerificationStatus(Boolean emailVerificationStatus) {
+		this.emailVerificationStatus = emailVerificationStatus;
 	}
 }
