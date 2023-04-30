@@ -43,7 +43,42 @@ public class EventServiceImpl implements EventService {
 	@Autowired
 	ActivityRepository activityRepository;
 
+	DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
+
 	// Get
+
+	/**
+	 * Returns all events that are about to happen in the future.
+	 * @return The list of the events.
+	 */
+	public List<EventsResponse> getFutureEvents() {
+		DateTime eventDateTime;
+		EventsResponse eventTemp;
+		ArrayList<EventsResponse> events = new ArrayList<>();
+		ArrayList<EventEntity>	rawEvents = (ArrayList<EventEntity>) eventRepository.findAll();
+
+		for (EventEntity event : rawEvents) {
+			try {
+				eventDateTime = DateTime.parse(event.getDateTime(), formatter);
+
+				if (eventDateTime.isAfterNow()) {
+					eventTemp = new EventsResponse();
+					BeanUtils.copyProperties(event, eventTemp);
+
+					eventTemp.setActivityName(event.getActivity().getName());
+					eventTemp.setOrganizerId(event.getOrganizer().getPublicId());
+					eventTemp.setOrganizerLastName(event.getOrganizer().getLastName());
+					eventTemp.setOrganizerFirstName(event.getOrganizer().getFirstName());
+
+					events.add(eventTemp);
+				}
+			} catch (Exception ignored) {
+				// Ignored.
+			}
+		}
+
+		return events;
+	}
 
 	/**
 	 * Returns the events conform to the role of the user.
@@ -52,7 +87,7 @@ public class EventServiceImpl implements EventService {
 	 * @return The list of the events.
 	 */
 	@Override
-	public List<EventsResponse> getEvents(String userPublicId) {
+	public List<EventsResponse> getEventsByUserPublicId(String userPublicId) {
 		UserEntity user;
 		RoleEntity userRole;
 		RoleEntity adminRole;
@@ -80,7 +115,6 @@ public class EventServiceImpl implements EventService {
 		if (user.getRole() == userRole) {
 			DateTime eventDateTime;
 			EventsResponse eventTemp;
-			DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
 
 			for (EventEntity event : rawEvents) {
 				try {

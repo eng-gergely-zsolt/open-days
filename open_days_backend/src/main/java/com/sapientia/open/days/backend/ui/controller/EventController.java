@@ -29,14 +29,23 @@ public class EventController {
 	// Get
 
 	/**
+	 * Returns all events that are about to happen in the future.
+	 * @return The list of the events.
+	 */
+	@GetMapping(path = "/future-events")
+	public List<EventsResponse> getFutureEvents() {
+		return eventService.getFutureEvents();
+	}
+
+	/**
 	 * Returns the events conform to the role of the user.
 	 *
 	 * @param userPublicId The public id of the user.
 	 * @return The list of the events.
 	 */
-	@GetMapping(path = "/events")
-	public List<EventsResponse> getEvents(@RequestHeader(value = "User-Public-ID") String userPublicId) {
-		return eventService.getEvents(userPublicId);
+	@GetMapping(path = "/events-by-user-id")
+	public List<EventsResponse> getEventsByUserPublicId(@RequestHeader(value = "User-Public-ID") String userPublicId) {
+		return eventService.getEventsByUserPublicId(userPublicId);
 	}
 
 	@ResponseBody

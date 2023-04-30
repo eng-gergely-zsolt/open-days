@@ -8,7 +8,9 @@ import java.util.List;
 
 public interface EventService {
 	// Get
-	List<EventsResponse> getEvents(String userPublicId);
+	List<EventsResponse> getFutureEvents();
+
+	List<EventsResponse> getEventsByUserPublicId(String userPublicId);
 
 	boolean getIsUserAppliedForEvent(long eventId, String userPublicId);
 
