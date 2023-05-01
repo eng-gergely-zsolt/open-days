@@ -5,17 +5,12 @@ import com.sapientia.open.days.backend.io.repository.OrganizerEmailRepository;
 import com.sapientia.open.days.backend.service.UserService;
 import com.sapientia.open.days.backend.shared.Roles;
 import com.sapientia.open.days.backend.shared.dto.UserDTO;
-import com.sapientia.open.days.backend.ui.model.request.*;
-import com.sapientia.open.days.backend.ui.model.request.user.UpdateImagePathReq;
-import com.sapientia.open.days.backend.ui.model.request.user.UpdateInstitutionReq;
-import com.sapientia.open.days.backend.ui.model.request.user.UpdateNameReq;
-import com.sapientia.open.days.backend.ui.model.request.user.UpdateUsernameReq;
+import com.sapientia.open.days.backend.ui.model.request.user.*;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorCode;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorMessage;
-import com.sapientia.open.days.backend.ui.model.resource.OperationStatus;
 import com.sapientia.open.days.backend.ui.model.response.BaseResponse;
-import com.sapientia.open.days.backend.ui.model.response.OperationStatusModel;
-import com.sapientia.open.days.backend.ui.model.response.UserResponse;
+import com.sapientia.open.days.backend.ui.model.OperationStatus;
+import com.sapientia.open.days.backend.ui.model.User;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -37,28 +32,48 @@ public class UserController {
 	@Autowired
 	OrganizerEmailRepository organizerEmailRepository;
 
+	// Get
+	// -----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Has only testing purpose.
+	 */
 	@GetMapping(path = "/test")
-	public int getTest() {
-		Random r = new Random(System.currentTimeMillis());
-		return r.nextInt(1000, 10000);
+	public void getTest() {
 	}
 
+	/**
+	 * Verifies if the given authorization token is valid or not.
+	 */
+	@GetMapping(path = "/token-verification")
+	public BaseResponse verifyAuthorizationToken() {
+		return new BaseResponse(true);
+	}
+
+	/**
+	 * Returns the user data identified by the given public id.
+	 */
 	@PostAuthorize("hasRole('ADMIN') or returnObject.publicId == principal.publicId")
 	@GetMapping(path = "/{publicId}")
-	public UserResponse getUser(@PathVariable String publicId) {
+	public User getUserByPublicId(@PathVariable String publicId) {
 		return userService.getUserByPublicId(publicId);
 	}
 
+	/**
+	 * Returns the list of users paginated.
+	 * @param pageNumber The number of page.
+	 * @param recordPerPage The number of returned users on a single page.
+	 */
 	@GetMapping
-	public List<UserResponse> getUsers(
-			@RequestParam(value = "page", defaultValue = "0") int page,
-			@RequestParam(value = "limit", defaultValue = "25") int limit) {
+	public List<User> getUsers(
+			@RequestParam(value = "page", defaultValue = "0") int pageNumber,
+			@RequestParam(value = "limit", defaultValue = "25") int recordPerPage) {
 
-		List<UserResponse> response = new ArrayList<>();
-		List<UserDTO> users = userService.getUsers(page, limit);
+		List<User> response = new ArrayList<>();
+		List<UserDTO> users = userService.getUsers(pageNumber, recordPerPage);
 
 		for (UserDTO user : users) {
-			UserResponse userModel = new UserResponse();
+			User userModel = new User();
 			BeanUtils.copyProperties(user, userModel);
 			response.add(userModel);
 		}
@@ -66,8 +81,14 @@ public class UserController {
 		return response;
 	}
 
+	// Post
+	// -----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Creates a new user at registration.
+	 */
 	@PostMapping
-	public OperationStatusModel createUser(@RequestBody UserCreateRequestModel createUserRequest) {
+	public OperationStatus createUser(@RequestBody CreateUserReq createUserRequest) {
 
 		if (createUserRequest.getEmail().isEmpty()) {
 			throw new GeneralServiceException(ErrorCode.MISSING_EMAIL.getErrorCode(),
@@ -94,7 +115,7 @@ public class UserController {
 					ErrorMessage.MISSING_FIRST_NAME.getErrorMessage());
 		}
 
-		if (createUserRequest.getInstitution().isEmpty()) {
+		if (createUserRequest.getInstitutionName().isEmpty()) {
 			throw new GeneralServiceException(ErrorCode.MISSING_INSTITUTION.getErrorCode(),
 					ErrorMessage.MISSING_INSTITUTION.getErrorMessage());
 		}
@@ -112,30 +133,14 @@ public class UserController {
 		userDTO.setRole(role);
 		userService.createUser(userDTO);
 
-		OperationStatusModel createUserResponse = new OperationStatusModel();
-		createUserResponse.setOperationResult(OperationStatus.SUCCESS.name());
+		OperationStatus createUserResponse = new OperationStatus();
+		createUserResponse.setOperationResult(com.sapientia.open.days.backend.ui.model.resource.OperationStatus.SUCCESS.name());
 
 		return createUserResponse;
 	}
 
-	@PutMapping(path = "/{publicId}")
-	public UserResponse updateUser(@PathVariable String publicId, @RequestBody UserUpdateRequestModel updateUserRequest) {
-
-		if (publicId.length() != 15) {
-			throw new GeneralServiceException(ErrorCode.USER_INVALID_PUBLIC_ID.getErrorCode(),
-					ErrorMessage.USER_INVALID_PUBLIC_ID.getErrorMessage());
-		}
-
-		UserResponse response = new UserResponse();
-
-		UserDTO userDTO = new UserDTO();
-		BeanUtils.copyProperties(updateUserRequest, userDTO);
-
-		UserDTO updatedUser = userService.updateUser(userDTO, publicId);
-		BeanUtils.copyProperties(updatedUser, response);
-
-		return response;
-	}
+	// Put
+	// -----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Updates the first and last name of the user identified by the given public id.
@@ -173,32 +178,26 @@ public class UserController {
 		return new ResponseEntity<>(headers, HttpStatus.OK);
 	}
 
-	@PreAuthorize("hasRole('ROLE_ADMIN') or #publicId == principal.publicId")
-//    @Secured("ROLE_ADMIN")
-//    @PreAuthorize("hasAuthority('DELETE_AUTHORITY')")
-	@DeleteMapping(path = "/{publicId}")
-	public OperationStatusModel deleteUser(@PathVariable String publicId) {
+	/**
+	 * Updates the data of a user identified by the public id.
+	 */
+	@PutMapping(path = "/{publicId}")
+	public User updateUser(@PathVariable String publicId, @RequestBody UpdateUserReq updateUserRequest) {
 
 		if (publicId.length() != 15) {
 			throw new GeneralServiceException(ErrorCode.USER_INVALID_PUBLIC_ID.getErrorCode(),
 					ErrorMessage.USER_INVALID_PUBLIC_ID.getErrorMessage());
 		}
 
-		OperationStatusModel result = new OperationStatusModel();
+		User response = new User();
 
-		userService.deleteUser(publicId);
+		UserDTO userDTO = new UserDTO();
+		BeanUtils.copyProperties(updateUserRequest, userDTO);
 
-		result.setOperationResult(OperationStatus.SUCCESS.name());
+		UserDTO updatedUser = userService.updateUser(userDTO, publicId);
+		BeanUtils.copyProperties(updatedUser, response);
 
-		return result;
-	}
-
-	/**
-	 * Verifies if the given authorization token is valid or not.
-	 */
-	@GetMapping(path = "/token-verification")
-	public BaseResponse verifyAuthorizationToken() {
-		return new BaseResponse(true);
+		return response;
 	}
 
 	/**
@@ -209,42 +208,24 @@ public class UserController {
 		userService.verifyEmailByOtpCode(payload);
 	}
 
-	/*
-	 * http://localhost:8080/open-days/users/password-reset-request
-	 **/
-	@PostMapping(path = "/password-reset-request")
-	public OperationStatusModel requestPasswordReset(@RequestBody PasswordResetRequestModel passwordResetRequestPayload) {
+	/**
+	 * Deletes a user identified by the public id.
+	 */
+	@PreAuthorize("hasRole('ROLE_ADMIN') or #publicId == principal.publicId")
+	@DeleteMapping(path = "/{publicId}")
+	public OperationStatus deleteUser(@PathVariable String publicId) {
 
-		OperationStatusModel response = new OperationStatusModel();
-		boolean operationResult = userService.requestPasswordReset(passwordResetRequestPayload.getEmail());
-
-		response.setOperationResult(OperationStatus.ERROR.name());
-
-		if (operationResult) {
-			response.setOperationResult(OperationStatus.SUCCESS.name());
+		if (publicId.length() != 15) {
+			throw new GeneralServiceException(ErrorCode.USER_INVALID_PUBLIC_ID.getErrorCode(),
+					ErrorMessage.USER_INVALID_PUBLIC_ID.getErrorMessage());
 		}
 
-		return response;
-	}
+		OperationStatus result = new OperationStatus();
 
-	/*
-	 * http://localhost:8080/open-days/users/password-reset
-	 **/
-	@PostMapping(path = "/password-reset")
-	public OperationStatusModel resetPassword(@RequestBody PasswordResetModel passwordResetPayload) {
+		userService.deleteUser(publicId);
 
-		OperationStatusModel response = new OperationStatusModel();
+		result.setOperationResult(com.sapientia.open.days.backend.ui.model.resource.OperationStatus.SUCCESS.name());
 
-		boolean operationResult = userService.resetPassword(
-				passwordResetPayload.getToken(),
-				passwordResetPayload.getPassword());
-
-		response.setOperationResult(OperationStatus.ERROR.name());
-
-		if (operationResult) {
-			response.setOperationResult(OperationStatus.SUCCESS.name());
-		}
-
-		return response;
+		return result;
 	}
 }

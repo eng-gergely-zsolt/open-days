@@ -1,15 +1,15 @@
-package com.sapientia.open.days.backend.ui.model.response;
+package com.sapientia.open.days.backend.ui.model;
 
 @SuppressWarnings("unused")
-public class ErrorMessageModel {
+public class ErrorMessage {
 	private int code;
 	private String message;
 	private String operationResult;
 
-	public ErrorMessageModel() {
+	public ErrorMessage() {
 	}
 
-	public ErrorMessageModel(int code, String message, String operationResult) {
+	public ErrorMessage(int code, String message, String operationResult) {
 		this.code = code;
 		this.message = message;
 		this.operationResult = operationResult;

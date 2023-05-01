@@ -23,6 +23,7 @@ public enum ErrorMessage {
     EVENT_INVALID_ORGANIZER_ID("The organizer id is invalid"),
     EVENT_MISSING_ACTIVITY_NAME("The activity name is missing"),
     EVENT_MISSING_LOCATION("The location is missing"),
+    EVENT_NOT_FOUND_WITH_ID("No event found with the given id."),
 
     // Registration related
     EMAIL_ALREADY_REGISTERED("Email address already registered"),

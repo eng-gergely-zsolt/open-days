@@ -60,7 +60,7 @@ public class UserEntity implements Serializable {
 	@JoinColumn(name = "institution_id", nullable = false)
 	private InstitutionEntity institution;
 
-	// Contains all the events thad the user applied for.
+	// Contains all the events thad the user enrolled in.
 	@ManyToMany(mappedBy = "users")
 	private Set<EventEntity> userEvents;
 

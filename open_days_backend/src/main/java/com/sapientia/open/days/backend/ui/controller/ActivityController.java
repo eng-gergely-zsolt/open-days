@@ -3,12 +3,10 @@ package com.sapientia.open.days.backend.ui.controller;
 import com.sapientia.open.days.backend.exceptions.GeneralServiceException;
 import com.sapientia.open.days.backend.service.ActivityService;
 import com.sapientia.open.days.backend.shared.dto.ActivityDto;
-import com.sapientia.open.days.backend.ui.model.request.ActivityRequestModel;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorCode;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorMessage;
-import com.sapientia.open.days.backend.ui.model.resource.OperationStatus;
-import com.sapientia.open.days.backend.ui.model.response.ActivityResponseModel;
-import com.sapientia.open.days.backend.ui.model.response.OperationStatusModel;
+import com.sapientia.open.days.backend.ui.model.Activity;
+import com.sapientia.open.days.backend.ui.model.OperationStatus;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -24,13 +22,13 @@ public class ActivityController {
 	ActivityService activityService;
 
 	@GetMapping(path = "/all-activity")
-	public List<ActivityResponseModel> getAllActivity() {
+	public List<Activity> getAllActivity() {
 
-		List<ActivityResponseModel> response = new ArrayList<>();
+		List<Activity> response = new ArrayList<>();
 		List<ActivityDto> rawActivities = activityService.getAllActivity();
 
 		for (ActivityDto activity : rawActivities) {
-			ActivityResponseModel activityTemp = new ActivityResponseModel();
+			Activity activityTemp = new Activity();
 			BeanUtils.copyProperties(activity, activityTemp);
 			response.add(activityTemp);
 		}
@@ -39,7 +37,7 @@ public class ActivityController {
 	}
 
 	@PostMapping
-	OperationStatusModel createActivity(@RequestBody ActivityRequestModel activity) {
+	OperationStatus createActivity(@RequestBody Activity activity) {
 
 		if (activity.getName().isEmpty()) {
 			throw new GeneralServiceException(ErrorCode.ACTIVITY_MISSING_NAME.getErrorCode(),
@@ -51,8 +49,8 @@ public class ActivityController {
 
 		activityService.createActivity(activityDto);
 
-		OperationStatusModel response = new OperationStatusModel();
-		response.setOperationResult(OperationStatus.SUCCESS.name());
+		OperationStatus response = new OperationStatus();
+		response.setOperationResult(com.sapientia.open.days.backend.ui.model.resource.OperationStatus.SUCCESS.name());
 
 		return response;
 	}

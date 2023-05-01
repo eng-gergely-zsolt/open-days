@@ -1,14 +1,14 @@
-package com.sapientia.open.days.backend.ui.model.request;
+package com.sapientia.open.days.backend.ui.model.request.user;
 
 @SuppressWarnings("unused")
-public class UserCreateRequestModel {
+public class CreateUserReq {
 
     private String email;
     private String password;
     private String username;
     private String lastName;
     private String firstName;
-    private String institution;
+    private String institutionName;
 
     public String getEmail() {
         return email;
@@ -30,8 +30,8 @@ public class UserCreateRequestModel {
         return firstName;
     }
 
-    public String getInstitution() {
-        return institution;
+    public String getInstitutionName() {
+        return institutionName;
     }
 
     public void setEmail(String email) {
@@ -54,7 +54,7 @@ public class UserCreateRequestModel {
         this.firstName = firstName;
     }
 
-    public void setInstitution(String institution) {
-        this.institution = institution;
+    public void setInstitutionName(String institutionName) {
+        this.institutionName = institutionName;
     }
 }

@@ -1,15 +1,10 @@
-package com.sapientia.open.days.backend.ui.model.response;
+package com.sapientia.open.days.backend.ui.model;
 
-import java.io.Serial;
-
-public class ActivityResponseModel {
+public class Activity {
 
 	private int id;
 
 	private String name;
-
-	@Serial
-	private static final long serialVersionUID = 6558070281872949903L;
 
 	public int getId() {
 		return id;

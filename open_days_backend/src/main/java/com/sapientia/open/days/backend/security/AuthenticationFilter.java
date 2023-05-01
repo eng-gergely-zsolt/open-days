@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sapientia.open.days.backend.SpringApplicationContext;
 import com.sapientia.open.days.backend.service.UserService;
 import com.sapientia.open.days.backend.shared.dto.UserDTO;
-import com.sapientia.open.days.backend.ui.model.request.UserLoginRequestModel;
+import com.sapientia.open.days.backend.ui.model.request.user.LoginUserReq;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -36,7 +36,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res) throws AuthenticationException {
 		try {
-			UserLoginRequestModel credentials = new ObjectMapper().readValue(req.getInputStream(), UserLoginRequestModel.class);
+			LoginUserReq credentials = new ObjectMapper().readValue(req.getInputStream(), LoginUserReq.class);
 
 			return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
 					credentials.getUsername(), credentials.getPassword(), new ArrayList<>()));

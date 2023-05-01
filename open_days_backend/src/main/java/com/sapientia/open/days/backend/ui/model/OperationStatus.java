@@ -1,7 +1,7 @@
-package com.sapientia.open.days.backend.ui.model.response;
+package com.sapientia.open.days.backend.ui.model;
 
 @SuppressWarnings("unused")
-public class OperationStatusModel {
+public class OperationStatus {
     private String operationResult;
 
     public String getOperationResult() {

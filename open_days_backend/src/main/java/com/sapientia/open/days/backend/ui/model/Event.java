@@ -1,9 +1,7 @@
-package com.sapientia.open.days.backend.ui.model.response;
-
-import java.io.Serial;
+package com.sapientia.open.days.backend.ui.model;
 
 @SuppressWarnings("unused")
-public class EventsResponse {
+public class Event {
 	private long id;
 	private boolean isOnline;
 	private String location;
@@ -15,9 +13,6 @@ public class EventsResponse {
 	private String activityName;
 	private String organizerLastName;
 	private String organizerFirstName;
-
-	@Serial
-	private static final long serialVersionUID = 3667708176484458123L;
 
 	public long getId() {
 		return id;

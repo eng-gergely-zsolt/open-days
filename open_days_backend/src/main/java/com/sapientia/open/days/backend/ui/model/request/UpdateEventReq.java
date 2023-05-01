@@ -1,30 +1,25 @@
 package com.sapientia.open.days.backend.ui.model.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 @SuppressWarnings("unused")
-public class CreateEventModel {
-
-	private boolean isOnline;
-	private String dateTime;
+public class UpdateEventReq {
 	private String location;
+	private String dateTime;
+	private boolean isOnline;
 	private String imageLink;
 	private String description;
 	private String meetingLink;
-	private String organizerId;
 	private String activityName;
 
-	@JsonProperty("isOnline")
-	public boolean getIsOnline() {
-		return isOnline;
+	public String getLocation() {
+		return location;
 	}
 
 	public String getDateTime() {
 		return dateTime;
 	}
 
-	public String getLocation() {
-		return location;
+	public boolean getIsOnline() {
+		return isOnline;
 	}
 
 	public String getImageLink() {
@@ -39,24 +34,20 @@ public class CreateEventModel {
 		return meetingLink;
 	}
 
-	public String getOrganizerId() {
-		return organizerId;
-	}
-
 	public String getActivityName() {
 		return activityName;
 	}
 
-	public void setIsOnline(boolean isOnline) {
-		this.isOnline = isOnline;
+	public void setLocation(String location) {
+		this.location = location;
 	}
 
 	public void setDateTime(String dateTime) {
 		this.dateTime = dateTime;
 	}
 
-	public void setLocation(String location) {
-		this.location = location;
+	public void setIsOnline(boolean isOnline) {
+		this.isOnline = isOnline;
 	}
 
 	public void setImageLink(String imageLink) {
@@ -69,10 +60,6 @@ public class CreateEventModel {
 
 	public void setMeetingLink(String meetingLink) {
 		this.meetingLink = meetingLink;
-	}
-
-	public void setOrganizerId(String organizerId) {
-		this.organizerId = organizerId;
 	}
 
 	public void setActivityName(String activityName) {

@@ -1,5 +1,6 @@
 package com.sapientia.open.days.backend.ui.model.response;
 
+@SuppressWarnings("unused")
 public class InstitutionNameResponse {
 	private String countyName;
 	private String institutionName;

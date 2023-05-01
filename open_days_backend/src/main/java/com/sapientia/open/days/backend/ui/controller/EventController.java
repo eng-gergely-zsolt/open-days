@@ -3,13 +3,12 @@ package com.sapientia.open.days.backend.ui.controller;
 import com.sapientia.open.days.backend.exceptions.GeneralServiceException;
 import com.sapientia.open.days.backend.service.EventService;
 import com.sapientia.open.days.backend.shared.dto.CreateEventDto;
-import com.sapientia.open.days.backend.ui.model.request.CreateEventModel;
-import com.sapientia.open.days.backend.ui.model.request.UpdateEventRequestModel;
+import com.sapientia.open.days.backend.ui.model.request.UpdateEventReq;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorCode;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorMessage;
-import com.sapientia.open.days.backend.ui.model.resource.OperationStatus;
-import com.sapientia.open.days.backend.ui.model.response.EventsResponse;
-import com.sapientia.open.days.backend.ui.model.response.OperationStatusModel;
+import com.sapientia.open.days.backend.ui.model.Event;
+import com.sapientia.open.days.backend.ui.model.OperationStatus;
+import com.sapientia.open.days.backend.ui.model.User;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -27,14 +26,20 @@ public class EventController {
 	EventService eventService;
 
 	// Get
+	// -----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Returns all events that are about to happen in the future.
 	 * @return The list of the events.
 	 */
 	@GetMapping(path = "/future-events")
-	public List<EventsResponse> getFutureEvents() {
+	public List<Event> getFutureEvents() {
 		return eventService.getFutureEvents();
+	}
+
+	@GetMapping(path = "/enrolled-users/{eventId}")
+	public List<User> getEnrolledUsers(@PathVariable long eventId) {
+		return eventService.getEnrolledUsers(eventId);
 	}
 
 	/**
@@ -44,7 +49,7 @@ public class EventController {
 	 * @return The list of the events.
 	 */
 	@GetMapping(path = "/events-by-user-id")
-	public List<EventsResponse> getEventsByUserPublicId(@RequestHeader(value = "User-Public-ID") String userPublicId) {
+	public List<Event> getEventsByUserPublicId(@RequestHeader(value = "User-Public-ID") String userPublicId) {
 		return eventService.getEventsByUserPublicId(userPublicId);
 	}
 
@@ -55,6 +60,8 @@ public class EventController {
 	}
 
 	// Post
+	// -----------------------------------------------------------------------------------------------------------------
+
 	@PostMapping(path = "/apply_user_for_event/{eventId}/{userPublicId}")
 	public void applyUserForEvent(@PathVariable long eventId, @PathVariable String userPublicId) {
 		eventService.applyUserForEvent(eventId, userPublicId);
@@ -66,7 +73,7 @@ public class EventController {
 	}
 
 	@PostMapping
-	OperationStatusModel createEvent(@RequestBody CreateEventModel event) {
+	OperationStatus createEvent(@RequestBody Event event) {
 
 		if (event.getLocation().isEmpty()) {
 			throw new GeneralServiceException(ErrorCode.EVENT_MISSING_LOCATION.getErrorCode(),
@@ -88,7 +95,7 @@ public class EventController {
 					ErrorMessage.EVENT_MISSING_ACTIVITY_NAME.getErrorMessage());
 		}
 
-		if (event.getIsOnline() && event.getMeetingLink().isEmpty()) {
+		if (event.isIsOnline() && event.getMeetingLink().isEmpty()) {
 			throw new GeneralServiceException(ErrorCode.EVENT_MISSING_MEETING_LINK.getErrorCode(),
 					ErrorMessage.EVENT_MISSING_MEETING_LINK.getErrorMessage());
 		}
@@ -106,13 +113,14 @@ public class EventController {
 
 		eventService.createEvent(eventDto);
 
-		OperationStatusModel response = new OperationStatusModel();
-		response.setOperationResult(OperationStatus.SUCCESS.name());
+		OperationStatus response = new OperationStatus();
+		response.setOperationResult(com.sapientia.open.days.backend.ui.model.resource.OperationStatus.SUCCESS.name());
 
 		return response;
 	}
 
 	// Put
+	// -----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * It updates the data of the event with the specified id in the path.
@@ -121,11 +129,12 @@ public class EventController {
 	 * @param updateEventPayload It contains the data that we use to update the existing record in the database.
 	 */
 	@PutMapping(path = "/update_event/{eventId}")
-	public void updateEvent(@PathVariable long eventId, @RequestBody UpdateEventRequestModel updateEventPayload) {
+	public void updateEvent(@PathVariable long eventId, @RequestBody UpdateEventReq updateEventPayload) {
 		eventService.updateEvent(eventId, updateEventPayload);
 	}
 
 	// Delete
+	// -----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * It deletes and event from the database by id.

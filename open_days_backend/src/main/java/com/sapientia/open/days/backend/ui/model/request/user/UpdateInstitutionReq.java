@@ -2,31 +2,31 @@ package com.sapientia.open.days.backend.ui.model.request.user;
 
 @SuppressWarnings("unused")
 public class UpdateInstitutionReq {
-	private String county;
 	private String publicId;
-	private String institution;
-
-	public String getCounty() {
-		return county;
-	}
+	private String countyName;
+	private String institutionName;
 
 	public String getPublicId() {
 		return publicId;
 	}
 
-	public String getInstitution() {
-		return institution;
+	public String getCountyName() {
+		return countyName;
 	}
 
-	public void setCounty(String county) {
-		this.county = county;
+	public String getInstitutionName() {
+		return institutionName;
 	}
 
 	public void setPublicId(String publicId) {
 		this.publicId = publicId;
 	}
 
-	public void setInstitution(String institution) {
-		this.institution = institution;
+	public void setCountyName(String countyName) {
+		this.countyName = countyName;
+	}
+
+	public void setInstitutionName(String institutionName) {
+		this.institutionName = institutionName;
 	}
 }

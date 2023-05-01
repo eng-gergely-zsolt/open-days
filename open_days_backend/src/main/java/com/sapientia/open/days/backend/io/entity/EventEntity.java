@@ -40,7 +40,7 @@ public class EventEntity {
 	@JoinColumn(name = "activity_id", nullable = false)
 	private ActivityEntity activity;
 
-	// Contains all the users that applied for this event.
+	// Contains all the users that were enrolled in this event.
 	@ManyToMany(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
 	@JoinTable(name = "users_events", joinColumns = @JoinColumn(name = "event_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
 	private Set<UserEntity> users;

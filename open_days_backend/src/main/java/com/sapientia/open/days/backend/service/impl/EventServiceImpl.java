@@ -14,10 +14,11 @@ import com.sapientia.open.days.backend.service.EventService;
 import com.sapientia.open.days.backend.shared.Roles;
 import com.sapientia.open.days.backend.shared.dto.CreateEventDto;
 import com.sapientia.open.days.backend.shared.utils.DateUtils;
-import com.sapientia.open.days.backend.ui.model.request.UpdateEventRequestModel;
+import com.sapientia.open.days.backend.ui.model.request.UpdateEventReq;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorCode;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorMessage;
-import com.sapientia.open.days.backend.ui.model.response.EventsResponse;
+import com.sapientia.open.days.backend.ui.model.Event;
+import com.sapientia.open.days.backend.ui.model.User;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -51,10 +52,10 @@ public class EventServiceImpl implements EventService {
 	 * Returns all events that are about to happen in the future.
 	 * @return The list of the events.
 	 */
-	public List<EventsResponse> getFutureEvents() {
+	public List<Event> getFutureEvents() {
 		DateTime eventDateTime;
-		EventsResponse eventTemp;
-		ArrayList<EventsResponse> events = new ArrayList<>();
+		Event eventTemp;
+		ArrayList<Event> events = new ArrayList<>();
 		ArrayList<EventEntity>	rawEvents = (ArrayList<EventEntity>) eventRepository.findAll();
 
 		for (EventEntity event : rawEvents) {
@@ -62,7 +63,7 @@ public class EventServiceImpl implements EventService {
 				eventDateTime = DateTime.parse(event.getDateTime(), formatter);
 
 				if (eventDateTime.isAfterNow()) {
-					eventTemp = new EventsResponse();
+					eventTemp = new Event();
 					BeanUtils.copyProperties(event, eventTemp);
 
 					eventTemp.setActivityName(event.getActivity().getName());
@@ -80,6 +81,31 @@ public class EventServiceImpl implements EventService {
 		return events;
 	}
 
+	@Override
+	public List<User> getEnrolledUsers(long eventId) {
+		ArrayList<User> response = new ArrayList<>();
+		EventEntity event = eventRepository.findById(eventId);
+
+		if (event == null) {
+			throw new BaseException(ErrorCode.EVENT_NOT_FOUND_WITH_ID.getErrorCode(),
+					ErrorMessage.EVENT_NOT_FOUND_WITH_ID.getErrorMessage());
+		}
+
+		for (UserEntity user: event.getUsers()) {
+			User userTemp = new User();
+
+			BeanUtils.copyProperties(user, userTemp);
+
+			userTemp.setRoleName(user.getRole().getName());
+			userTemp.setInstitutionName(user.getInstitution().getName());
+			userTemp.setCountyName(user.getInstitution().getSettlement().getCounty().getName());
+
+			response.add(userTemp);
+		}
+
+		return response;
+	}
+
 	/**
 	 * Returns the events conform to the role of the user.
 	 *
@@ -87,13 +113,13 @@ public class EventServiceImpl implements EventService {
 	 * @return The list of the events.
 	 */
 	@Override
-	public List<EventsResponse> getEventsByUserPublicId(String userPublicId) {
+	public List<Event> getEventsByUserPublicId(String userPublicId) {
 		UserEntity user;
 		RoleEntity userRole;
 		RoleEntity adminRole;
 		RoleEntity organizerRole;
 		ArrayList<EventEntity> rawEvents;
-		ArrayList<EventsResponse> events = new ArrayList<>();
+		ArrayList<Event> events = new ArrayList<>();
 
 		if (userPublicId == null || userPublicId.length() != 15) {
 			throw new BaseException(ErrorCode.USER_INVALID_PUBLIC_ID.getErrorCode(),
@@ -114,14 +140,14 @@ public class EventServiceImpl implements EventService {
 
 		if (user.getRole() == userRole) {
 			DateTime eventDateTime;
-			EventsResponse eventTemp;
+			Event eventTemp;
 
 			for (EventEntity event : rawEvents) {
 				try {
 					eventDateTime = DateTime.parse(event.getDateTime(), formatter);
 
 					if (eventDateTime.isAfterNow()) {
-						eventTemp = new EventsResponse();
+						eventTemp = new Event();
 						BeanUtils.copyProperties(event, eventTemp);
 
 						eventTemp.setActivityName(event.getActivity().getName());
@@ -138,7 +164,7 @@ public class EventServiceImpl implements EventService {
 		} else if (user.getRole() == organizerRole) {
 			for (EventEntity event : rawEvents) {
 				if (Objects.equals(userPublicId, event.getOrganizer().getPublicId())) {
-					EventsResponse eventTemp = new EventsResponse();
+					Event eventTemp = new Event();
 					BeanUtils.copyProperties(event, eventTemp);
 
 					eventTemp.setActivityName(event.getActivity().getName());
@@ -151,7 +177,7 @@ public class EventServiceImpl implements EventService {
 			}
 		} else {
 			for (EventEntity event : rawEvents) {
-				EventsResponse eventTemp = new EventsResponse();
+				Event eventTemp = new Event();
 				BeanUtils.copyProperties(event, eventTemp);
 
 				eventTemp.setActivityName(event.getActivity().getName());
@@ -248,7 +274,7 @@ public class EventServiceImpl implements EventService {
 
 	// Post
 	@Override
-	public void updateEvent(long eventId, UpdateEventRequestModel updateEventPayload) {
+	public void updateEvent(long eventId, UpdateEventReq updateEventPayload) {
 		EventEntity event = eventRepository.findById(eventId);
 		ActivityEntity activity = activityRepository.findByName(updateEventPayload.getActivityName());
 

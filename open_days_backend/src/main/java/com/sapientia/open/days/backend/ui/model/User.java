@@ -1,23 +1,19 @@
-package com.sapientia.open.days.backend.ui.model.response;
+package com.sapientia.open.days.backend.ui.model;
 
 @SuppressWarnings("unused")
-public class UserResponse {
+public class User {
     private String email;
-    private String county;
     private String publicId;
     private String username;
     private String lastName;
     private String roleName;
     private String firstName;
     private String imagePath;
-    private String institution;
+    private String countyName;
+    private String institutionName;
 
     public String getEmail() {
         return email;
-    }
-
-    public String getCounty() {
-        return county;
     }
 
     public String getPublicId() {
@@ -44,16 +40,16 @@ public class UserResponse {
         return imagePath;
     }
 
-    public String getInstitution() {
-        return institution;
+    public String getCountyName() {
+        return countyName;
+    }
+
+    public String getInstitutionName() {
+        return institutionName;
     }
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public void setCounty(String county) {
-        this.county = county;
     }
 
     public void setPublicId(String publicId) {
@@ -80,7 +76,11 @@ public class UserResponse {
         this.imagePath = imagePath;
     }
 
-    public void setInstitution(String institution) {
-        this.institution = institution;
+    public void setCountyName(String countyName) {
+        this.countyName = countyName;
+    }
+
+    public void setInstitutionName(String institutionName) {
+        this.institutionName = institutionName;
     }
 }

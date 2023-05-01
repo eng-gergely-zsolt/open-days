@@ -1,18 +1,18 @@
-package com.sapientia.open.days.backend.ui.model.response;
+package com.sapientia.open.days.backend.ui.model;
 
 /**
  * A basic model to return an error to the client. The BaseException uses this as return type.
  */
 @SuppressWarnings("unused")
-public class BaseErrorResponse {
+public class BaseError {
 
 	private int errorCode;
 	private String errorMessage;
 
-	public BaseErrorResponse() {
+	public BaseError() {
 	}
 
-	public BaseErrorResponse(int errorCode, String errorMessage) {
+	public BaseError(int errorCode, String errorMessage) {
 		this.errorCode = errorCode;
 		this.errorMessage = errorMessage;
 	}

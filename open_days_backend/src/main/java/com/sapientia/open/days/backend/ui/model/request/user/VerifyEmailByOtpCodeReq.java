@@ -1,17 +1,16 @@
-package com.sapientia.open.days.backend.ui.model.request;
+package com.sapientia.open.days.backend.ui.model.request.user;
 
 @SuppressWarnings("unused")
 public class VerifyEmailByOtpCodeReq {
-	private String email;
-
 	private int otpCode;
-
-	public String getEmail() {
-		return email;
-	}
+	private String email;
 
 	public int getOtpCode() {
 		return otpCode;
+	}
+
+	public String getEmail() {
+		return email;
 	}
 
 	public void setEmail(String email) {
