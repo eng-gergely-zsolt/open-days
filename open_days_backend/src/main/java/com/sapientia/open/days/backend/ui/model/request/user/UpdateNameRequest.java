@@ -1,14 +1,9 @@
 package com.sapientia.open.days.backend.ui.model.request.user;
 
 @SuppressWarnings("unused")
-public class UpdateNameReq {
-	private String publicId;
+public class UpdateNameRequest {
 	private String lastName;
 	private String firstName;
-
-	public String getPublicId() {
-		return publicId;
-	}
 
 	public String getLastName() {
 		return lastName;
@@ -16,10 +11,6 @@ public class UpdateNameReq {
 
 	public String getFirstName() {
 		return firstName;
-	}
-
-	public void setPublicId(String publicId) {
-		this.publicId = publicId;
 	}
 
 	public void setLastName(String lastName) {

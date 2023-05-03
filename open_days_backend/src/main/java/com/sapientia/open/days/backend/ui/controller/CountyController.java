@@ -15,8 +15,8 @@ public class CountyController {
 	@Autowired
 	CountyService countyService;
 
-	@GetMapping(path = "/all-name")
-	public List<String> getAllCountyName() {
+	@GetMapping(path = "/counties")
+	public List<String> getCounties() {
 		return countyService.getAllCountyName();
 	}
 }

@@ -1,6 +1,5 @@
 package com.sapientia.open.days.backend.shared.dto;
 
-import java.io.Serial;
 import java.io.Serializable;
 
 @SuppressWarnings("unused")
@@ -19,9 +18,6 @@ public class UserDTO implements Serializable {
 	private String encryptedPassword;
 	private String emailVerificationToken;
 	private Boolean emailVerificationStatus = false;
-
-	@Serial
-	private static final long serialVersionUID = 6932311355757395934L;
 
 	public long getId() {
 		return id;

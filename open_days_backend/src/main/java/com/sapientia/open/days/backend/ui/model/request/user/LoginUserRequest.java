@@ -1,7 +1,7 @@
 package com.sapientia.open.days.backend.ui.model.request.user;
 
 @SuppressWarnings("unused")
-public class LoginUserReq {
+public class LoginUserRequest {
 
     private String username;
     private String password;

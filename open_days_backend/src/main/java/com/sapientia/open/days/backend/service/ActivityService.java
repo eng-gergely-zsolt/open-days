@@ -1,11 +1,9 @@
 package com.sapientia.open.days.backend.service;
 
-import com.sapientia.open.days.backend.shared.dto.ActivityDto;
+import com.sapientia.open.days.backend.ui.model.Activity;
 
 import java.util.List;
 
 public interface ActivityService {
-	List<ActivityDto> getAllActivity();
-
-	void createActivity(ActivityDto activity);
+	List<Activity> getActivities();
 }

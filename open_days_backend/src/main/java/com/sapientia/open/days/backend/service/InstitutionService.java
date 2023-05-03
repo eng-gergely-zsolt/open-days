@@ -1,9 +1,9 @@
 package com.sapientia.open.days.backend.service;
 
-import com.sapientia.open.days.backend.ui.model.response.InstitutionNameResponse;
+import com.sapientia.open.days.backend.ui.model.Institution;
 
 import java.util.List;
 
 public interface InstitutionService {
-	List<InstitutionNameResponse> getAllInstitutionNameWithCounty();
+	List<Institution> getInstitutions();
 }

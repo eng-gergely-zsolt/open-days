@@ -1,7 +1,6 @@
 package com.sapientia.open.days.backend.io.entity;
 
 import javax.persistence.*;
-import java.io.Serial;
 import java.io.Serializable;
 import java.util.Set;
 
@@ -13,11 +12,11 @@ public class UserEntity implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@Column(length = 100, unique = true, nullable = false)
-	private String email;
-
 	@Column(length = 15, unique = true, nullable = false)
 	private String publicId;
+
+	@Column(length = 100, unique = true, nullable = false)
+	private String email;
 
 	@Column(length = 50, unique = true, nullable = false)
 	private String username;
@@ -37,14 +36,8 @@ public class UserEntity implements Serializable {
 	@Column(nullable = false)
 	private String encryptedPassword;
 
-	@Column
-	private String emailVerificationToken;
-
 	@Column(nullable = false)
 	private Boolean emailVerificationStatus = false;
-
-	@Serial
-	private static final long serialVersionUID = 232383759086741088L;
 
 	// Contains all the events that the user organized.
 	@OneToMany(mappedBy = "organizer")
@@ -61,29 +54,12 @@ public class UserEntity implements Serializable {
 	private InstitutionEntity institution;
 
 	// Contains all the events thad the user enrolled in.
-	@ManyToMany(mappedBy = "users")
-	private Set<EventEntity> userEvents;
+	@ManyToMany(mappedBy = "enrolledUsers")
+	private Set<EventEntity> enrolledEvents;
 
 	// Contains all the events that the user participated in.
 	@ManyToMany(mappedBy = "participatedUsers")
 	private Set<EventEntity> participatedEvents;
-
-	public UserEntity() {
-	}
-
-	public UserEntity(String email, String userName, String firstName, String lastName, String publicId,
-	                  String encryptedPassword, RoleEntity role, InstitutionEntity institution,
-	                  boolean emailVerificationStatus) {
-		this.role = role;
-		this.email = email;
-		this.username = userName;
-		this.publicId = publicId;
-		this.lastName = lastName;
-		this.firstName = firstName;
-		this.institution = institution;
-		this.encryptedPassword = encryptedPassword;
-		this.emailVerificationStatus = emailVerificationStatus;
-	}
 
 	public long getId() {
 		return id;
@@ -121,16 +97,12 @@ public class UserEntity implements Serializable {
 		return imagePath;
 	}
 
-	public String getEncryptedPassword() {
-		return encryptedPassword;
-	}
-
-	public String getEmailVerificationToken() {
-		return emailVerificationToken;
-	}
-
 	public InstitutionEntity getInstitution() {
 		return institution;
+	}
+
+	public String getEncryptedPassword() {
+		return encryptedPassword;
 	}
 
 	public Boolean getEmailVerificationStatus() {
@@ -145,7 +117,7 @@ public class UserEntity implements Serializable {
 		this.email = email;
 	}
 
-	public void setRoles(RoleEntity role) {
+	public void setRole(RoleEntity role) {
 		this.role = role;
 	}
 
@@ -179,10 +151,6 @@ public class UserEntity implements Serializable {
 
 	public void setEncryptedPassword(String encryptedPassword) {
 		this.encryptedPassword = encryptedPassword;
-	}
-
-	public void setEmailVerificationToken(String emailVerificationToken) {
-		this.emailVerificationToken = emailVerificationToken;
 	}
 
 	public void setEmailVerificationStatus(Boolean emailVerificationStatus) {

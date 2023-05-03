@@ -1,7 +1,6 @@
 package com.sapientia.open.days.backend.io.entity;
 
 import javax.persistence.*;
-import java.io.Serial;
 import java.io.Serializable;
 import java.util.Set;
 
@@ -19,16 +18,6 @@ public class AuthorityEntity implements Serializable {
 
 	@ManyToMany(mappedBy = "authorities")
 	private Set<RoleEntity> roles;
-
-	@Serial
-	private static final long serialVersionUID = 7226990133576874679L;
-
-	public AuthorityEntity() {
-	}
-
-	public AuthorityEntity(String name) {
-		this.name = name;
-	}
 
 	public long getId() {
 		return id;

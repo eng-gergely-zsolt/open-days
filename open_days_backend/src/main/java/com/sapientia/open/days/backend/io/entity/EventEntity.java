@@ -21,13 +21,13 @@ public class EventEntity {
 	@Column(nullable = false)
 	private boolean isOnline;
 
-	@Column(nullable = true)
-	private String imageLink;
+	@Column
+	private String imagePath;
 
 	@Column(nullable = false)
 	private String description;
 
-	@Column(nullable = true)
+	@Column
 	private String meetingLink;
 
 	// It's the user that organises/organised the event.
@@ -42,29 +42,15 @@ public class EventEntity {
 
 	// Contains all the users that were enrolled in this event.
 	@ManyToMany(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
-	@JoinTable(name = "users_events", joinColumns = @JoinColumn(name = "event_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
-	private Set<UserEntity> users;
+	@JoinTable(name = "enrolled_users", joinColumns = @JoinColumn(name = "event_id", referencedColumnName = "id"),
+			inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
+	private Set<UserEntity> enrolledUsers;
 
 	// Contains all the users that have participated in this event.
 	@ManyToMany(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
-	@JoinTable(name = "participated_users", joinColumns = @JoinColumn(name = "event_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
+	@JoinTable(name = "participated_users", joinColumns = @JoinColumn(name = "event_id", referencedColumnName = "id"),
+			inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
 	private Set<UserEntity> participatedUsers;
-
-	public EventEntity() {
-	}
-
-	public EventEntity(boolean isOnline, String location, String dateTime, String imageLink, String description,
-	                   String meetingLink, UserEntity organizer, ActivityEntity activity) {
-		this.isOnline = isOnline;
-		this.location = location;
-		this.dateTime = dateTime;
-		this.imageLink = imageLink;
-		this.description = description;
-		this.meetingLink = meetingLink;
-		this.activity = activity;
-		this.organizer = organizer;
-
-	}
 
 	public long getId() {
 		return id;
@@ -82,8 +68,8 @@ public class EventEntity {
 		return isOnline;
 	}
 
-	public String getImageLink() {
-		return imageLink;
+	public String getImagePath() {
+		return imagePath;
 	}
 
 	public String getDescription() {
@@ -102,8 +88,8 @@ public class EventEntity {
 		return activity;
 	}
 
-	public Set<UserEntity> getUsers() {
-		return users;
+	public Set<UserEntity> getEnrolledUsers() {
+		return enrolledUsers;
 	}
 
 	public Set<UserEntity> getParticipatedUsers() {
@@ -126,8 +112,8 @@ public class EventEntity {
 		this.isOnline = isOnline;
 	}
 
-	public void setImageLink(String imageLink) {
-		this.imageLink = imageLink;
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
 	}
 
 	public void setDescription(String description) {
@@ -146,8 +132,8 @@ public class EventEntity {
 		this.activity = activity;
 	}
 
-	public void setUsers(Set<UserEntity> users) {
-		this.users = users;
+	public void setEnrolledUsers(Set<UserEntity> enrolledUsers) {
+		this.enrolledUsers = enrolledUsers;
 	}
 
 	public void setParticipatedUsers(Set<UserEntity> participatedUsers) {

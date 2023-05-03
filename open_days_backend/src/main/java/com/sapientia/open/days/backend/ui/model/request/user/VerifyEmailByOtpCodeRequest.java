@@ -1,7 +1,7 @@
 package com.sapientia.open.days.backend.ui.model.request.user;
 
 @SuppressWarnings("unused")
-public class VerifyEmailByOtpCodeReq {
+public class VerifyEmailByOtpCodeRequest {
 	private int otpCode;
 	private String email;
 

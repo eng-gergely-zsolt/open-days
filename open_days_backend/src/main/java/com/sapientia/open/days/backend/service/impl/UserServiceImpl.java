@@ -1,20 +1,15 @@
 package com.sapientia.open.days.backend.service.impl;
 
 import com.sapientia.open.days.backend.exceptions.BaseException;
-import com.sapientia.open.days.backend.exceptions.GeneralServiceException;
 import com.sapientia.open.days.backend.io.entity.*;
 import com.sapientia.open.days.backend.io.repository.*;
 import com.sapientia.open.days.backend.security.SecurityConstants;
 import com.sapientia.open.days.backend.security.UserPrincipal;
 import com.sapientia.open.days.backend.service.UserService;
 import com.sapientia.open.days.backend.shared.EmailService;
+import com.sapientia.open.days.backend.shared.Roles;
 import com.sapientia.open.days.backend.shared.Utils;
-import com.sapientia.open.days.backend.shared.dto.UserDTO;
-import com.sapientia.open.days.backend.ui.model.request.user.UpdateImagePathReq;
-import com.sapientia.open.days.backend.ui.model.request.user.UpdateInstitutionReq;
-import com.sapientia.open.days.backend.ui.model.request.user.UpdateNameReq;
-import com.sapientia.open.days.backend.ui.model.request.user.VerifyEmailByOtpCodeReq;
-import com.sapientia.open.days.backend.ui.model.request.user.UpdateUsernameReq;
+import com.sapientia.open.days.backend.ui.model.request.user.*;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorCode;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorMessage;
 import com.sapientia.open.days.backend.ui.model.User;
@@ -63,7 +58,7 @@ public class UserServiceImpl implements UserService {
 	BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	@Autowired
-	PasswordResetTokenRepository passwordResetTokenRepository;
+	OrganizerEmailRepository organizerEmailRepository;
 
 	// Get
 	// -----------------------------------------------------------------------------------------------------------------
@@ -73,57 +68,55 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public User getUserByPublicId(String publicId) {
-		SettlementEntity settlement;
-		InstitutionEntity institution;
+		User user = new User();
+		UserEntity userEntity = userRepository.findByPublicId(publicId);
 
-		User result = new User();
-		List<String> userRoles = new ArrayList<>();
-		UserEntity user = userRepository.findByPublicId(publicId);
-
-		if (publicId.length() != 15) {
-			throw new BaseException(ErrorCode.USER_INVALID_PUBLIC_ID.getErrorCode(),
-					ErrorMessage.USER_INVALID_PUBLIC_ID.getErrorMessage());
-		}
-
-		if (user == null) {
+		if (userEntity == null) {
 			throw new BaseException(ErrorCode.USER_NOT_FOUND_WITH_PUBLIC_ID.getErrorCode(),
 					ErrorMessage.USER_NOT_FOUND_WITH_PUBLIC_ID.getErrorMessage());
 		}
 
-		BeanUtils.copyProperties(user, result);
+		BeanUtils.copyProperties(userEntity, user);
 
-		result.setRoleName(user.getRole().getName());
-		result.setInstitutionName(user.getInstitution().getName());
-		result.setCountyName(user.getInstitution().getSettlement().getCounty().getName());
+		user.setRoleName(userEntity.getRole().getName());
+		user.setInstitutionName(userEntity.getInstitution().getName());
+		user.setCountyName(userEntity.getInstitution().getSettlement().getCounty().getName());
 
-		return result;
+		return user;
 	}
 
 	/**
 	 * Returns the list of users paginated.
-	 * @param pageNumber The number of page.
+	 *
+	 * @param pageNumber    The number of page.
 	 * @param recordPerPage The number of returned users on a single page.
 	 */
 	@Override
-	public List<UserDTO> getUsers(int pageNumber, int recordPerPage) {
-
-		List<UserDTO> result = new ArrayList<>();
+	public List<User> getPaginatedUsers(int pageNumber, int recordPerPage) {
+		Pageable pageableRequest;
+		Page<UserEntity> userPage;
+		List<UserEntity> userEntities;
+		List<User> users = new ArrayList<>();
 
 		if (pageNumber < 0) pageNumber = 1;
 		if (pageNumber > 0) pageNumber -= 1;
 
-		Pageable pageableRequest = PageRequest.of(pageNumber, recordPerPage);
+		pageableRequest = PageRequest.of(pageNumber, recordPerPage);
+		userPage = userRepository.findAll(pageableRequest);
+		userEntities = userPage.getContent();
 
-		Page<UserEntity> userPage = userRepository.findAll(pageableRequest);
-		List<UserEntity> users = userPage.getContent();
+		for (UserEntity userEntity : userEntities) {
+			User user = new User();
+			BeanUtils.copyProperties(userEntity, user);
 
-		for (UserEntity user : users) {
-			UserDTO userDTO = new UserDTO();
-			BeanUtils.copyProperties(user, userDTO);
-			result.add(userDTO);
+			user.setRoleName(userEntity.getRole().getName());
+			user.setInstitutionName(userEntity.getInstitution().getName());
+			user.setCountyName(userEntity.getInstitution().getSettlement().getCounty().getName());
+
+			users.add(user);
 		}
 
-		return result;
+		return users;
 	}
 
 	// Post
@@ -133,40 +126,70 @@ public class UserServiceImpl implements UserService {
 	 * Creates a new user at registration.
 	 */
 	@Override
-	public void createUser(UserDTO user) {
-		InstitutionEntity institution = institutionRepository.findByName(user.getInstitution());
+	public void createUser(CreateUserRequest payload) {
+		int otpCode;
+		boolean isPublicIdValid = false;
+		InstitutionEntity institutionEntity;
+		OrganizerEmailEntity organizerEmailEntity;
+		UserEntity newUserEntity = new UserEntity();
+		UserEntity userEntity = userRepository.findByEmail(payload.getEmail());
 
-		if (institution == null) {
-			throw new GeneralServiceException(ErrorCode.INSTITUTION_NOT_EXISTS.getErrorCode(),
-					ErrorMessage.INSTITUTION_NOT_EXISTS.getErrorMessage());
+		if (userEntity != null) {
+			throw new BaseException(ErrorCode.USER_EMAIL_ALREADY_TAKEN.getErrorCode(),
+					ErrorMessage.USER_EMAIL_ALREADY_TAKEN.getErrorMessage());
 		}
 
-		if (userRepository.findByEmail(user.getEmail()) != null) {
-			throw new GeneralServiceException(ErrorCode.EMAIL_ALREADY_REGISTERED.getErrorCode(),
-					ErrorMessage.EMAIL_ALREADY_REGISTERED.getErrorMessage());
+		userEntity = userRepository.findByUsername(payload.getUsername());
+
+		if (userEntity != null) {
+			throw new BaseException(ErrorCode.USER_USERNAME_ALREADY_TAKEN.getErrorCode(),
+					ErrorMessage.USER_USERNAME_ALREADY_TAKEN.getErrorMessage());
 		}
 
-		UserEntity userEntity = new UserEntity();
-		BeanUtils.copyProperties(user, userEntity);
+		institutionEntity = institutionRepository.findByName(payload.getInstitutionName());
 
-		String publicId = utils.generatePublicId(15);
-		RoleEntity role = roleRepository.findByName(user.getRole());
+		if (institutionEntity == null) {
+			throw new BaseException(ErrorCode.INSTITUTION_NOT_FOUND_WITH_NAME.getErrorCode(),
+					ErrorMessage.INSTITUTION_NOT_FOUND_WITH_NAME.getErrorMessage());
+		}
 
-		userEntity.setRoles(role);
-		userEntity.setPublicId(publicId);
-		userEntity.setInstitution(institution);
-		userEntity.setEmailVerificationStatus(false);
-		userEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+		otpCode = Utils.generateSixDigitNumber();
+		organizerEmailEntity = organizerEmailRepository.findByEmail(payload.getEmail());
 
-		int otpCode = Utils.generateSixDigitNumber();
-		userEntity.setOtpCode(otpCode);
+		BeanUtils.copyProperties(payload, newUserEntity);
+
+		newUserEntity.setOtpCode(otpCode);
+		newUserEntity.setInstitution(institutionEntity);
+		newUserEntity.setEmailVerificationStatus(false);
+		newUserEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(payload.getPassword()));
+
+		while (!isPublicIdValid) {
+			String publicId = utils.generatePublicId(15);
+			userEntity = userRepository.findByPublicId(publicId);
+			if (userEntity == null) {
+				isPublicIdValid = true;
+				newUserEntity.setPublicId(publicId);
+			}
+		}
+
+		if (organizerEmailEntity == null) {
+			newUserEntity.setRole(roleRepository.findByName(Roles.ROLE_USER.name()));
+		} else {
+			newUserEntity.setRole(roleRepository.findByName(Roles.ROLE_ORGANIZER.name()));
+		}
 
 		try {
-			new EmailService().sendOtpCodeViaEmail(user.getEmail(), otpCode);
-			UserEntity storedUserDetails = userRepository.save(userEntity);
-		} catch (Exception e) {
+			new EmailService().sendOtpCodeViaEmail(payload.getEmail(), otpCode);
+		} catch (Exception error) {
 			throw new BaseException(ErrorCode.REGISTRATION_EMAIL_NOT_SENT.getErrorCode(),
 					ErrorMessage.REGISTRATION_EMAIL_NOT_SENT.getErrorMessage());
+		}
+
+		try {
+			userRepository.save(newUserEntity);
+		} catch (Exception error) {
+			throw new BaseException(ErrorCode.USER_NOT_SAVED.getErrorCode(),
+					ErrorMessage.USER_NOT_SAVED.getErrorMessage());
 		}
 	}
 
@@ -177,68 +200,22 @@ public class UserServiceImpl implements UserService {
 	 * Updates the first and last name of the user identified by the given public id.
 	 */
 	@Override
-	public void updateName(UpdateNameReq payload) {
-		UserEntity user;
+	public void updateName(String publicId, UpdateNameRequest payload) {
+		UserEntity userEntity = userRepository.findByPublicId(publicId);
 
-		if (payload.getPublicId() == null || payload.getPublicId().length() != 15) {
-			throw new BaseException(ErrorCode.USER_INVALID_PUBLIC_ID.getErrorCode(),
-					ErrorMessage.USER_INVALID_PUBLIC_ID.getErrorMessage());
-		}
-
-		if (payload.getLastName() == null || payload.getLastName().length() < 3 || payload.getLastName().length() > 50) {
-			throw new BaseException(ErrorCode.USER_INVALID_LAST_NAME.getErrorCode(),
-					ErrorMessage.USER_INVALID_LAST_NAME.getErrorMessage());
-		}
-
-		if (payload.getFirstName() == null || payload.getFirstName().length() < 3 || payload.getFirstName().length() > 50) {
-			throw new BaseException(ErrorCode.USER_INVALID_FIRST_NAME.getErrorCode(),
-					ErrorMessage.USER_INVALID_FIRST_NAME.getErrorMessage());
-		}
-
-		user = userRepository.findByPublicId(payload.getPublicId());
-
-		if (user == null) {
+		if (userEntity == null) {
 			throw new BaseException(ErrorCode.USER_NOT_FOUND_WITH_PUBLIC_ID.getErrorCode(),
 					ErrorMessage.USER_NOT_FOUND_WITH_PUBLIC_ID.getErrorMessage());
 		}
 
-		user.setLastName(payload.getLastName());
-		user.setFirstName(payload.getFirstName());
+		userEntity.setLastName(payload.getLastName());
+		userEntity.setFirstName(payload.getFirstName());
 
 		try {
-			userRepository.save(user);
+			userRepository.save(userEntity);
 		} catch (Exception error) {
-			throw new BaseException(ErrorCode.DB_USER_NOT_SAVED.getErrorCode(),
-					ErrorMessage.DB_USER_NOT_SAVED.getErrorMessage());
-		}
-	}
-
-	/**
-	 * Updates the image path of the user identified by the given public id.
-	 */
-	@Override
-	public void updateImagePath(UpdateImagePathReq payload) {
-		UserEntity user;
-
-		if (payload.getPublicId() == null || payload.getPublicId().length() != 15) {
-			throw new BaseException(ErrorCode.USER_INVALID_PUBLIC_ID.getErrorCode(),
-					ErrorMessage.USER_INVALID_PUBLIC_ID.getErrorMessage());
-		}
-
-		user = userRepository.findByPublicId(payload.getPublicId());
-
-		if (user == null) {
-			throw new BaseException(ErrorCode.USER_NOT_FOUND_WITH_PUBLIC_ID.getErrorCode(),
-					ErrorMessage.USER_NOT_FOUND_WITH_PUBLIC_ID.getErrorMessage());
-		}
-
-		user.setImagePath(payload.getImagePath());
-
-		try {
-			userRepository.save(user);
-		} catch (Exception error) {
-			throw new BaseException(ErrorCode.DB_USER_NOT_SAVED.getErrorCode(),
-					ErrorMessage.DB_USER_NOT_SAVED.getErrorMessage());
+			throw new BaseException(ErrorCode.USER_NOT_SAVED.getErrorCode(),
+					ErrorMessage.USER_NOT_SAVED.getErrorMessage());
 		}
 	}
 
@@ -246,38 +223,26 @@ public class UserServiceImpl implements UserService {
 	 * Updates the username of the user identified by the given public id.
 	 */
 	@Override
-	public String updateUsername(UpdateUsernameReq payload) {
-		UserEntity user;
+	public String updateUsername(String publicId, UpdateUsernameRequest payload) {
 		String authorizationToken;
+		UserEntity userEntity = userRepository.findByUsername(payload.getUsername());
 
-		if (payload.getPublicId() == null || payload.getPublicId().length() != 15) {
-			throw new BaseException(ErrorCode.USER_INVALID_PUBLIC_ID.getErrorCode(),
-					ErrorMessage.USER_INVALID_PUBLIC_ID.getErrorMessage());
-		}
-
-		if (payload.getUsername() == null || payload.getUsername().length() < 3 || payload.getUsername().length() > 50) {
-			throw new BaseException(ErrorCode.USER_INVALID_USERNAME.getErrorCode(),
-					ErrorMessage.USER_INVALID_USERNAME.getErrorMessage());
-		}
-
-		user = userRepository.findByUsername(payload.getUsername());
-
-		if (user != null) {
+		if (userEntity != null) {
 			throw new BaseException(ErrorCode.USER_USERNAME_ALREADY_TAKEN.getErrorCode(),
 					ErrorMessage.USER_USERNAME_ALREADY_TAKEN.getErrorMessage());
 		}
 
-		user = userRepository.findByPublicId(payload.getPublicId());
+		userEntity = userRepository.findByPublicId(publicId);
 
-		if (user == null) {
+		if (userEntity == null) {
 			throw new BaseException(ErrorCode.USER_NOT_FOUND_WITH_PUBLIC_ID.getErrorCode(),
 					ErrorMessage.USER_NOT_FOUND_WITH_PUBLIC_ID.getErrorMessage());
 		}
 
-		user.setUsername(payload.getUsername());
+		userEntity.setUsername(payload.getUsername());
 
 		try {
-			userRepository.save(user);
+			userRepository.save(userEntity);
 
 			authorizationToken = TOKEN_PREFIX + Jwts.builder()
 					.setSubject(payload.getUsername())
@@ -285,82 +250,69 @@ public class UserServiceImpl implements UserService {
 					.signWith(SignatureAlgorithm.HS512, SecurityConstants.getJwtSecretKey())
 					.compact();
 		} catch (Exception error) {
-			throw new BaseException(ErrorCode.DB_USER_NOT_SAVED.getErrorCode(),
-					ErrorMessage.DB_USER_NOT_SAVED.getErrorMessage());
+			throw new BaseException(ErrorCode.USER_NOT_SAVED.getErrorCode(),
+					ErrorMessage.USER_NOT_SAVED.getErrorMessage());
 		}
 
 		return authorizationToken;
 	}
 
 	/**
-	 * Updates the data of a user identified by the public id.
+	 * Updates the image path of the user identified by the given public id.
 	 */
 	@Override
-	public UserDTO updateUser(UserDTO user, String publicId) {
+	public void updateImagePath(String publicId, UpdateImagePathRequest payload) {
 		UserEntity userEntity = userRepository.findByPublicId(publicId);
 
 		if (userEntity == null) {
-			throw new GeneralServiceException(ErrorCode.USER_NOT_FOUND_WITH_PUBLIC_ID.getErrorCode(),
+			throw new BaseException(ErrorCode.USER_NOT_FOUND_WITH_PUBLIC_ID.getErrorCode(),
 					ErrorMessage.USER_NOT_FOUND_WITH_PUBLIC_ID.getErrorMessage());
 		}
 
-		if (user.getLastName().length() >= 3 && user.getLastName().length() <= 50) {
-			userEntity.setLastName(user.getLastName());
+		userEntity.setImagePath(payload.getImagePath());
+
+		try {
+			userRepository.save(userEntity);
+		} catch (Exception error) {
+			throw new BaseException(ErrorCode.USER_NOT_SAVED.getErrorCode(),
+					ErrorMessage.USER_NOT_SAVED.getErrorMessage());
 		}
-
-		if (user.getFirstName().length() >= 3 && user.getFirstName().length() <= 50) {
-			userEntity.setFirstName(user.getFirstName());
-		}
-
-		UserEntity updatedUserDetails = userRepository.save(userEntity);
-
-		UserDTO result = new UserDTO();
-		BeanUtils.copyProperties(updatedUserDetails, result);
-
-		return result;
 	}
 
 	/**
 	 * Updates the institution of the user identified by the given public id.
 	 */
 	@Override
-	public void updateInstitution(UpdateInstitutionReq payload) {
-		UserEntity user;
-		InstitutionEntity institution = null;
-		List<InstitutionEntity> institutions;
-
-		if (payload.getPublicId() == null || payload.getPublicId().length() != 15) {
-			throw new BaseException(ErrorCode.USER_INVALID_PUBLIC_ID.getErrorCode(),
-					ErrorMessage.USER_INVALID_PUBLIC_ID.getErrorMessage());
-		}
-
-		user = userRepository.findByPublicId(payload.getPublicId());
+	public void updateInstitution(String publicId, UpdateInstitutionRequest payload) {
+		InstitutionEntity institutionEntity = null;
+		List<InstitutionEntity> institutionEntities;
+		UserEntity user = userRepository.findByPublicId(publicId);
 
 		if (user == null) {
 			throw new BaseException(ErrorCode.USER_NOT_FOUND_WITH_PUBLIC_ID.getErrorCode(),
 					ErrorMessage.USER_NOT_FOUND_WITH_PUBLIC_ID.getErrorMessage());
 		}
 
-		institutions = institutionRepository.findAllByName(payload.getInstitutionName());
+		institutionEntities = institutionRepository.findAllByName(payload.getInstitutionName());
 
-		for (InstitutionEntity institutionTemp : institutions) {
-			if (Objects.equals(institutionTemp.getSettlement().getCounty().getName(), payload.getCountyName())) {
-				institution = institutionTemp;
+		for (InstitutionEntity institutionEntityTemp : institutionEntities) {
+			if (Objects.equals(institutionEntityTemp.getSettlement().getCounty().getName(), payload.getCountyName())) {
+				institutionEntity = institutionEntityTemp;
 			}
 		}
 
-		if (institution == null) {
-			throw new BaseException(ErrorCode.USER_INSTITUTION_NOT_FOUND.getErrorCode(),
-					ErrorMessage.USER_INSTITUTION_NOT_FOUND.getErrorMessage());
+		if (institutionEntity == null) {
+			throw new BaseException(ErrorCode.INSTITUTION_NOT_FOUND_WITH_NAME.getErrorCode(),
+					ErrorMessage.INSTITUTION_NOT_FOUND_WITH_NAME.getErrorMessage());
 		}
 
-		user.setInstitution(institution);
+		user.setInstitution(institutionEntity);
 
 		try {
 			userRepository.save(user);
 		} catch (Exception error) {
-			throw new BaseException(ErrorCode.DB_USER_NOT_SAVED.getErrorCode(),
-					ErrorMessage.DB_USER_NOT_SAVED.getErrorMessage());
+			throw new BaseException(ErrorCode.USER_NOT_SAVED.getErrorCode(),
+					ErrorMessage.USER_NOT_SAVED.getErrorMessage());
 		}
 	}
 
@@ -368,51 +320,33 @@ public class UserServiceImpl implements UserService {
 	 * Authenticates the email by the code that was sent to the user via email.
 	 */
 	@Override
-	public void verifyEmailByOtpCode(VerifyEmailByOtpCodeReq payload) {
-		UserEntity user = userRepository.findByEmail(payload.getEmail());
+	public void verifyEmailByOtpCode(VerifyEmailByOtpCodeRequest payload) {
+		UserEntity userEntity = userRepository.findByEmail(payload.getEmail());
 
-		if (user == null) {
-			throw new BaseException(ErrorCode.EMAIL_VERIFICATION_INVALID_EMAIL.getErrorCode(),
-					ErrorMessage.EMAIL_VERIFICATION_INVALID_EMAIL.getErrorMessage());
+		if (userEntity == null) {
+			throw new BaseException(ErrorCode.USER_NOT_FOUND_WITH_PUBLIC_ID.getErrorCode(),
+					ErrorMessage.USER_NOT_FOUND_WITH_PUBLIC_ID.getErrorMessage());
 		}
 
-		if (user.getEmailVerificationStatus()) {
+		if (userEntity.getOtpCode() != payload.getOtpCode()) {
+			throw new BaseException(ErrorCode.USER_INVALID_OTP_CODE.getErrorCode(),
+					ErrorMessage.USER_INVALID_OTP_CODE.getErrorMessage());
+		}
+
+		if (userEntity.getEmailVerificationStatus()) {
 			throw new BaseException(ErrorCode.EMAIL_VERIFICATION_EMAIL_ALREADY_VERIFIED.getErrorCode(),
 					ErrorMessage.EMAIL_VERIFICATION_EMAIL_ALREADY_VERIFIED.getErrorMessage());
 		}
 
-		if (user.getOtpCode() != payload.getOtpCode()) {
-			throw new BaseException(ErrorCode.EMAIL_VERIFICATION_INVALID_OTP_CODE.getErrorCode(),
-					ErrorMessage.EMAIL_VERIFICATION_INVALID_OTP_CODE.getErrorMessage());
-		}
-
-		user.setOtpCode(null);
-		user.setEmailVerificationStatus(true);
+		userEntity.setOtpCode(null);
+		userEntity.setEmailVerificationStatus(true);
 
 		try {
-			userRepository.save(user);
+			userRepository.save(userEntity);
 		} catch (Exception error) {
-			throw new BaseException(ErrorCode.UNSPECIFIED_ERROR.getErrorCode(), error.getMessage());
+			throw new BaseException(ErrorCode.USER_NOT_SAVED.getErrorCode(),
+					ErrorMessage.USER_NOT_SAVED.getErrorMessage());
 		}
-	}
-
-	// Delete
-	// -----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Deletes a user identified by the public id.
-	 */
-	@Override
-	public void deleteUser(String publicId) {
-
-		UserEntity userEntity = userRepository.findByPublicId(publicId);
-
-		if (userEntity == null) {
-			throw new GeneralServiceException(ErrorCode.USER_NOT_FOUND_WITH_PUBLIC_ID.getErrorCode(),
-					ErrorMessage.USER_NOT_FOUND_WITH_PUBLIC_ID.getErrorMessage());
-		}
-
-		userRepository.delete(userEntity);
 	}
 
 	// Other
@@ -428,17 +362,14 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserDTO getUserByUsername(String username) {
+	public String getUserByUsername(String username) {
 		UserEntity userEntity = userRepository.findByUsername(username);
 
 		if (userEntity == null) {
-			throw new GeneralServiceException(ErrorCode.USER_NOT_FOUND_WITH_USERNAME.getErrorCode(),
+			throw new BaseException(ErrorCode.USER_NOT_FOUND_WITH_USERNAME.getErrorCode(),
 					ErrorMessage.USER_NOT_FOUND_WITH_USERNAME.getErrorMessage());
 		}
 
-		UserDTO result = new UserDTO();
-		BeanUtils.copyProperties(userEntity, result);
-
-		return result;
+		return  userEntity.getPublicId();
 	}
 }

@@ -1,7 +1,6 @@
 package com.sapientia.open.days.backend.exceptions;
 
 import com.sapientia.open.days.backend.ui.model.resource.ErrorCode;
-import com.sapientia.open.days.backend.ui.model.resource.OperationStatus;
 import com.sapientia.open.days.backend.ui.model.BaseError;
 import com.sapientia.open.days.backend.ui.model.ErrorMessage;
 import org.springframework.http.HttpHeaders;
@@ -31,8 +30,7 @@ public class ApplicationExceptionHandler {
 	@ExceptionHandler(value = {GeneralServiceException.class})
 	public ResponseEntity<Object> handleUserServiceException(GeneralServiceException exception, WebRequest request) {
 
-		ErrorMessage errorMessages = new ErrorMessage(exception.getCode(), exception.getMessage(),
-				exception.getOperationResult());
+		ErrorMessage errorMessages = new ErrorMessage(exception.getErrorCode(), exception.getMessage());
 
 		return new ResponseEntity<>(errorMessages, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
@@ -42,7 +40,7 @@ public class ApplicationExceptionHandler {
 	public ResponseEntity<Object> handleOtherException(Exception exception, WebRequest request) {
 
 		ErrorMessage errorMessages = new ErrorMessage(ErrorCode.UNSPECIFIED_ERROR.getErrorCode(),
-				exception.getMessage(), OperationStatus.ERROR.name());
+				exception.getMessage());
 
 		return new ResponseEntity<>(errorMessages, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 	}

@@ -2,40 +2,30 @@ package com.sapientia.open.days.backend.ui.model;
 
 @SuppressWarnings("unused")
 public class ErrorMessage {
-	private int code;
-	private String message;
-	private String operationResult;
+	private int errorCode;
+	private String errorMessage;
 
 	public ErrorMessage() {
 	}
 
-	public ErrorMessage(int code, String message, String operationResult) {
-		this.code = code;
-		this.message = message;
-		this.operationResult = operationResult;
+	public ErrorMessage(int errorCode, String errorMessage) {
+		this.errorCode = errorCode;
+		this.errorMessage = errorMessage;
 	}
 
-	public int getCode() {
-		return code;
+	public int getErrorCode() {
+		return errorCode;
 	}
 
-	public String getMessage() {
-		return message;
+	public String getErrorMessage() {
+		return errorMessage;
 	}
 
-	public String getOperationResult() {
-		return operationResult;
+	public void setErrorCode(int errorCode) {
+		this.errorCode = errorCode;
 	}
 
-	public void setCode(int code) {
-		this.code = code;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
-	}
-
-	public void setOperationResult(String operationResult) {
-		this.operationResult = operationResult;
+	public void setErrorMessage(String errorMessage) {
+		this.errorMessage = errorMessage;
 	}
 }

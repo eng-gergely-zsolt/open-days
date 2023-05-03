@@ -1,7 +1,6 @@
 package com.sapientia.open.days.backend.io.entity;
 
 import javax.persistence.*;
-import java.io.Serial;
 import java.util.Set;
 
 @Entity
@@ -18,15 +17,6 @@ public class ActivityEntity {
 
 	@OneToMany(mappedBy = "activity")
 	private Set<EventEntity> events;
-
-	public ActivityEntity() {}
-
-	public ActivityEntity(String name) {
-		this.name = name;
-	}
-
-	@Serial
-	private static final long serialVersionUID = 6204558143681775472L;
 
 	public long getId() {
 		return id;

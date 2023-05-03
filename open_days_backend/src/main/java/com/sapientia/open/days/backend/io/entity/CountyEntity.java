@@ -1,7 +1,6 @@
 package com.sapientia.open.days.backend.io.entity;
 
 import javax.persistence.*;
-import java.io.Serial;
 import java.io.Serializable;
 import java.util.Set;
 
@@ -19,16 +18,6 @@ public class CountyEntity implements Serializable {
 
 	@OneToMany(mappedBy = "county")
 	private Set<SettlementEntity> settlements;
-
-	@Serial
-	private static final long serialVersionUID = 8633409196848736088L;
-
-	public CountyEntity() {
-	}
-
-	public CountyEntity(String name) {
-		this.name = name;
-	}
 
 	public long getId() {
 		return id;

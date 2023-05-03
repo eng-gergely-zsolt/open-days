@@ -1,14 +1,9 @@
-package com.sapientia.open.days.backend.ui.model.request.user;
+package com.sapientia.open.days.backend.ui.model;
 
 @SuppressWarnings("unused")
-public class UpdateInstitutionReq {
-	private String publicId;
+public class Institution {
 	private String countyName;
 	private String institutionName;
-
-	public String getPublicId() {
-		return publicId;
-	}
 
 	public String getCountyName() {
 		return countyName;
@@ -16,10 +11,6 @@ public class UpdateInstitutionReq {
 
 	public String getInstitutionName() {
 		return institutionName;
-	}
-
-	public void setPublicId(String publicId) {
-		this.publicId = publicId;
 	}
 
 	public void setCountyName(String countyName) {

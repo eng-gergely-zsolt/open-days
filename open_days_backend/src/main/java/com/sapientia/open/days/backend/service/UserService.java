@@ -1,11 +1,6 @@
 package com.sapientia.open.days.backend.service;
 
-import com.sapientia.open.days.backend.shared.dto.UserDTO;
-import com.sapientia.open.days.backend.ui.model.request.user.UpdateImagePathReq;
-import com.sapientia.open.days.backend.ui.model.request.user.UpdateInstitutionReq;
-import com.sapientia.open.days.backend.ui.model.request.user.UpdateNameReq;
-import com.sapientia.open.days.backend.ui.model.request.user.VerifyEmailByOtpCodeReq;
-import com.sapientia.open.days.backend.ui.model.request.user.UpdateUsernameReq;
+import com.sapientia.open.days.backend.ui.model.request.user.*;
 import com.sapientia.open.days.backend.ui.model.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -16,27 +11,23 @@ public interface UserService extends UserDetailsService {
 	// Get
 	User getUserByPublicId(String publicId);
 
-	List<UserDTO> getUsers(int pageNumber, int recordPerPage);
+	List<User> getPaginatedUsers(int pageNumber, int recordPerPage);
 
 	//	Post
-	void createUser(UserDTO user);
+	void createUser(CreateUserRequest user);
 
 	// Put
-	void updateName(UpdateNameReq payload);
 
-	void updateImagePath(UpdateImagePathReq payload);
+	void updateName(String publicId, UpdateNameRequest payload);
 
-	String updateUsername(UpdateUsernameReq payload);
+	String updateUsername(String publicId, UpdateUsernameRequest payload);
 
-	UserDTO updateUser(UserDTO user, String publicId);
+	void updateImagePath(String publicId, UpdateImagePathRequest payload);
 
-	void updateInstitution(UpdateInstitutionReq payload);
+	void updateInstitution(String publicId, UpdateInstitutionRequest payload);
 
-	void verifyEmailByOtpCode(VerifyEmailByOtpCodeReq payload);
-
-	// Delete
-	void deleteUser(String publicId);
+	void verifyEmailByOtpCode(VerifyEmailByOtpCodeRequest payload);
 
 	// Other
-	UserDTO getUserByUsername(String email);
+	String getUserByUsername(String email);
 }

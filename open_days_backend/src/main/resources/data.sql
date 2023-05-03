@@ -1,18 +1,17 @@
-DELETE FROM users_events
+DELETE FROM enrolled_users
 DELETE FROM roles_authorities
 DELETE FROM participated_users
-DELETE FROM password_reset_tokens
 
 DELETE FROM events
 DELETE FROM users
 DELETE FROM roles
 DELETE FROM activities
 DELETE FROM authorities
+DELETE FROM organizer_emails
 
 DELETE FROM institutions
 DELETE FROM settlements
 DELETE FROM counties
-DELETE FROM organizer_emails
 
 --Organizer emails
 INSERT INTO organizer_emails (id, email) VALUES (1, 'anomakyr@gmail.com')
@@ -95,14 +94,14 @@ INSERT INTO authorities (id, name) VALUES (3, 'DELETE_AUTHORITY')
 
 --Users
 --Admin
-INSERT INTO users (id, email, email_verification_status, email_verification_token, encrypted_password, first_name, last_name, otp_code, public_id, username, institution_id, image_path, role_id) VALUES (1, 'admin@mailinator.com', true, NULL, '$2a$10$z9BeqAxh0nY.kdpuvDi.xuP0mwIPgqK2WPtkTghwX3iAJJoHQ0MMm', 'John', 'Doe', NULL, 'qwertyuiopasdf1', 'admin', 37, NULL, 3)
+INSERT INTO users (id, email, email_verification_status, encrypted_password, first_name, last_name, otp_code, public_id, username, institution_id, image_path, role_id) VALUES (1, 'admin@mailinator.com', true, '$2a$10$z9BeqAxh0nY.kdpuvDi.xuP0mwIPgqK2WPtkTghwX3iAJJoHQ0MMm', 'John', 'Doe', NULL, 'qwertyuiopasdf1', 'admin', 37, NULL, 3)
 
 --Organizers
-INSERT INTO users (id, email, email_verification_status, email_verification_token, encrypted_password, first_name, last_name, otp_code, public_id, username, institution_id, image_path, role_id) VALUES (2, 'geergely.zsolt@gmail.com', true, NULL, '$2a$10$z9BeqAxh0nY.kdpuvDi.xuP0mwIPgqK2WPtkTghwX3iAJJoHQ0MMm', 'Zsolt', 'Gergely', NULL, 'qwertyuiopasdf2', 'organizer', 37, 'user/placeholder.jpg', 2)
-INSERT INTO users (id, email, email_verification_status, email_verification_token, encrypted_password, first_name, last_name, otp_code, public_id, username, institution_id, image_path, role_id) VALUES (3, 'csenge.albert.toth@mailinator.com', true, NULL, '$2a$10$z9BeqAxh0nY.kdpuvDi.xuP0mwIPgqK2WPtkTghwX3iAJJoHQ0MMm', 'Csenge', 'Albert-Tóth', NULL, 'qwertyuiopasdf3', 'csenge', 37, NULL, 2)
+INSERT INTO users (id, email, email_verification_status, encrypted_password, first_name, last_name, otp_code, public_id, username, institution_id, image_path, role_id) VALUES (2, 'geergely.zsolt@gmail.com', true, '$2a$10$z9BeqAxh0nY.kdpuvDi.xuP0mwIPgqK2WPtkTghwX3iAJJoHQ0MMm', 'Zsolt', 'Gergely', NULL, 'qwertyuiopasdf2', 'organizer', 37, 'user/placeholder.jpg', 2)
+INSERT INTO users (id, email, email_verification_status, encrypted_password, first_name, last_name, otp_code, public_id, username, institution_id, image_path, role_id) VALUES (3, 'csenge.albert.toth@mailinator.com', true, '$2a$10$z9BeqAxh0nY.kdpuvDi.xuP0mwIPgqK2WPtkTghwX3iAJJoHQ0MMm', 'Csenge', 'Albert-Tóth', NULL, 'qwertyuiopasdf3', 'csenge', 37, NULL, 2)
 
 --Users
-INSERT INTO users (id, email, email_verification_status, email_verification_token, encrypted_password, first_name, last_name, otp_code, public_id, username, institution_id, image_path, role_id) VALUES (4, 'user@mailinator.com', true, NULL, '$2a$10$z9BeqAxh0nY.kdpuvDi.xuP0mwIPgqK2WPtkTghwX3iAJJoHQ0MMm', 'Marci', 'Puck', NULL, 'qwertyuiopasdf4', 'user', 4, NULL, 1)
+INSERT INTO users (id, email, email_verification_status, encrypted_password, first_name, last_name, otp_code, public_id, username, institution_id, image_path, role_id) VALUES (4, 'user@mailinator.com', true, '$2a$10$z9BeqAxh0nY.kdpuvDi.xuP0mwIPgqK2WPtkTghwX3iAJJoHQ0MMm', 'Marci', 'Puck', NULL, 'qwertyuiopasdf4', 'user', 4, NULL, 1)
 
 
 --Activities
@@ -115,16 +114,16 @@ INSERT INTO activities (id, name) VALUES (6, 'Alkalmazott Nyelvészeti tanszékb
 INSERT INTO activities (id, name) VALUES (7, 'Alkalmazott Társadalomtudomanyok tanszékbemutató')
 
 --Events
-INSERT INTO events (id, date_time, image_link, is_online, location, meeting_link, activity_id, organizer_id, description) VALUES (1, '2024-03-01 10:15', 'event/placeholder.jpg', false, 'Sapientia', NULL, 1, 2, 'A kampusztúrán bemutatjuk az érdeklődőknek az egyetem épületét. Érintve akönyvtárat, a Hallgató Önkormányzatot (HÖK), a sportpályát, a bentlakás épületét és a közösségi terünket,a placcot.')
-INSERT INTO events (id, date_time, image_link, is_online, location, meeting_link, activity_id, organizer_id, description) VALUES (2, '2024-03-01 11:20', 'event/placeholder.jpg', false, '312-es terem', NULL, 2, 2, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. LoremIpsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took agalley of type and scrambled it to make a type specimen book.')
-INSERT INTO events (id, date_time, image_link, is_online, location, meeting_link, activity_id, organizer_id, description) VALUES (3, '2024-03-10 15:30', 'event/placeholder.jpg', false, 'Sportpálya', NULL, 3, 2, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. LoremIpsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took agalley of type and scrambled it to make a type specimen book.')
-INSERT INTO events (id, date_time, image_link, is_online, location, meeting_link, activity_id, organizer_id, description) VALUES (4, '2024-03-15 09:30', 'event/placeholder.jpg', false, '114-es terem', NULL, 4, 2, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. LoremIpsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took agalley of type and scrambled it to make a type specimen book.')
-INSERT INTO events (id, date_time, image_link, is_online, location, meeting_link, activity_id, organizer_id, description) VALUES (5, '2024-04-02 22:30', 'event/placeholder.jpg', false, '114-es tanterem', NULL, 5, 2, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. LoremIpsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took agalley of type and scrambled it to make a type specimen book.')
-INSERT INTO events (id, date_time, image_link, is_online, location, meeting_link, activity_id, organizer_id, description) VALUES (6, '2024-04-22 19:45', 'event/placeholder.jpg', false, 'Aula', NULL, 6, 2, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. LoremIpsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took agalley of type and scrambled it to make a type specimen book.')
-INSERT INTO events (id, date_time, image_link, is_online, location, meeting_link, activity_id, organizer_id, description) VALUES (7, '2024-05-26 07:12', 'event/placeholder.jpg', false, '1. emelet', NULL, 7, 2, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. LoremIpsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took agalley of type and scrambled it to make a type specimen book.')
-INSERT INTO events (id, date_time, image_link, is_online, location, meeting_link, activity_id, organizer_id, description) VALUES (8, '2024-05-08 09:10', 'event/placeholder.jpg', true, '2. emelet', 'https://meeting.com', 1, 2, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. LoremIpsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took agalley of type and scrambled it to make a type specimen book.')
-INSERT INTO events (id, date_time, image_link, is_online, location, meeting_link, activity_id, organizer_id, description) VALUES (9, '2022-05-08 09:10', 'event/placeholder.jpg', true, '2. emelet', 'https://meeting.com', 1, 3, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. LoremIpsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took agalley of type and scrambled it to make a type specimen book.')
-INSERT INTO events (id, date_time, image_link, is_online, location, meeting_link, activity_id, organizer_id, description) VALUES (10, '2024-08-08 09:10', 'event/placeholder.jpg', true, '2. emelet', 'https://meeting.com', 1, 3, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. LoremIpsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took agalley of type and scrambled it to make a type specimen book.')
+INSERT INTO events (id, date_time, image_path, is_online, location, meeting_link, activity_id, organizer_id, description) VALUES (1, '2024-03-01 10:15', 'event/placeholder.jpg', false, 'Sapientia', NULL, 1, 2, 'A kampusztúrán bemutatjuk az érdeklődőknek az egyetem épületét. Érintve akönyvtárat, a Hallgató Önkormányzatot (HÖK), a sportpályát, a bentlakás épületét és a közösségi terünket,a placcot.')
+INSERT INTO events (id, date_time, image_path, is_online, location, meeting_link, activity_id, organizer_id, description) VALUES (2, '2024-03-01 11:20', 'event/placeholder.jpg', false, '312-es terem', NULL, 2, 2, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. LoremIpsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took agalley of type and scrambled it to make a type specimen book.')
+INSERT INTO events (id, date_time, image_path, is_online, location, meeting_link, activity_id, organizer_id, description) VALUES (3, '2024-03-10 15:30', 'event/placeholder.jpg', false, 'Sportpálya', NULL, 3, 2, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. LoremIpsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took agalley of type and scrambled it to make a type specimen book.')
+INSERT INTO events (id, date_time, image_path, is_online, location, meeting_link, activity_id, organizer_id, description) VALUES (4, '2024-03-15 09:30', 'event/placeholder.jpg', false, '114-es terem', NULL, 4, 2, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. LoremIpsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took agalley of type and scrambled it to make a type specimen book.')
+INSERT INTO events (id, date_time, image_path, is_online, location, meeting_link, activity_id, organizer_id, description) VALUES (5, '2024-04-02 22:30', 'event/placeholder.jpg', false, '114-es tanterem', NULL, 5, 2, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. LoremIpsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took agalley of type and scrambled it to make a type specimen book.')
+INSERT INTO events (id, date_time, image_path, is_online, location, meeting_link, activity_id, organizer_id, description) VALUES (6, '2024-04-22 19:45', 'event/placeholder.jpg', false, 'Aula', NULL, 6, 2, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. LoremIpsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took agalley of type and scrambled it to make a type specimen book.')
+INSERT INTO events (id, date_time, image_path, is_online, location, meeting_link, activity_id, organizer_id, description) VALUES (7, '2024-05-26 07:12', 'event/placeholder.jpg', false, '1. emelet', NULL, 7, 2, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. LoremIpsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took agalley of type and scrambled it to make a type specimen book.')
+INSERT INTO events (id, date_time, image_path, is_online, location, meeting_link, activity_id, organizer_id, description) VALUES (8, '2024-05-08 09:10', 'event/placeholder.jpg', true, '2. emelet', 'https://meeting.com', 1, 2, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. LoremIpsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took agalley of type and scrambled it to make a type specimen book.')
+INSERT INTO events (id, date_time, image_path, is_online, location, meeting_link, activity_id, organizer_id, description) VALUES (9, '2022-05-08 09:10', 'event/placeholder.jpg', true, '2. emelet', 'https://meeting.com', 1, 3, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. LoremIpsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took agalley of type and scrambled it to make a type specimen book.')
+INSERT INTO events (id, date_time, image_path, is_online, location, meeting_link, activity_id, organizer_id, description) VALUES (10, '2024-08-08 09:10', 'event/placeholder.jpg', true, '2. emelet', 'https://meeting.com', 1, 3, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. LoremIpsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took agalley of type and scrambled it to make a type specimen book.')
 
 --Roles-authorities
 INSERT INTO roles_authorities (roles_id, authorities_id) VALUES (1, 1)

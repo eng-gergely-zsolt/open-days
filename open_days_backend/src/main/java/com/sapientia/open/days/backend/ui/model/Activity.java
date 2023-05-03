@@ -1,9 +1,7 @@
 package com.sapientia.open.days.backend.ui.model;
 
 public class Activity {
-
 	private int id;
-
 	private String name;
 
 	public int getId() {

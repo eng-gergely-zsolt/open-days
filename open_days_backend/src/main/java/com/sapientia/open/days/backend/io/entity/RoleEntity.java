@@ -1,7 +1,6 @@
 package com.sapientia.open.days.backend.io.entity;
 
 import javax.persistence.*;
-import java.io.Serial;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Set;
@@ -21,21 +20,10 @@ public class RoleEntity implements Serializable {
 	@OneToMany(mappedBy = "role")
 	private Collection<UserEntity> users;
 
-	@Serial
-	private static final long serialVersionUID = 1773859640689567294L;
-
 	@ManyToMany(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
-	@JoinTable(name = "roles_authorities",
-			joinColumns = @JoinColumn(name = "roles_id", referencedColumnName = "id"),
+	@JoinTable(name = "roles_authorities", joinColumns = @JoinColumn(name = "roles_id", referencedColumnName = "id"),
 			inverseJoinColumns = @JoinColumn(name = "authorities_id", referencedColumnName = "id"))
 	private Set<AuthorityEntity> authorities;
-
-	public RoleEntity() {
-	}
-
-	public RoleEntity(String name) {
-		this.name = name;
-	}
 
 	public long getId() {
 		return id;

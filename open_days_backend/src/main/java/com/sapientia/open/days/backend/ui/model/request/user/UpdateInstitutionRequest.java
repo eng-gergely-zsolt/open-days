@@ -1,7 +1,7 @@
-package com.sapientia.open.days.backend.ui.model.response;
+package com.sapientia.open.days.backend.ui.model.request.user;
 
 @SuppressWarnings("unused")
-public class InstitutionNameResponse {
+public class UpdateInstitutionRequest {
 	private String countyName;
 	private String institutionName;
 

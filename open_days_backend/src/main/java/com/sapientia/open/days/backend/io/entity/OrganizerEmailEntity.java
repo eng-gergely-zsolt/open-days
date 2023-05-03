@@ -1,7 +1,6 @@
 package com.sapientia.open.days.backend.io.entity;
 
 import javax.persistence.*;
-import java.io.Serial;
 import java.io.Serializable;
 
 @Entity
@@ -15,17 +14,6 @@ public class OrganizerEmailEntity implements Serializable {
 
 	@Column(length = 100, unique = true, nullable = false)
 	private String email;
-
-	@Serial
-	private static final long serialVersionUID = 1065801915520221340L;
-
-	public OrganizerEmailEntity() {
-
-	}
-
-	public OrganizerEmailEntity(String email) {
-		this.email = email;
-	}
 
 	public long getId() {
 		return id;

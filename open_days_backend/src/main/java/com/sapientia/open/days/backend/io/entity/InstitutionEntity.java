@@ -1,7 +1,6 @@
 package com.sapientia.open.days.backend.io.entity;
 
 import javax.persistence.*;
-import java.io.Serial;
 import java.io.Serializable;
 import java.util.Set;
 
@@ -23,9 +22,6 @@ public class InstitutionEntity implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "settlement_id", nullable = false)
 	private SettlementEntity settlement;
-
-	@Serial
-	private static final long serialVersionUID = 3311958932293142019L;
 
 	public long getId() {
 		return id;

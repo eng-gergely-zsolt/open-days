@@ -3,8 +3,7 @@ package com.sapientia.open.days.backend.security;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sapientia.open.days.backend.SpringApplicationContext;
 import com.sapientia.open.days.backend.service.UserService;
-import com.sapientia.open.days.backend.shared.dto.UserDTO;
-import com.sapientia.open.days.backend.ui.model.request.user.LoginUserReq;
+import com.sapientia.open.days.backend.ui.model.request.user.LoginUserRequest;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -36,7 +35,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res) throws AuthenticationException {
 		try {
-			LoginUserReq credentials = new ObjectMapper().readValue(req.getInputStream(), LoginUserReq.class);
+			LoginUserRequest credentials = new ObjectMapper().readValue(req.getInputStream(), LoginUserRequest.class);
 
 			return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
 					credentials.getUsername(), credentials.getPassword(), new ArrayList<>()));
@@ -56,6 +55,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 	@Override
 	protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain, Authentication auth) {
 		String username = ((UserPrincipal) auth.getPrincipal()).getUsername();
+		UserService userService = (UserService) SpringApplicationContext.getBean("userServiceImpl");
 
 		String token = Jwts.builder()
 				.setSubject(username)
@@ -63,11 +63,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 				.signWith(SignatureAlgorithm.HS512, SecurityConstants.getJwtSecretKey())
 				.compact();
 
-		UserService userService = (UserService) SpringApplicationContext.getBean("userServiceImpl");
-		UserDTO userDto = userService.getUserByUsername(username);
-
+		res.addHeader("User-Public-ID", userService.getUserByUsername(username));
 		res.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
-
-		res.addHeader("UserID", userDto.getPublicId());
 	}
 }

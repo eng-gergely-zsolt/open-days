@@ -1,11 +1,11 @@
 package com.sapientia.open.days.backend.ui.model.request;
 
 @SuppressWarnings("unused")
-public class UpdateEventReq {
+public class UpdateEventRequest {
 	private String location;
 	private String dateTime;
 	private boolean isOnline;
-	private String imageLink;
+	private String imagePath;
 	private String description;
 	private String meetingLink;
 	private String activityName;
@@ -22,8 +22,8 @@ public class UpdateEventReq {
 		return isOnline;
 	}
 
-	public String getImageLink() {
-		return imageLink;
+	public String getImagePath() {
+		return imagePath;
 	}
 
 	public String getDescription() {
@@ -50,8 +50,8 @@ public class UpdateEventReq {
 		this.isOnline = isOnline;
 	}
 
-	public void setImageLink(String imageLink) {
-		this.imageLink = imageLink;
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
 	}
 
 	public void setDescription(String description) {

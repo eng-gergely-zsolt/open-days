@@ -4,7 +4,6 @@ import com.sapientia.open.days.backend.security.SecurityConstants;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import net.bytebuddy.utility.RandomString;
 import org.springframework.stereotype.Component;
 
 import java.security.SecureRandom;

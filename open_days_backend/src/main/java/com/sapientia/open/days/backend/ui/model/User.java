@@ -4,9 +4,9 @@ package com.sapientia.open.days.backend.ui.model;
 public class User {
     private String email;
     private String publicId;
+    private String roleName;
     private String username;
     private String lastName;
-    private String roleName;
     private String firstName;
     private String imagePath;
     private String countyName;

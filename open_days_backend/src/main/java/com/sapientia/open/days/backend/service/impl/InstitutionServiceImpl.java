@@ -7,7 +7,7 @@ import com.sapientia.open.days.backend.io.repository.CountyRepository;
 import com.sapientia.open.days.backend.io.repository.InstitutionRepository;
 import com.sapientia.open.days.backend.io.repository.SettlementRepository;
 import com.sapientia.open.days.backend.service.InstitutionService;
-import com.sapientia.open.days.backend.ui.model.response.InstitutionNameResponse;
+import com.sapientia.open.days.backend.ui.model.Institution;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +28,7 @@ public class InstitutionServiceImpl implements InstitutionService {
 	InstitutionRepository institutionRepository;
 
 	@Override
-	public List<InstitutionNameResponse> getAllInstitutionNameWithCounty() {
+	public List<Institution> getInstitutions() {
 
 		List<CountyEntity> countyEntities = new ArrayList<>();
 		List<SettlementEntity> settlementEntities = new ArrayList<>();
@@ -50,23 +50,23 @@ public class InstitutionServiceImpl implements InstitutionService {
 			institutionEntities.add(institutionEntity);
 		}
 
-		List<InstitutionNameResponse> response = new ArrayList<>();
+		List<Institution> response = new ArrayList<>();
 
 		for (InstitutionEntity institutionEntity : institutionEntities) {
 
-			InstitutionNameResponse responseItem = new InstitutionNameResponse();
-			responseItem.setInstitutionName(institutionEntity.getName());
+			Institution institution = new Institution();
+			institution.setInstitutionName(institutionEntity.getName());
 
 			for (SettlementEntity settlementEntity : settlementEntities) {
 				if (institutionEntity.getSettlement().getId() == settlementEntity.getId()) {
 					for (CountyEntity countyEntity : countyEntities) {
 						if (settlementEntity.getCounty().getId() == countyEntity.getId()) {
-							responseItem.setCountyName(countyEntity.getName());
+							institution.setCountyName(countyEntity.getName());
 						}
 					}
 				}
 			}
-			response.add(responseItem);
+			response.add(institution);
 		}
 		return response;
 	}

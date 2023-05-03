@@ -1,18 +1,15 @@
 package com.sapientia.open.days.backend.ui.controller;
 
-import com.sapientia.open.days.backend.exceptions.GeneralServiceException;
+import com.sapientia.open.days.backend.exceptions.BaseException;
 import com.sapientia.open.days.backend.service.EventService;
-import com.sapientia.open.days.backend.shared.dto.CreateEventDto;
-import com.sapientia.open.days.backend.ui.model.request.UpdateEventReq;
+import com.sapientia.open.days.backend.ui.model.request.UpdateEventRequest;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorCode;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorMessage;
 import com.sapientia.open.days.backend.ui.model.Event;
-import com.sapientia.open.days.backend.ui.model.OperationStatus;
 import com.sapientia.open.days.backend.ui.model.User;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,13 +27,16 @@ public class EventController {
 
 	/**
 	 * Returns all events that are about to happen in the future.
-	 * @return The list of the events.
 	 */
 	@GetMapping(path = "/future-events")
 	public List<Event> getFutureEvents() {
 		return eventService.getFutureEvents();
 	}
 
+
+	/**
+	 * Returns the users that were enrolled in an event.
+	 */
 	@GetMapping(path = "/enrolled-users/{eventId}")
 	public List<User> getEnrolledUsers(@PathVariable long eventId) {
 		return eventService.getEnrolledUsers(eventId);
@@ -44,110 +44,158 @@ public class EventController {
 
 	/**
 	 * Returns the events conform to the role of the user.
-	 *
-	 * @param userPublicId The public id of the user.
-	 * @return The list of the events.
 	 */
-	@GetMapping(path = "/events-by-user-id")
-	public List<Event> getEventsByUserPublicId(@RequestHeader(value = "User-Public-ID") String userPublicId) {
-		return eventService.getEventsByUserPublicId(userPublicId);
+	@GetMapping(path = "/events-conform-to-user-role")
+	public List<Event> getEventsConformToUserRole(@RequestHeader(value = "User-Public-ID") String userPublicId) {
+		if (userPublicId == null || userPublicId.length() != 15) {
+			throw new BaseException(ErrorCode.USER_INVALID_PUBLIC_ID.getErrorCode(),
+					ErrorMessage.USER_INVALID_PUBLIC_ID.getErrorMessage());
+		}
+
+		return eventService.getEventsConformToUserRole(userPublicId);
 	}
 
+	/**
+	 * Returns true if the user is already enrolled in the event.
+	 */
 	@ResponseBody
-	@GetMapping(path = "/is-user-applied-for-event/{eventId}/{userPublicId}")
-	public boolean isUserAppliedForEvent(@PathVariable long eventId, @PathVariable String userPublicId) {
-		return eventService.getIsUserAppliedForEvent(eventId, userPublicId);
+	@GetMapping(path = "/is-user-enrolled/{eventId}")
+	public boolean isUserEnrolled(@PathVariable long eventId,
+	                                     @RequestHeader(value = "User-Public-ID") String userPublicId) {
+		if (eventId < 1) {
+			throw new BaseException(ErrorCode.EVENT_INVALID_ID.getErrorCode(),
+					ErrorMessage.EVENT_INVALID_ID.getErrorMessage());
+		}
+
+		if (userPublicId == null || userPublicId.length() != 15) {
+			throw new BaseException(ErrorCode.USER_INVALID_PUBLIC_ID.getErrorCode(),
+					ErrorMessage.USER_INVALID_PUBLIC_ID.getErrorMessage());
+		}
+
+		return eventService.isUserEnrolled(eventId, userPublicId);
 	}
 
 	// Post
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@PostMapping(path = "/apply_user_for_event/{eventId}/{userPublicId}")
-	public void applyUserForEvent(@PathVariable long eventId, @PathVariable String userPublicId) {
-		eventService.applyUserForEvent(eventId, userPublicId);
+	/**
+	 * Enrolls the user in the event. Basically it means that the user want to participate in the event.
+	 */
+	@PostMapping(path = "/enroll_user/{eventId}")
+	public void enrollUser(@PathVariable long eventId, @RequestHeader(value = "User-Public-ID") String userPublicId) {
+		if (eventId < 1) {
+			throw new BaseException(ErrorCode.EVENT_INVALID_ID.getErrorCode(),
+					ErrorMessage.EVENT_INVALID_ID.getErrorMessage());
+		}
+
+		if (userPublicId == null || userPublicId.length() != 15) {
+			throw new BaseException(ErrorCode.USER_INVALID_PUBLIC_ID.getErrorCode(),
+					ErrorMessage.USER_INVALID_PUBLIC_ID.getErrorMessage());
+		}
+
+		eventService.enrollUser(eventId, userPublicId);
 	}
 
-	@PostMapping(path = "/user_participates_in_event/{eventId}/{userPublicId}")
-	public void userParticipatesInEvent(@PathVariable long eventId, @PathVariable String userPublicId) {
-		eventService.userParticipatesInEvent(eventId, userPublicId);
+	/**
+	 * Saves the user as a participant in the event. It's called when create QR code is scanned.
+	 */
+	@PostMapping(path = "/save-user-participation/{eventId}")
+	public void saveUserParticipation(@PathVariable long eventId,
+	                                  @RequestHeader(value = "User-Public-ID") String userPublicId) {
+		if (eventId < 1) {
+			throw new BaseException(ErrorCode.EVENT_INVALID_ID.getErrorCode(),
+					ErrorMessage.EVENT_INVALID_ID.getErrorMessage());
+		}
+
+		if (userPublicId == null || userPublicId.length() != 15) {
+			throw new BaseException(ErrorCode.USER_INVALID_PUBLIC_ID.getErrorCode(),
+					ErrorMessage.USER_INVALID_PUBLIC_ID.getErrorMessage());
+		}
+
+		eventService.saveUserParticipation(eventId, userPublicId);
 	}
 
-	@PostMapping
-	OperationStatus createEvent(@RequestBody Event event) {
-
-		if (event.getLocation().isEmpty()) {
-			throw new GeneralServiceException(ErrorCode.EVENT_MISSING_LOCATION.getErrorCode(),
-					ErrorMessage.EVENT_MISSING_LOCATION.getErrorMessage());
+	@PostMapping(path = "/create-event")
+	void createEvent(@RequestBody Event payload) {
+		if (payload.getActivityName().isEmpty()) {
+			throw new BaseException(ErrorCode.ACTIVITY_INVALID_NAME.getErrorCode(),
+					ErrorMessage.ACTIVITY_INVALID_NAME.getErrorMessage());
 		}
 
-		if (event.getDateTime().isEmpty()) {
-			throw new GeneralServiceException(ErrorCode.EVENT_MISSING_DATE_TIME.getErrorCode(),
-					ErrorMessage.EVENT_MISSING_DATE_TIME.getErrorMessage());
+		if (payload.getLocation().isEmpty()) {
+			throw new BaseException(ErrorCode.EVENT_INVALID_LOCATION.getErrorCode(),
+					ErrorMessage.EVENT_INVALID_LOCATION.getErrorMessage());
 		}
 
-		if (event.getOrganizerId().isEmpty()) {
-			throw new GeneralServiceException(ErrorCode.EVENT_MISSING_ORGANIZER_ID.getErrorCode(),
-					ErrorMessage.EVENT_MISSING_ORGANIZER_ID.getErrorMessage());
+		if (payload.getOrganizerPublicId().isEmpty()) {
+			throw new BaseException(ErrorCode.USER_INVALID_PUBLIC_ID.getErrorCode(),
+					ErrorMessage.USER_INVALID_PUBLIC_ID.getErrorMessage());
 		}
 
-		if (event.getActivityName().isEmpty()) {
-			throw new GeneralServiceException(ErrorCode.EVENT_MISSING_ACTIVITY_NAME.getErrorCode(),
-					ErrorMessage.EVENT_MISSING_ACTIVITY_NAME.getErrorMessage());
+		if (payload.getDateTime().isEmpty()) {
+			throw new BaseException(ErrorCode.EVENT_INVALID_DATE_TIME.getErrorCode(),
+					ErrorMessage.EVENT_INVALID_DATE_TIME.getErrorMessage());
 		}
 
-		if (event.isIsOnline() && event.getMeetingLink().isEmpty()) {
-			throw new GeneralServiceException(ErrorCode.EVENT_MISSING_MEETING_LINK.getErrorCode(),
-					ErrorMessage.EVENT_MISSING_MEETING_LINK.getErrorMessage());
+		if (payload.isIsOnline() && payload.getMeetingLink().isEmpty()) {
+			throw new BaseException(ErrorCode.EVENT_INVALID_MEETING_LINK.getErrorCode(),
+					ErrorMessage.EVENT_INVALID_MEETING_LINK.getErrorMessage());
 		}
 
 		try {
 			DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
-			DateTime.parse(event.getDateTime(), formatter);
+			DateTime.parse(payload.getDateTime(), formatter);
 		} catch (Exception exception) {
-			throw new GeneralServiceException(ErrorCode.EVENT_INVALID_DATE_TIME.getErrorCode(),
+			throw new BaseException(ErrorCode.EVENT_INVALID_DATE_TIME.getErrorCode(),
 					ErrorMessage.EVENT_INVALID_DATE_TIME.getErrorMessage());
 		}
 
-		CreateEventDto eventDto = new CreateEventDto();
-		BeanUtils.copyProperties(event, eventDto);
-
-		eventService.createEvent(eventDto);
-
-		OperationStatus response = new OperationStatus();
-		response.setOperationResult(com.sapientia.open.days.backend.ui.model.resource.OperationStatus.SUCCESS.name());
-
-		return response;
+		eventService.createEvent(payload);
 	}
 
 	// Put
 	// -----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * It updates the data of the event with the specified id in the path.
-	 *
-	 * @param eventId            The unique id of the event.
-	 * @param updateEventPayload It contains the data that we use to update the existing record in the database.
+	 * Updates the data of the event identified by the given event id.
 	 */
-	@PutMapping(path = "/update_event/{eventId}")
-	public void updateEvent(@PathVariable long eventId, @RequestBody UpdateEventReq updateEventPayload) {
-		eventService.updateEvent(eventId, updateEventPayload);
+	@PutMapping(path = "/update-event/{eventId}")
+	public void updateEvent(@PathVariable long eventId, @RequestBody UpdateEventRequest payload) {
+		if (eventId < 1) {
+			throw new BaseException(ErrorCode.EVENT_INVALID_ID.getErrorCode(),
+					ErrorMessage.EVENT_INVALID_ID.getErrorMessage());
+		}
+
+		eventService.updateEvent(eventId, payload);
 	}
 
 	// Delete
 	// -----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * It deletes and event from the database by id.
-	 *
-	 * @param eventId The unique id of the event.
+	 * Deletes the event identified by the given event id.
 	 */
 	@DeleteMapping(path = "/delete_event/{eventId}")
 	public void deleteEvent(@PathVariable long eventId) {
 		eventService.deleteEvent(eventId);
 	}
 
-	@DeleteMapping(path = "/delete_user_from_event/{eventId}/{userPublicId}")
-	public void deleteUserFromEvent(@PathVariable long eventId, @PathVariable String userPublicId) {
-		eventService.deleteUserFromEvent(eventId, userPublicId);
+	/**
+	 * Deletes the enrolled user identified by the userPublicId from the event identified by the event id.
+	 */
+	@DeleteMapping(path = "/unenroll-user/{eventId}")
+	public void unenrollUser(@PathVariable long eventId,
+	                               @RequestHeader(value = "User-Public-ID") String userPublicId) {
+		if (eventId < 1) {
+			throw new BaseException(ErrorCode.EVENT_INVALID_ID.getErrorCode(),
+					ErrorMessage.EVENT_INVALID_ID.getErrorMessage());
+		}
+
+		if (userPublicId == null || userPublicId.length() != 15) {
+			throw new BaseException(ErrorCode.USER_INVALID_PUBLIC_ID.getErrorCode(),
+					ErrorMessage.USER_INVALID_PUBLIC_ID.getErrorMessage());
+		}
+
+		eventService.unenrollUser(eventId, userPublicId);
 	}
 }

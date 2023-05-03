@@ -2,7 +2,6 @@ package com.sapientia.open.days.backend.security;
 
 import com.sapientia.open.days.backend.io.repository.UserRepository;
 import com.sapientia.open.days.backend.service.UserService;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -11,12 +10,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-
-import java.util.List;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
@@ -44,17 +37,13 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 		httpSecurity
 				.cors().and()
 				.csrf().disable().authorizeHttpRequests()
-				.antMatchers(HttpMethod.GET, SecurityConstants.GET_ALL_EVENT_URL)
+				.antMatchers(HttpMethod.GET, SecurityConstants.GET_INSTITUTIONS)
 				.permitAll()
-				.antMatchers(HttpMethod.GET, SecurityConstants.INSTITUTION_ALL_NAME_WITH_COUNTY)
+				.antMatchers(HttpMethod.GET, SecurityConstants.GET_FUTURE_EVENTS_URL)
 				.permitAll()
-				.antMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL)
+				.antMatchers(HttpMethod.POST, SecurityConstants.CREATE_USER_URL)
 				.permitAll()
-				.antMatchers(HttpMethod.POST, SecurityConstants.PASSWORD_RESET_URL)
-				.permitAll()
-				.antMatchers(HttpMethod.POST, SecurityConstants.PASSWORD_RESET_REQUEST_URL)
-				.permitAll()
-				.antMatchers(HttpMethod.PUT, SecurityConstants.EMAIL_VERIFICATION_BY_OTP_CODE_URL)
+				.antMatchers(HttpMethod.PUT, SecurityConstants.VERIFY_EMAIL_BY_OTP_CODE_URL)
 				.permitAll()
 				.anyRequest().authenticated().and()
 				.addFilter(getAuthenticationFilter())
@@ -72,23 +61,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 	// This function will change the endpoint name.
 	public AuthenticationFilter getAuthenticationFilter() throws Exception {
 		final AuthenticationFilter filter = new AuthenticationFilter(authenticationManager());
-		filter.setFilterProcessesUrl("/users/login");
+		filter.setFilterProcessesUrl("/user/login");
 		return filter;
-	}
-
-	@Bean
-	CorsConfigurationSource corsConfigurationSource() {
-		CorsConfiguration configuration = new CorsConfiguration();
-
-		configuration.setAllowedOrigins(List.of("*"));
-		configuration.setAllowedHeaders(List.of("*"));
-		configuration.setAllowedMethods(List.of("*"));
-		configuration.setAllowCredentials(true);
-		configuration.setExposedHeaders(List.of("*"));
-
-		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/**", configuration);
-
-		return source;
 	}
 }
