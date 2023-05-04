@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:path/path.dart' as path;
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -93,7 +94,7 @@ class ProfileController {
     });
   }
 
-  Future<void> selectImage(String id, String imagePath) async {
+  Future<void> selectImage(String imagePath) async {
     ImagePicker imagePicker = ImagePicker();
     XFile? xFile = await imagePicker.pickImage(source: ImageSource.gallery);
 
@@ -115,10 +116,10 @@ class ProfileController {
       }
     }
 
-    saveImage(id);
+    saveImage();
   }
 
-  void saveImage(String id) async {
+  void saveImage() async {
     _ref.read(_isOperationInProgress.notifier).state = true;
 
     if (_imageToDeleteRef != null) {
@@ -134,25 +135,29 @@ class ProfileController {
     }
 
     if (_imagePathInDB != '') {
-      _updateImagePathResponse = await _repository.updateImagePathRepo(id, _imagePathInDB);
+      _updateImagePathResponse = await _repository.updateImagePathRepo(_imagePathInDB);
     }
 
     _ref.read(_isOperationInProgress.notifier).state = false;
   }
 
-  void logOut() async {
+  Future<void> logOut() async {
     setIsOperationInProgress(true);
 
-    String? userId = await SecureStorage.getUserId();
-    String? authorizationToken = await SecureStorage.getAuthorizationToken();
+    final cacheDir = await getTemporaryDirectory();
 
-    if (userId != null) {
-      await SecureStorage.deleteUserId();
+    if (cacheDir.existsSync()) {
+      cacheDir.deleteSync(recursive: true);
     }
 
-    if (authorizationToken != null) {
-      await SecureStorage.deleteAuthorizationToken();
+    final appDir = await getApplicationSupportDirectory();
+
+    if (appDir.existsSync()) {
+      appDir.deleteSync(recursive: true);
     }
+
+    await SecureStorage.deleteUserId();
+    await SecureStorage.deleteAuthorizationToken();
 
     setIsClosingPageRequired(true);
   }

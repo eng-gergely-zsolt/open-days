@@ -10,9 +10,10 @@ import '../../utils/utils.dart';
 import '../profile/profile.dart';
 import './home_base_controller.dart';
 import '../../constants/constants.dart';
-import './models/initial_data_model.dart';
+import '../error/base_error_screen.dart';
 import '../event_creator/event_creator.dart';
 import '../event_scanner/event_scanner.dart';
+import './models/home_base_initial_payload.dart';
 
 class HomeBase extends ConsumerWidget {
   const HomeBase({Key? key}) : super(key: key);
@@ -23,25 +24,26 @@ class HomeBase extends ConsumerWidget {
     final appHeight = MediaQuery.of(context).size.height;
 
     final controller = ref.read(homeBaseControllerProvider);
-    final initialData = ref.watch(controller.getInitialDataProvider());
-    final navigationBarIndex = ref.watch(controller.getNavigationBarIndexProvider());
+    controller.createInitialDataProvider();
 
-    UserResponse user = controller.getInitialData()?.user ?? UserResponse();
+    final userResponse = controller.getInitialData()?.userResponse ?? UserResponse();
+    final initialData = ref.watch(controller.getInitialDataProvider()!);
+    final navigationBarIndex = ref.watch(controller.getNavigationBarIndexProvider());
 
     final screens = [
       Home(initialDataModel: controller.getInitialData(), homeBaseController: controller),
       const EventScanner(),
-      Profile(user, controller),
+      Profile(userResponse.user, controller),
     ];
 
     final organizerSreens = [
       Home(initialDataModel: controller.getInitialData(), homeBaseController: controller),
-      Profile(user, controller),
+      Profile(userResponse.user, controller),
     ];
 
     final appBarTitles = [
       appLocale?.home,
-      Utils.getString(appLocale?.application_bar_scanner),
+      Utils.getString(appLocale?.home_base_app_bar_title_qr),
       Utils.getString(appLocale?.profile),
     ];
 
@@ -73,16 +75,14 @@ class HomeBase extends ConsumerWidget {
           ),
           error: (error, stackTrace) => const Center(),
           data: (initialData) {
-            return initialData.operationResult == operationResultSuccess
+            return initialData.isOperationSuccessful
                 ? RefreshIndicator(
-                    child: initialData.user.roleName == roleUser
+                    child: initialData.userResponse.user.roleName == roleUser
                         ? screens[navigationBarIndex]
                         : organizerSreens[navigationBarIndex],
                     onRefresh: () => controller.invalidateInitialDataProvider(),
                   )
-                : const Center(
-                    child: Text('FAILURE'),
-                  );
+                : const BaseErrorScreen();
           },
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -119,8 +119,8 @@ class HomeBase extends ConsumerWidget {
   }
 
   Widget getBottomNavigationBar(int navigationBarIndex, HomeBaseController controller,
-      AppLocalizations? appLocale, InitialDataModel initialData) {
-    return initialData.user.roleName == roleUser
+      AppLocalizations? appLocale, HomeBaseInitialPayload initialData) {
+    return initialData.userResponse.user.roleName == roleUser
         ? BottomNavigationBar(
             showUnselectedLabels: false,
             currentIndex: navigationBarIndex,
@@ -137,7 +137,7 @@ class HomeBase extends ConsumerWidget {
               ),
               BottomNavigationBarItem(
                 icon: const Icon(Icons.qr_code),
-                label: Utils.getString(appLocale?.bottom_navigation_bar_title_QR),
+                label: Utils.getString(appLocale?.home_base_navigation_bar_title_qr),
                 activeIcon: Icon(
                   Icons.qr_code,
                   color: CustomTheme.lightTheme.primaryColor,

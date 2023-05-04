@@ -6,15 +6,15 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../../theme/theme.dart';
-import '../../utils/helper_widget_utils.dart';
-import '../error/base_error.dart';
+import '../../models/event.dart';
+import '../error/base_error_screen.dart';
 import './event_modification_controller.dart';
+import '../../utils/helper_widget_utils.dart';
 import '../../models/responses/activities_response.dart';
-import '../home_base/models/event_response_model.dart';
 
 /// This class holds the event modification screen.
 class EventModification extends ConsumerWidget {
-  final EventResponseModel? _event;
+  final Event? _event;
 
   const EventModification(this._event, {Key? key}) : super(key: key);
 
@@ -28,7 +28,7 @@ class EventModification extends ConsumerWidget {
     controller.initializeMeetingProvider(_event?.isOnline, _event?.meetingLink);
 
     final isLoading = ref.watch(controller.getIsLoadinProvider());
-    final activities = ref.watch(controller.createInitialDataProvider(_event?.imageLink));
+    final activities = ref.watch(controller.createInitialDataProvider(_event?.imagePath));
     final selectedDateTime = ref.watch(controller.getSelectedDateTimeProvider(_event?.dateTime));
 
     var imagePath = ref.watch(controller.getImagePathProvider());
@@ -39,12 +39,12 @@ class EventModification extends ConsumerWidget {
       SnackBar snackBar;
 
       if (controller.getUpdateEventResponse()?.isOperationSuccessful == true) {
-        snackBar = const SnackBar(
-          content: Text('Event updated successfully'),
+        snackBar = SnackBar(
+          content: Text(appLocale?.event_modification_successful_update as String),
         );
       } else {
-        snackBar = const SnackBar(
-          content: Text('Something went wrong. Please try again!'),
+        snackBar = SnackBar(
+          content: Text(controller.getUpdateEventResponse()!.error.errorMessage),
         );
       }
 
@@ -69,7 +69,7 @@ class EventModification extends ConsumerWidget {
                   ),
                 )
               : activities.when(
-                  error: (error, stackTrace) => const BaseError(),
+                  error: (error, stackTrace) => const BaseErrorScreen(),
                   loading: () => Center(
                         child: LoadingAnimationWidget.staggeredDotsWave(
                           size: appHeight * 0.1,

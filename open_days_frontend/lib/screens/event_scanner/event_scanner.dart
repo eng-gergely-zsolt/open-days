@@ -59,10 +59,10 @@ class _EventScannerState extends ConsumerState<EventScanner> {
     final homeBaseController = ref.read(homeBaseControllerProvider);
     final isApplyingSuccessful = ref.watch(_eventScannerController!.getIsApplyingSuccessful());
 
-    if (isApplyingSuccessful == true) {
+    if (isApplyingSuccessful) {
       var snackBar = SnackBar(
         content: Text(
-          Utils.getString(appLocale?.event_details_qr_code),
+          Utils.getString(appLocale?.event_scanner_successful_scan),
         ),
       );
 
@@ -118,7 +118,7 @@ class _EventScannerState extends ConsumerState<EventScanner> {
 
     _eventScannerController?.getQRViewController()?.scannedDataStream.listen((barcode) {
       _eventScannerController?.setBarcode(barcode);
-      _eventScannerController?.participateInEvent();
+      _eventScannerController?.saveUserParticipation();
       _eventScannerController?.getQRViewController()?.dispose();
     });
   }

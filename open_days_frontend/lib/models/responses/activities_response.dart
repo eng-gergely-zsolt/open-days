@@ -1,10 +1,13 @@
-import '../activity_model.dart';
+import '../activity.dart';
+import '../base_error.dart';
 
 class ActivitiesResponse {
+  List<Activity> activities;
   bool isOperationSuccessful;
-  List<ActivityModel> activities = [];
+  BaseError error = BaseError();
 
   ActivitiesResponse({
+    this.activities = const [],
     this.isOperationSuccessful = false,
   });
 }

@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:open_days_frontend/theme/theme.dart';
-import 'package:open_days_frontend/utils/validator_utils.dart';
 
-import '../../utils/user_data_utils.dart';
+import '../../theme/theme.dart';
 import './registration_controller.dart';
-import '../../constants/constants.dart';
 import '../../constants/page_routes.dart';
+import '../../utils/user_data_utils.dart';
+import '../../utils/validator_utils.dart';
 
 class Registration extends ConsumerStatefulWidget {
   const Registration({Key? key}) : super(key: key);
@@ -34,14 +33,13 @@ class _RegistrationState extends ConsumerState<Registration> {
 
     final registrationController = ref.read(registrationControllerProvider);
     final isLoading = ref.watch(registrationController.getIsLoadingProvider());
-    final institutions = ref.watch(registrationController.getInstitutionProvider());
+    final initialData = ref.watch(registrationController.getInstitutionsProvider());
 
     var selectedCounty = ref.watch(registrationController.getSelectedCountyProvider());
     var selectedInstitution = ref.watch(registrationController.getSelectedInstitutionProvider());
 
     if (registrationController.getRegistrationResponse() != null) {
-      if (registrationController.getRegistrationResponse()?.operationResult ==
-          operationResultSuccess) {
+      if (registrationController.getRegistrationResponse()!.isOperationSuccessful) {
         Future.microtask(
           () => Navigator.pushNamed(
             context,
@@ -66,7 +64,7 @@ class _RegistrationState extends ConsumerState<Registration> {
         appBar: AppBar(
           title: Text(appLocale?.sign_up as String),
         ),
-        body: institutions.when(
+        body: initialData.when(
           loading: () => Center(
             child: LoadingAnimationWidget.staggeredDotsWave(
               size: appHeight * 0.1,
@@ -76,16 +74,17 @@ class _RegistrationState extends ConsumerState<Registration> {
           error: (error, stackTrace) => Center(
             child: Text(error.toString()),
           ),
-          data: (institutions) {
-            selectedCounty ??= registrationController.getFirstCounty(institutions);
+          data: (data) {
+            selectedCounty ??= registrationController.getFirstCounty(data.institutions);
 
             if (selectedInstitution == null ||
-                !UserDataUtils.getInstitutions(selectedCounty, institutions)
+                !UserDataUtils.getInstitutions(selectedCounty, data.institutions)
                     .contains(selectedInstitution)) {
-              selectedInstitution = UserDataUtils.getFirstInstitution(selectedCounty, institutions);
+              selectedInstitution =
+                  UserDataUtils.getFirstInstitution(selectedCounty, data.institutions);
             }
 
-            registrationController.setInstitution(selectedInstitution);
+            registrationController.setInstitutionName(selectedInstitution);
 
             return isLoading == true
                 ? Center(
@@ -197,7 +196,7 @@ class _RegistrationState extends ConsumerState<Registration> {
                                     Icons.keyboard_arrow_down,
                                     color: Theme.of(context).iconTheme.color,
                                   ),
-                                  items: UserDataUtils.getCounties(institutions)
+                                  items: UserDataUtils.getCounties(data.institutions)
                                       .map<DropdownMenuItem<String>>(
                                     (String value) {
                                       return DropdownMenuItem<String>(
@@ -234,7 +233,8 @@ class _RegistrationState extends ConsumerState<Registration> {
                                     Icons.keyboard_arrow_down,
                                     color: Theme.of(context).iconTheme.color,
                                   ),
-                                  items: UserDataUtils.getInstitutions(selectedCounty, institutions)
+                                  items: UserDataUtils.getInstitutions(
+                                          selectedCounty, data.institutions)
                                       .map<DropdownMenuItem<String>>(
                                     (String value) {
                                       return DropdownMenuItem<String>(
@@ -249,7 +249,7 @@ class _RegistrationState extends ConsumerState<Registration> {
                                             .getSelectedInstitutionProvider()
                                             .notifier)
                                         .state = value;
-                                    registrationController.setInstitution(value);
+                                    registrationController.setInstitutionName(value);
                                   },
                                 ),
                               ),

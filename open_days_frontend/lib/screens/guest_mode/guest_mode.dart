@@ -4,12 +4,11 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../../theme/theme.dart';
-import '../error/base_error.dart';
 import './guest_mode_controller.dart';
-import '../../constants/constants.dart';
 import './guest_mode_event_details.dart';
+import '../error/base_error_screen.dart';
 import '../../constants/page_routes.dart';
-import '../home_base/models/get_all_event_model.dart';
+import '../../models/responses/events_response.dart';
 
 class GuestMode extends ConsumerWidget {
   const GuestMode({Key? key}) : super(key: key);
@@ -33,7 +32,7 @@ class GuestMode extends ConsumerWidget {
           ),
         ),
         body: events.when(
-          error: (error, stackTrace) => const BaseError(),
+          error: (error, stackTrace) => const BaseErrorScreen(),
           loading: () => Center(
             child: LoadingAnimationWidget.staggeredDotsWave(
               size: appHeight * 0.1,
@@ -45,7 +44,7 @@ class GuestMode extends ConsumerWidget {
 
             return RefreshIndicator(
               onRefresh: () => controller.refreshEvents(),
-              child: data.operationResult == operationResultSuccess
+              child: data.isOperationSuccessful
                   ? Column(
                       children: [
                         Container(
@@ -120,7 +119,7 @@ class GuestMode extends ConsumerWidget {
                         ),
                       ],
                     )
-                  : const BaseError(),
+                  : const BaseErrorScreen(),
             );
           },
         ),
@@ -128,7 +127,7 @@ class GuestMode extends ConsumerWidget {
     );
   }
 
-  Widget getEventsListView(double appWidth, double appHeight, GetAllEventModel data) {
+  Widget getEventsListView(double appWidth, double appHeight, EventsResponse data) {
     return ListView.builder(
         itemCount: data.events.length,
         itemBuilder: (context, index) {

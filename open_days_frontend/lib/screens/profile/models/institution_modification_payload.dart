@@ -1,11 +1,11 @@
 class InstitutionModificationPayload {
   String id;
-  String county;
-  String institution;
+  String countyName;
+  String institutionName;
 
   InstitutionModificationPayload({
     this.id = '',
-    this.county = '',
-    this.institution = '',
+    this.countyName = '',
+    this.institutionName = '',
   });
 }

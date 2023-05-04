@@ -1,4 +1,4 @@
-import '../screens/registration/models/institution.dart';
+import '../models/institution.dart';
 
 class UserDataUtils {
   static List<String> getCounties(List<Institution> institutions) {

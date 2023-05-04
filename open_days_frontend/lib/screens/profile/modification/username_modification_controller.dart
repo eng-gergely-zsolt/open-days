@@ -53,11 +53,11 @@ class UsernameModificationController {
     }
   }
 
-  void updateUsername(String id) async {
+  void updateUsername() async {
     _ref.read(_isLoadingProvider.notifier).state = true;
 
     if (_username != null) {
-      _updateUsernameResponse = await _repository.updateUsernameRepo(id, _username.toString());
+      _updateUsernameResponse = await _repository.updateUsernameRepo(_username.toString());
     }
 
     if (_updateUsernameResponse != null && _updateUsernameResponse?.authorizationToken != '') {

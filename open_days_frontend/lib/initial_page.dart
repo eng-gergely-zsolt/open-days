@@ -5,13 +5,12 @@ import 'package:flutter/services.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
-import 'package:open_days_frontend/screens/error/internet_connection_error_scaffold.dart';
-
-import 'package:open_days_frontend/models/responses/base_response.dart';
-import 'package:open_days_frontend/services/main/get_verify_authorization_token.dart';
 
 import './screens/lobby/lobby.dart';
 import './screens/home_base/home_base.dart';
+import './models/responses/base_response.dart';
+import 'services/main/verify_authorization_token_svc.dart';
+import './screens/error/internet_connection_error_scaffold.dart';
 
 class InitialPage extends StatefulWidget {
   const InitialPage({Key? key}) : super(key: key);
@@ -34,13 +33,12 @@ class _InitialPageState extends State<InitialPage> {
   }
 
   @override
-  build(context) {
+  Widget build(context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         systemNavigationBarColor: Colors.white,
-        // systemNavigationBarColor: Color.fromRGBO(234, 234, 234, 1),
         systemNavigationBarIconBrightness: Brightness.dark,
         systemNavigationBarDividerColor: Color.fromRGBO(234, 234, 234, 1),
       ),

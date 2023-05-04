@@ -5,15 +5,13 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../../theme/theme.dart';
 import '../../utils/utils.dart';
+import '../../models/event.dart';
 import './guest_mode_event_details_controller.dart';
-import '../home_base/models/event_response_model.dart';
 
 class GuestModeEventDetails extends ConsumerWidget {
-  final EventResponseModel? _event;
-  const GuestModeEventDetails(
-    this._event, {
-    Key? key,
-  }) : super(key: key);
+  final Event? _event;
+
+  const GuestModeEventDetails(this._event, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -21,7 +19,7 @@ class GuestModeEventDetails extends ConsumerWidget {
     final appHeight = MediaQuery.of(context).size.height;
 
     final controller = ref.read(guestModeEventDetailsControllerProvider);
-    final initialDataAsync = ref.watch(controller.createInitialDataProvider(_event?.imageLink));
+    final initialDataAsync = ref.watch(controller.createInitialDataProvider(_event?.imagePath));
 
     return WillPopScope(
       onWillPop: controller.invalidateControllerProvider,

@@ -1,28 +1,26 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constants/constants.dart';
-import './models/initial_data_model.dart';
+import './models/home_base_initial_payload.dart';
 import '../../repositories/home_base_repository.dart';
 
 class HomeBaseController {
-  InitialDataModel? _initialData;
+  HomeBaseInitialPayload? _initialData;
 
   final ProviderRef _ref;
   final HomeBaseRepository _homeBaseRepository;
-  late FutureProvider<InitialDataModel> _initialDataProvider;
+  FutureProvider<HomeBaseInitialPayload>? _initialDataProvider;
   final _orderValueProvider = StateProvider<String?>((ref) => null);
   final _navigationBarIndexProvider = StateProvider<int>((_ref) => 0);
 
   static const String dateOrder = 'Date';
   static const String nameOrder = 'Name';
 
-  HomeBaseController(this._ref, this._homeBaseRepository) {
-    _initialDataProvider = createInitialDataProvider();
-  }
+  HomeBaseController(this._ref, this._homeBaseRepository);
 
-  InitialDataModel? getInitialData() {
+  HomeBaseInitialPayload? getInitialData() {
     return _initialData;
   }
 
@@ -34,43 +32,43 @@ class HomeBaseController {
     return _navigationBarIndexProvider;
   }
 
-  FutureProvider<InitialDataModel> getInitialDataProvider() {
+  FutureProvider<HomeBaseInitialPayload>? getInitialDataProvider() {
     return _initialDataProvider;
   }
 
   void setCounty(String county) {
     if (_initialData != null) {
-      _initialData?.user.county = county;
+      _initialData?.userResponse.user.countyName = county;
     }
   }
 
   void setUsername(String username) {
     if (_initialData != null) {
-      _initialData?.user.username = username;
+      _initialData?.userResponse.user.username = username;
     }
   }
 
   void setLastName(String lastName) {
     if (_initialData != null) {
-      _initialData?.user.lastName = lastName;
+      _initialData?.userResponse.user.lastName = lastName;
     }
   }
 
   void setFirstName(String firstName) {
     if (_initialData != null) {
-      _initialData?.user.firstName = firstName;
+      _initialData?.userResponse.user.firstName = firstName;
     }
   }
 
   void setImagePath(String imagePath) {
     if (_initialData != null) {
-      _initialData?.user.imagePath = imagePath;
+      _initialData?.userResponse.user.imagePath = imagePath;
     }
   }
 
   void setInstitution(String institution) {
     if (_initialData != null) {
-      _initialData?.user.institution = institution;
+      _initialData?.userResponse.user.institutionName = institution;
     }
   }
 
@@ -85,26 +83,30 @@ class HomeBaseController {
     return Future.value(true);
   }
 
-  void invalidateInitialDataProviderNow() {
-    _ref.invalidate(_initialDataProvider);
+  void invalidateControllerProvider() {
+    _ref.invalidate(homeBaseControllerProvider);
   }
 
   Future<void> invalidateInitialDataProvider() async {
-    _ref.invalidate(_initialDataProvider);
-    return await Future<void>.delayed(const Duration(seconds: 3));
+    if (_initialDataProvider != null) {
+      _ref.invalidate(_initialDataProvider!);
+    }
   }
 
   void setNavigationBarIndexProvider(int navigationBarIndex) {
     _ref.read(_navigationBarIndexProvider.notifier).state = navigationBarIndex;
   }
 
-  bool isParticipant(InitialDataModel initialData) {
-    return initialData.user.roleName == roleUser;
+  bool isParticipant(HomeBaseInitialPayload initialData) {
+    return _initialData?.userResponse.user.roleName == roleUser;
   }
 
   void orderEvents(String? sortingValue) {
     if (sortingValue != null) {
-      _ref.invalidate(_initialDataProvider);
+      if (_initialDataProvider != null) {
+        _ref.invalidate(_initialDataProvider!);
+      }
+
       if (sortingValue == dateOrder) {
         _initialDataProvider = _getInitialDataProviderEventsOrderedByDate();
       } else if (sortingValue == nameOrder) {
@@ -113,20 +115,20 @@ class HomeBaseController {
     }
   }
 
-  FutureProvider<InitialDataModel> _getInitialDataProviderEventsOrderedByDate() {
+  FutureProvider<HomeBaseInitialPayload> _getInitialDataProviderEventsOrderedByDate() {
     return FutureProvider((ref) async {
       return await _getInitialDataEventsOrderedByDate();
     });
   }
 
-  FutureProvider<InitialDataModel> _getInitialDataProviderEventsOrderedByName() {
+  FutureProvider<HomeBaseInitialPayload> _getInitialDataProviderEventsOrderedByName() {
     return FutureProvider((ref) async {
       return await _getInitialDataEventsOrderedByName();
     });
   }
 
-  Future<InitialDataModel> _getInitialDataEventsOrderedByDate() {
-    InitialDataModel result = InitialDataModel();
+  Future<HomeBaseInitialPayload> _getInitialDataEventsOrderedByDate() {
+    HomeBaseInitialPayload result = HomeBaseInitialPayload();
 
     var savedUser = _homeBaseRepository.getSavedUser();
     var savedEvents = _homeBaseRepository.getSavedEventsRepo();
@@ -139,21 +141,20 @@ class HomeBaseController {
       },
     );
 
-    if (savedUser.isOperationSuccessful == true &&
-        savedEvents.operationResult == operationResultSuccess) {
-      result.operationResult = operationResultSuccess;
+    if (savedUser.isOperationSuccessful == true && savedEvents.isOperationSuccessful) {
+      result.isOperationSuccessful = true;
     } else {
-      result.operationResult = operationResultFailure;
+      result.isOperationSuccessful = true;
     }
 
-    result.user = savedUser;
-    result.events = savedEvents;
+    result.userResponse = savedUser;
+    result.eventsResponse = savedEvents;
 
     return Future.value(result);
   }
 
-  Future<InitialDataModel> _getInitialDataEventsOrderedByName() {
-    InitialDataModel result = InitialDataModel();
+  Future<HomeBaseInitialPayload> _getInitialDataEventsOrderedByName() {
+    HomeBaseInitialPayload result = HomeBaseInitialPayload();
 
     var savedUser = _homeBaseRepository.getSavedUser();
     var savedEvents = _homeBaseRepository.getSavedEventsRepo();
@@ -166,39 +167,39 @@ class HomeBaseController {
       },
     );
 
-    if (savedUser.isOperationSuccessful == true &&
-        savedEvents.operationResult == operationResultSuccess) {
-      result.operationResult = operationResultSuccess;
+    if (savedUser.isOperationSuccessful == true && savedEvents.isOperationSuccessful) {
+      result.isOperationSuccessful = true;
     } else {
-      result.operationResult = operationResultFailure;
+      result.isOperationSuccessful = true;
     }
 
-    result.user = savedUser;
-    result.events = savedEvents;
+    result.userResponse = savedUser;
+    result.eventsResponse = savedEvents;
 
     return Future.value(result);
   }
 
   // It decides if we should show the floating button for creating events or not.
-  bool isFloatingButtonRequired(InitialDataModel initialData) {
+  bool isFloatingButtonRequired(HomeBaseInitialPayload initialData) {
     return _ref.read(_navigationBarIndexProvider) == 0 &&
-        initialData.operationResult == operationResultSuccess &&
-        (initialData.user.roleName == roleAdmin || initialData.user.roleName == roleOrganizer);
+        initialData.isOperationSuccessful &&
+        (initialData.userResponse.user.roleName == roleAdmin ||
+            initialData.userResponse.user.roleName == roleOrganizer);
   }
 
-  FutureProvider<InitialDataModel> createInitialDataProvider() {
-    return FutureProvider((ref) async {
-      InitialDataModel response = InitialDataModel();
+  void createInitialDataProvider() {
+    _initialDataProvider ??= FutureProvider((ref) async {
+      HomeBaseInitialPayload response = HomeBaseInitialPayload();
 
-      var eventResponse = _homeBaseRepository.getAllEventRepo();
       var userResponse = _homeBaseRepository.getUserByIdRepo();
+      var eventResponse = _homeBaseRepository.getEventsConformToUserRoleRepo();
 
-      response.user = await userResponse;
-      response.events = await eventResponse;
+      response.userResponse = await userResponse;
+      response.eventsResponse = await eventResponse;
 
-      if (response.user.isOperationSuccessful == true &&
-          response.events?.operationResult == operationResultSuccess) {
-        response.operationResult = operationResultSuccess;
+      if (response.userResponse.isOperationSuccessful == true &&
+          response.eventsResponse.isOperationSuccessful) {
+        response.isOperationSuccessful = true;
       }
 
       _initialData = response;

@@ -1,13 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../models/requests/user_request_model.dart';
-import '../models/responses/user_login_response.dart';
-import '../services/login/post_login_user.dart';
+import '../services/login/login_user_svc.dart';
+import '../models/requests/login_user_request.dart';
+import '../models/responses/login_user_response.dart';
 
 final loginRepositoryProvider = Provider((_) => LoginRepository());
 
 class LoginRepository {
-  Future<UserLoginResponse> loginUserRepo(UserRequestModel user) async {
+  Future<LoginUserResponse> loginUserRepo(LoginUserRequest user) async {
     return await loginUserSvc(user);
   }
 }

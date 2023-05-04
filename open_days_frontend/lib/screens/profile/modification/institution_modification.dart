@@ -22,21 +22,21 @@ class InstitutionModification extends ConsumerWidget {
     final controller = ref.read(institutionModificationControllerProvider);
 
     final isLoading = ref.watch(controller.getLoadingProvider());
-    final institutions = ref.watch(controller.getInstitutionsProvider());
+    final institutionsResponse = ref.watch(controller.getInstitutionsProvider());
 
     var selectedCounty = ref.watch(controller.getSelectedCountyProvider());
     var selectedInstitution = ref.watch(controller.getSelectedInstitutionProvider());
 
     controller.setPayload(payload);
-    controller.setSelectedValuesInitially(payload.county, payload.institution);
+    controller.setSelectedValuesInitially(payload.countyName, payload.institutionName);
 
     if (controller.getUpdateInstitutionResponse() != null) {
       if (controller.getUpdateInstitutionResponse()?.isOperationSuccessful == true) {
         Future.microtask(() {
           InstitutionModificationPayload result = InstitutionModificationPayload(
             id: payload.id,
-            county: controller.getSelectedCounty(),
-            institution: controller.getSelectedInstitution(),
+            countyName: controller.getSelectedCounty(),
+            institutionName: controller.getSelectedInstitution(),
           );
 
           Navigator.pop(context, result);
@@ -61,8 +61,8 @@ class InstitutionModification extends ConsumerWidget {
         appBar: AppBar(
           title: Text(appLocale?.profile_name as String),
         ),
-        body: institutions.when(
-          data: (institutions) {
+        body: institutionsResponse.when(
+          data: (data) {
             selectedCounty = controller.getSelectedCounty();
             selectedInstitution = controller.getSelectedInstitutionOnCountyChange();
 
@@ -87,8 +87,8 @@ class InstitutionModification extends ConsumerWidget {
                           Icons.keyboard_arrow_down,
                           color: Theme.of(context).iconTheme.color,
                         ),
-                        items:
-                            UserDataUtils.getCounties(institutions).map<DropdownMenuItem<String>>(
+                        items: UserDataUtils.getCounties(data.institutions)
+                            .map<DropdownMenuItem<String>>(
                           (String value) {
                             return DropdownMenuItem<String>(
                               value: value,
@@ -110,7 +110,7 @@ class InstitutionModification extends ConsumerWidget {
                           Icons.keyboard_arrow_down,
                           color: Theme.of(context).iconTheme.color,
                         ),
-                        items: UserDataUtils.getInstitutions(selectedCounty, institutions)
+                        items: UserDataUtils.getInstitutions(selectedCounty, data.institutions)
                             .map<DropdownMenuItem<String>>(
                           (String value) {
                             return DropdownMenuItem<String>(

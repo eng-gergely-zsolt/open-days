@@ -5,19 +5,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
+import '../../models/user.dart';
 import '../../theme/theme.dart';
-import '../error/base_error.dart';
 import './profile_controller.dart';
+import '../error/base_error_screen.dart';
 import '../../constants/page_routes.dart';
 import '../../utils/helper_widget_utils.dart';
 import '../home_base/home_base_controller.dart';
 import './models/name_modification_payload.dart';
-import '../../models/responses/user_response.dart';
 import './models/username_modification_payload.dart';
 import './models/institution_modification_payload.dart';
 
 class Profile extends ConsumerWidget {
-  final UserResponse _user;
+  final User _user;
   final HomeBaseController _homeBaseController;
   static const _localPlaceholderImage = 'lib/assets/images/user_image_placeholder.jpg';
 
@@ -94,7 +94,7 @@ class Profile extends ConsumerWidget {
                       top: appHeight * 0.05,
                       child: GestureDetector(
                         onTap: () async {
-                          await controller.selectImage(_user.id, _user.imagePath);
+                          await controller.selectImage(_user.imagePath);
                           if (controller.getImagePathInDB() != "") {
                             _user.imagePath = controller.getImagePathInDB();
                             _homeBaseController.setImagePath(controller.getImagePathInDB());
@@ -122,7 +122,7 @@ class Profile extends ConsumerWidget {
                 ),
               );
             }),
-            error: (error, stackTrace) => const BaseError(),
+            error: (error, stackTrace) => const BaseErrorScreen(),
             loading: () => HelperWidgetUtils.getStaggeredDotsWaveAnimation(appHeight),
           );
   }
@@ -241,7 +241,7 @@ class Profile extends ConsumerWidget {
         ),
         SizedBox(height: appHeight * 0.01),
         Text(
-          _user.county,
+          _user.countyName,
           style: CustomTheme.lightTheme.textTheme.bodyText1?.copyWith(
             fontSize: 18,
           ),
@@ -266,7 +266,7 @@ class Profile extends ConsumerWidget {
         Row(
           children: [
             Text(
-              _user.institution,
+              _user.institutionName,
               style: CustomTheme.lightTheme.textTheme.bodyText1?.copyWith(
                 fontSize: 18,
               ),
@@ -277,8 +277,8 @@ class Profile extends ConsumerWidget {
               onPressed: () async {
                 InstitutionModificationPayload payload = InstitutionModificationPayload(
                   id: _user.id,
-                  county: _user.county,
-                  institution: _user.institution,
+                  countyName: _user.countyName,
+                  institutionName: _user.institutionName,
                 );
 
                 InstitutionModificationPayload result = await Navigator.pushNamed(
@@ -287,10 +287,10 @@ class Profile extends ConsumerWidget {
                   arguments: payload,
                 ) as InstitutionModificationPayload;
 
-                _user.county = result.county;
-                _user.institution = result.institution;
-                _homeBaseController.setCounty(result.county);
-                _homeBaseController.setInstitution(result.institution);
+                _user.countyName = result.countyName;
+                _user.institutionName = result.institutionName;
+                _homeBaseController.setCounty(result.countyName);
+                _homeBaseController.setInstitution(result.institutionName);
 
                 controller.setForcedReload();
               },
@@ -339,8 +339,9 @@ class Profile extends ConsumerWidget {
               style: ElevatedButton.styleFrom(
                 minimumSize: Size(appWidth * 0.6, 45),
               ),
-              onPressed: () {
-                controller.logOut();
+              onPressed: () async {
+                _homeBaseController.invalidateControllerProvider();
+                await controller.logOut();
               },
             ),
           ],

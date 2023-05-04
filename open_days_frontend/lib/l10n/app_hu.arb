@@ -1,15 +1,15 @@
 {
     "language": "Magyar",
 
+    "home": "Főmenü",
+    "email": "E-mail",
     "sign_up": "Regisztráció",
     "username": "Felhasználónév",
     "password": "Jelszó",
+    "settings": "Beállítások",
     "first_name": "Keresztnév",
     "last_name": "Vezetéknév",
-    "email": "E-mail",
-    "home": "Főmenü",
-    "settings": "Beállítások",
-
+    
     "base_text_date": "Dátum",
     "base_text_time": "Idő",
     "base_text_link": "Link",
@@ -23,6 +23,10 @@
     "base_text_general_error_message": "Hiba történt",
     "base_text_general_try_again_message": "Hiba történt. Kérjük próbálja újra!",
 
+    "order_by": "Rendezés",
+    "order_by_name": "Név szerint",
+    "order_by_date": "Dátum szerint",
+
     "sign_in": "Bejelentkezés",
     "sign_in_from_here": "Jelentkezz be itt",
 
@@ -31,11 +35,17 @@
     "connectivity_offline": "Offline állapotban van",
     "connectivity_check_connection": "Ellenőrizze az internet kapcsolatot és próbálja újra.",
 
-    "event_scanner_successful_registration": "Sikeres Regisztráció",
+    "email_verification_main_button": "Ellenőrzés",
+    "email_verification_header": "Ellenőrző kód",
+    "email_verification_title": "E-mail címed ellenőrzése",
+    "email_verification_subtitle": "Ide írd be a kapot OTP kódot.",
 
-    "bottom_navigation_bar_title_QR": "QR",
+    "home_base_app_bar_title_qr": "QR kód olvasó",
+    "home_base_navigation_bar_title_qr": "QR",
 
-    "application_bar_scanner": "QR kód olvasó",
+    "event_creator_main_button": "Mentés",
+    "event_creator_header": "Eseménykészítő",
+    "event_creator_online_event": "Online esemény",
 
     "events": "Események",
     "event_details_enroll": "Feliratkozás",
@@ -44,18 +54,15 @@
     "event_details_description": "Leírás",
     "event_details_create_qr_code": "QR Készítése",
 
-    "event_creator_main_button": "Mentés",
-    "event_creator_header": "Eseménykészítő",
-    "event_creator_online_event": "Online esemény",
+    "event_modification_save": "Mentés",
+    "event_modification_image": "Kép",
+    "event_modification_activity": "Tevékenység",
+    "event_modification_header": "Esemény módosítása",
+    "event_modification_description": "Leírás",
+    "event_modification_upload_image": "Kép feltöltése",
+    "event_modification_successful_update": "Az esemény sikeresen frissítve",
 
-    "order_by": "Rendezés",
-    "order_by_name": "Név szerint",
-    "order_by_date": "Dátum szerint",
-
-    "email_verification_main_button": "Ellenőrzés",
-    "email_verification_header": "Ellenőrző kód",
-    "email_verification_title": "E-mail címed ellenőrzése",
-    "email_verification_subtitle": "Ide írd be a kapot OTP kódot.",
+    "event_scanner_successful_scan": "Jelenlét sikeresen elmentve.",
 
     "profile": "Profil",
     "profile_name": "Név",
@@ -67,12 +74,5 @@
     "profile_institution": "Intézmény",
     "profile_what_is_your_name": "Mi a neved?",
     "profile_institution_modification_title": "Válazd ki az intézményed!",
-    "profile_username_modification_title": "Milyen felhasználónevet szeretnél használni?",
-
-    "event_modification_save": "Mentés",
-    "event_modification_image": "Kép",
-    "event_modification_activity": "Tevékenység",
-    "event_modification_header": "Esemény módosítása",
-    "event_modification_description": "Leírás",
-    "event_modification_upload_image": "Kép feltöltése"
+    "profile_username_modification_title": "Milyen felhasználónevet szeretnél használni?"
 }

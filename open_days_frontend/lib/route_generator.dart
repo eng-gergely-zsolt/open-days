@@ -4,9 +4,9 @@ import './initial_page.dart';
 import './screens/lobby/lobby.dart';
 import './screens/login/login.dart';
 import './constants/page_routes.dart';
-import './screens/error/base_error.dart';
 import './screens/home_base/home_base.dart';
 import './screens/guest_mode/guest_mode.dart';
+import './screens/error/base_error_screen.dart';
 import './screens/registration/registration.dart';
 import './screens/registration/email_verification.dart';
 import './screens/profile/modification/name_modification.dart';
@@ -45,7 +45,7 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => NameModification(args as NameModificationPayload));
 
       default:
-        return MaterialPageRoute(builder: (_) => const BaseError());
+        return MaterialPageRoute(builder: (_) => const BaseErrorScreen());
     }
   }
 }

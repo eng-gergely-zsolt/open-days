@@ -7,10 +7,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../models/event.dart';
 import '../constants/constants.dart';
+import '../../models/activity.dart';
 import '../../utils/firebase_utils.dart';
-import './models/create_event_model.dart';
-import '../../models/activity_model.dart';
 import '../../shared/secure_storage.dart';
 import '../../repositories/base_repository.dart';
 import '../../models/responses/base_response.dart';
@@ -118,10 +118,10 @@ class EventCreatorController {
     _ref.read(_isOnlineMeetingProvider.notifier).state = isOnlineMeeting;
   }
 
-  List<String> getAllActivityName(List<ActivityModel> activities) {
+  List<String> getAllActivityName(List<Activity> activities) {
     List<String> activityNames = [];
 
-    for (ActivityModel it in activities) {
+    for (Activity it in activities) {
       activityNames.add(it.name);
     }
 
@@ -130,8 +130,8 @@ class EventCreatorController {
 
   Future<void> createInitialData() async {
     _activitiesProvider = FutureProvider((ref) async {
-      _imageUrl = await FirebaseUtils.getDownloadURL(placeholderImagePath);
-      return _baseRepository.getAllActivityRepo();
+      _imageUrl = await FirebaseUtils.getDownloadURL(eventPlaceholderImagePath);
+      return _baseRepository.getActivitiesRepo();
     });
   }
 
@@ -190,42 +190,38 @@ class EventCreatorController {
   void createEvent(String? selectedActivityName) async {
     _ref.read(_isLoadingProvider.notifier).state = true;
 
-    var payload = CreateEventModel();
+    var event = Event();
     final DateFormat dateFormatter = DateFormat('yyyy-MM-dd H:m');
 
-    payload.event.location = _location;
-    payload.event.description = _description;
-    payload.event.activityName = selectedActivityName ?? '';
-    payload.event.isOnline = _ref.read(_isOnlineMeetingProvider);
-    payload.event.meetingLink = payload.event.isOnline ? _meetingLink : null;
+    event.location = _location;
+    event.description = _description;
+    event.activityName = selectedActivityName ?? '';
+    event.isOnline = _ref.read(_isOnlineMeetingProvider);
+    event.meetingLink = event.isOnline ? _meetingLink : null;
+    event.dateTime = dateFormatter.format(_ref.read(_selectedDateTimeProvider));
 
-    payload.authorizationToken = await SecureStorage.getAuthorizationToken() ?? '';
-    payload.event.dateTime = dateFormatter.format(_ref.read(_selectedDateTimeProvider));
-
-    payload.event.organizerId = await SecureStorage.getUserId() ?? '';
+    event.organizerId = await SecureStorage.getUserId() ?? '';
 
     if (_imageToUploadRef != null) {
       try {
         await _imageToUploadRef?.putFile(File(_ref.read(_imagePathProvider)));
-        payload.event.imagePath = _imagePathInDB;
+        event.imagePath = _imagePathInDB;
       } catch (error) {}
     }
 
     if (_imageToUploadRef != null) {
       try {
         await _imageToUploadRef?.putFile(File(_ref.read(_imagePathProvider)));
-        payload.event.imagePath = _imagePathInDB;
+        event.imagePath = _imagePathInDB;
       } catch (error) {}
     } else {
-      payload.event.imagePath = placeholderImagePath;
+      event.imagePath = eventPlaceholderImagePath;
     }
 
-    if (payload.event.location == '' ||
-        payload.event.organizerId == '' ||
-        payload.authorizationToken == '') {
+    if (event.location == '' || event.organizerId == '') {
       _createEventResponse = BaseResponse();
     } else {
-      _createEventResponse = await _eventCreatorRepository.createEventRepo(payload);
+      _createEventResponse = await _eventCreatorRepository.createEventRepo(event);
     }
 
     if (_createEventResponse?.isOperationSuccessful == true) {

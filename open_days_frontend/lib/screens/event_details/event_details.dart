@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:open_days_frontend/constants/constants.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -7,18 +6,16 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../../theme/theme.dart';
 import '../../utils/utils.dart';
+import '../../models/event.dart';
+import '../../constants/constants.dart';
 import './event_details_controller.dart';
-import '../home_base/models/event_response_model.dart';
-import 'models/is_user_applied_for_event.dart';
+import '../../models/responses/base_logical_response.dart';
 
 class EventDetails extends ConsumerWidget {
-  final String? _roleName;
-  final EventResponseModel? _event;
-  const EventDetails(
-    this._event,
-    this._roleName, {
-    Key? key,
-  }) : super(key: key);
+  final String _roleName;
+  final Event? _event;
+
+  const EventDetails(this._event, this._roleName, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -29,7 +26,7 @@ class EventDetails extends ConsumerWidget {
 
     final isLoading = ref.watch(controller.getIsLoading());
     final initialData =
-        ref.watch(controller.createInitialDataProvider(_event?.id, _event?.imageLink));
+        ref.watch(controller.createInitialDataProvider(_event?.id, _event?.imagePath));
 
     controller.setQrImageText(_event?.id.toString() as String);
 
@@ -84,7 +81,7 @@ class EventDetails extends ConsumerWidget {
   }
 
   Widget buildPage(
-      BuildContext context, IsUserAppliedForEvent initialData, EventDetailsController controller) {
+      BuildContext context, BaseLogicalResponse initialData, EventDetailsController controller) {
     final appLocale = AppLocalizations.of(context);
     final appWidth = MediaQuery.of(context).size.width;
     final appHeight = MediaQuery.of(context).size.height;
@@ -145,7 +142,7 @@ class EventDetails extends ConsumerWidget {
     double appHeight,
     BuildContext context,
     AppLocalizations? appLocale,
-    IsUserAppliedForEvent initialData,
+    BaseLogicalResponse initialData,
     EventDetailsController controller,
   ) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -265,36 +262,45 @@ class EventDetails extends ConsumerWidget {
 
       SizedBox(height: appHeight * 0.05),
       buildCreateQRButton(appWidth, appHeight, context, appLocale, controller),
-      buildEntollButton(appWidth, appHeight, appLocale, initialData, controller),
+      buildEnrollButton(appWidth, appHeight, appLocale, controller),
     ]);
   }
 
-  Widget buildEntollButton(double appWidth, double appHeight, AppLocalizations? appLocale,
-      IsUserAppliedForEvent initialData, EventDetailsController controller) {
+  Widget buildEnrollButton(double appWidth, double appHeight, AppLocalizations? appLocale,
+      EventDetailsController controller) {
     return _roleName == roleUser
         ? Container(
             margin: EdgeInsets.only(bottom: appHeight * 0.03),
-            child: Row(children: [
-              initialData.isUserAppliedForEvent
-                  ? ElevatedButton(
-                      child: Text(
-                        Utils.getString(appLocale?.event_details_unenroll),
-                        style: TextStyle(
-                          fontSize: appHeight * 0.025,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                controller.isUserEnrolled()
+                    ? ElevatedButton(
+                        child: Text(
+                          Utils.getString(appLocale?.event_details_unenroll),
+                          style: TextStyle(
+                            fontSize: appHeight * 0.025,
+                          ),
                         ),
-                      ),
-                      onPressed: () => controller.deleteUserFromEvent(),
-                    )
-                  : ElevatedButton(
-                      child: Text(
-                        Utils.getString(appLocale?.event_details_enroll),
-                        style: TextStyle(
-                          fontSize: appHeight * 0.025,
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: Size(appWidth * 0.6, 45),
                         ),
-                      ),
-                      onPressed: () => controller.applyUserForEvent(),
-                    )
-            ]),
+                        onPressed: () => controller.unenrollUser(),
+                      )
+                    : ElevatedButton(
+                        child: Text(
+                          Utils.getString(appLocale?.event_details_enroll),
+                          style: TextStyle(
+                            fontSize: appHeight * 0.025,
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: Size(appWidth * 0.6, 45),
+                        ),
+                        onPressed: () => controller.enrollUser(),
+                      )
+              ],
+            ),
           )
         : const SizedBox.shrink();
   }

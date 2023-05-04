@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:open_days_frontend/screens/registration/models/verify_email_by_otp_code_req.dart';
 
 import '../../models/responses/base_response.dart';
 import '../../repositories/registration_repository.dart';
@@ -77,8 +76,8 @@ class EmailVerificationController {
   void verifyEmailByOtpCode(String email) async {
     _ref.read(_isLoadingProvider.notifier).state = true;
 
-    VerifyEmailByOtpCodeReq payload = VerifyEmailByOtpCodeReq(email, getOtpCode());
-    _emailVerificationResponse = await _registrationRepository.verifyEmailByOtpCodeRepo(payload);
+    _emailVerificationResponse =
+        await _registrationRepository.verifyEmailByOtpCodeRepo(getOtpCode(), email);
 
     _ref.read(_isLoadingProvider.notifier).state = false;
   }

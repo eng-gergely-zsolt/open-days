@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../theme/theme.dart';
 import './home_controller.dart';
+import '../../theme/theme.dart';
 import '../../constants/constants.dart';
 import '../event_details/event_details.dart';
 import '../home_base/home_base_controller.dart';
-import '../home_base/models/initial_data_model.dart';
 import '../event_modification/event_modification.dart';
+import '../home_base/models/home_base_initial_payload.dart';
 
 class Home extends ConsumerStatefulWidget {
-  final InitialDataModel? _initialData;
+  final HomeBaseInitialPayload? _initialData;
 
   const Home(
       {Key? key,
-      required InitialDataModel? initialDataModel,
+      required HomeBaseInitialPayload? initialDataModel,
       required HomeBaseController homeBaseController})
       : _initialData = initialDataModel,
         super(key: key);
@@ -103,17 +103,17 @@ class _HomeState extends ConsumerState<Home> {
             width: appWidth * 1,
             height: appHeight * 0.744,
             child: ListView.builder(
-                itemCount: widget._initialData?.events?.events.length,
+                itemCount: widget._initialData?.eventsResponse.events.length,
                 itemBuilder: (context, index) {
-                  final event = widget._initialData?.events?.events[index];
+                  final event = widget._initialData?.eventsResponse.events[index];
 
                   return GestureDetector(
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: ((context) => EventDetails(
-                              widget._initialData?.events?.events[index],
-                              widget._initialData?.user?.roleName,
+                              widget._initialData?.eventsResponse.events[index],
+                              widget._initialData?.userResponse.user.roleName ?? '',
                             )),
                       ),
                     ),
@@ -164,7 +164,7 @@ class _HomeState extends ConsumerState<Home> {
                             ),
                           ),
                           const Spacer(),
-                          widget._initialData?.user?.roleName == roleOrganizer
+                          widget._initialData?.userResponse.user.roleName == roleOrganizer
                               ? Container(
                                   margin: EdgeInsets.only(right: appWidth * 0.05),
                                   child: Column(
@@ -175,12 +175,12 @@ class _HomeState extends ConsumerState<Home> {
                                             Icons.edit,
                                           ),
                                           onPressed: () {
-                                            homeBaseController.invalidateInitialDataProviderNow();
+                                            homeBaseController.invalidateInitialDataProvider();
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
-                                                builder: (context) => EventModification(
-                                                    widget._initialData?.events?.events[index]),
+                                                builder: (context) => EventModification(widget
+                                                    ._initialData?.eventsResponse.events[index]),
                                               ),
                                             );
                                           },
@@ -191,15 +191,15 @@ class _HomeState extends ConsumerState<Home> {
                                           ),
                                           onPressed: () {
                                             homeController.deleteEvent(
-                                                widget._initialData?.events?.events[index].id
+                                                widget._initialData?.eventsResponse.events[index].id
                                                     as int,
                                                 homeBaseController);
                                             setState(() {
-                                              widget._initialData?.events?.events.removeWhere(
-                                                  (element) =>
+                                              widget._initialData?.eventsResponse.events
+                                                  .removeWhere((element) =>
                                                       element.id ==
-                                                      widget
-                                                          ._initialData?.events?.events[index].id);
+                                                      widget._initialData?.eventsResponse
+                                                          .events[index].id);
                                             });
                                           },
                                         ),

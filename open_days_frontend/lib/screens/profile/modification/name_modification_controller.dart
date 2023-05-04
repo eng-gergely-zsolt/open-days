@@ -66,12 +66,12 @@ class NameModificationController {
     }
   }
 
-  void updateName(String id) async {
+  void updateName() async {
     _ref.read(_isLoadingProvider.notifier).state = true;
 
     if (_lastName != null && _firstName != null) {
       _updateNameResponse =
-          await _repository.updateNameRepo(id, _lastName.toString(), _firstName.toString());
+          await _repository.updateNameRepo(_lastName.toString(), _firstName.toString());
     }
 
     _ref.read(_isLoadingProvider.notifier).state = false;

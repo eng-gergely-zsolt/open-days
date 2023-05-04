@@ -92,7 +92,7 @@ class UsernameModification extends ConsumerWidget {
                             minimumSize: Size(appWidth * 0.6, 45),
                           ),
                           onPressed: () {
-                            controller.updateUsername(payload.id);
+                            controller.updateUsername();
                           },
                         )
                       : ElevatedButton(

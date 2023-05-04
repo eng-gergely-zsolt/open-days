@@ -4,7 +4,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import './login_controller.dart';
-import '../../constants/constants.dart';
 import '../../constants/page_routes.dart';
 
 class Login extends ConsumerWidget {
@@ -17,14 +16,19 @@ class Login extends ConsumerWidget {
     final appWidth = MediaQuery.of(context).size.width;
     final appHeight = MediaQuery.of(context).size.height;
 
-    final loginController = ref.read(loginControllerProvider);
-    final isLoading = ref.watch(loginController.getIsLoadinProvider());
+    final controller = ref.read(loginControllerProvider);
+    final isLoading = ref.watch(controller.getIsLoadinProvider());
 
-    if (loginController.getLoginResponse() != null) {
-      if (loginController.getLoginResponse()?.operationResult == operationResultSuccess) {
+    if (controller.getLoginUserResponse() != null) {
+      if (controller.getLoginUserResponse()!.isOperationSuccessful) {
         Future.microtask(() {
+          controller.invalidateControllerProvider();
           Navigator.pop(context);
-          Navigator.pushNamed(context, homeBaseRoute);
+          Navigator.pushNamed(
+            context,
+            homeBaseRoute,
+            arguments: controller.getLoginUserResponse()?.id ?? '',
+          );
         });
       } else {
         const snackBar = SnackBar(
@@ -35,7 +39,7 @@ class Login extends ConsumerWidget {
       }
     }
 
-    loginController.deleteResponse();
+    controller.deleteResponse();
 
     return GestureDetector(
       onTap: (() => FocusScope.of(context).requestFocus(FocusNode())),
@@ -61,7 +65,7 @@ class Login extends ConsumerWidget {
                       SizedBox(height: appHeight * 0.2),
                       TextFormField(
                         maxLength: 50,
-                        initialValue: loginController.getUsername(),
+                        initialValue: controller.getUsername(),
                         decoration: InputDecoration(
                           labelText: appLocale?.username,
                           prefixIcon: Icon(
@@ -70,14 +74,14 @@ class Login extends ConsumerWidget {
                           ),
                         ),
                         validator: (value) {
-                          return loginController.validateUsername(value);
+                          return controller.validateUsername(value);
                         },
-                        onChanged: ((value) => loginController.setUsername(value)),
+                        onChanged: ((value) => controller.setUsername(value)),
                       ),
                       TextFormField(
                         maxLength: 50,
                         obscureText: true,
-                        initialValue: loginController.getPassword(),
+                        initialValue: controller.getPassword(),
                         decoration: InputDecoration(
                           labelText: appLocale?.password,
                           prefixIcon: Icon(
@@ -86,9 +90,9 @@ class Login extends ConsumerWidget {
                           ),
                         ),
                         validator: (value) {
-                          return loginController.validatePassword(value);
+                          return controller.validatePassword(value);
                         },
-                        onChanged: ((value) => loginController.setPassword(value)),
+                        onChanged: ((value) => controller.setPassword(value)),
                       ),
                       SizedBox(height: appHeight * 0.05),
                       ElevatedButton(
@@ -98,7 +102,7 @@ class Login extends ConsumerWidget {
                         ),
                         onPressed: (() {
                           if (_formKey.currentState!.validate()) {
-                            loginController.loginUser();
+                            controller.loginUser();
                           }
                         }),
                       ),

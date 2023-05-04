@@ -1,30 +1,32 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import './models/user.dart';
-import './models/institution.dart';
+import '../../models/institution.dart';
 import '../../repositories/base_repository.dart';
-import '../../models/responses/user_login_response.dart';
+import '../../models/responses/base_response.dart';
+import '../../models/requests/create_user_request.dart';
+import '../../models/responses/login_user_response.dart';
 import '../../repositories/registration_repository.dart';
+import '../../models/responses/institution_response.dart';
 
 class RegistrationController {
-  UserLoginResponse? _registrationResponse;
+  BaseResponse? _registrationResponse;
 
   final ProviderRef _ref;
   final RegistrationRepository _registrationRepository;
 
-  final _user = User();
+  final _user = CreateUserRequest();
   final _isLoadingProvider = StateProvider<bool>((ref) => false);
   final _selectedCountyProvider = StateProvider<String?>((ref) => null);
   final _selectedInstitutionProvider = StateProvider<String?>((ref) => null);
 
-  final _institutionProvider = FutureProvider((ref) async {
+  final _institutionsProvider = FutureProvider((ref) async {
     final baseRepository = ref.watch(baseRepositoryProvider);
-    return baseRepository.getAllInstitutionRepo();
+    return baseRepository.getInstitutionsRepo();
   });
 
   RegistrationController(this._ref, this._registrationRepository);
 
-  User getUser() {
+  CreateUserRequest getUser() {
     return _user;
   }
 
@@ -32,7 +34,7 @@ class RegistrationController {
     return _user.email;
   }
 
-  UserLoginResponse? getRegistrationResponse() {
+  BaseResponse? getRegistrationResponse() {
     return _registrationResponse;
   }
 
@@ -48,8 +50,8 @@ class RegistrationController {
     return _selectedInstitutionProvider;
   }
 
-  FutureProvider<List<Institution>> getInstitutionProvider() {
-    return _institutionProvider;
+  FutureProvider<InstitutionsResponse> getInstitutionsProvider() {
+    return _institutionsProvider;
   }
 
   void setEmail(String email) {
@@ -72,9 +74,9 @@ class RegistrationController {
     _user.firstName = firstName;
   }
 
-  void setInstitution(String? institution) {
-    if (institution != null) {
-      _user.institution = institution;
+  void setInstitutionName(String? institutionName) {
+    if (institutionName != null) {
+      _user.institutionName = institutionName;
     }
   }
 

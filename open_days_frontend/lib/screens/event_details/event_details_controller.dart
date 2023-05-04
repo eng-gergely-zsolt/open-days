@@ -1,14 +1,14 @@
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../constants/constants.dart';
-import './models/is_user_applied_for_event.dart';
+import '../../utils/firebase_utils.dart';
 import '../../models/responses/base_response.dart';
 import '../../repositories/event_details_repository.dart';
+import '../../models/responses/base_logical_response.dart';
 
 class EventDetailsController {
   var _imageURL = '';
   var _qrImageText = '';
+  var _isUserEnrolled = false;
 
   final ProviderRef _ref;
   final EventDetailsRepository _eventDetailsRepository;
@@ -16,15 +16,19 @@ class EventDetailsController {
 
   int? _eventId;
   BaseResponse? _eventParticipatonResponse;
-  FutureProvider<IsUserAppliedForEvent>? _initialDataProvider;
+  FutureProvider<BaseLogicalResponse>? _initialDataProvider;
 
   final _eventScannerUri =
-      'https://open-days-thesis.herokuapp.com/open-days/event/user_participates_in_event/';
+      'https://open-days-thesis.herokuapp.com/open-days/event/save-user-participation/';
 
   EventDetailsController(this._ref, this._eventDetailsRepository);
 
   String getImageURL() {
     return _imageURL;
+  }
+
+  bool isUserEnrolled() {
+    return _isUserEnrolled;
   }
 
   String getQrImageText() {
@@ -37,10 +41,6 @@ class EventDetailsController {
 
   BaseResponse? getEventParticipationResponse() {
     return _eventParticipatonResponse;
-  }
-
-  void setEventId(int? eventId) {
-    _eventId = eventId;
   }
 
   void setQrImageText(String eventId) {
@@ -56,90 +56,60 @@ class EventDetailsController {
     return Future.value(true);
   }
 
-  void applyUserForEvent() async {
+  void enrollUser() async {
     var response = BaseResponse();
     _ref.read(_isLoadingProvider.notifier).state = true;
 
     if (_eventId != null) {
-      response = _eventParticipatonResponse =
-          await _eventDetailsRepository.applyUserForEventRepo(_eventId!);
+      response =
+          _eventParticipatonResponse = await _eventDetailsRepository.enrollUserRepo(_eventId!);
     }
 
     if (response.isOperationSuccessful) {
-      reloadInitialDataProvider();
-    } else {
-      _ref.read(_isLoadingProvider.notifier).state = false;
+      _isUserEnrolled = true;
     }
+
+    _ref.read(_isLoadingProvider.notifier).state = false;
   }
 
-  void deleteUserFromEvent() async {
+  void unenrollUser() async {
     var response = BaseResponse();
     _ref.read(_isLoadingProvider.notifier).state = true;
 
     if (_eventId != null) {
-      response = _eventParticipatonResponse =
-          await _eventDetailsRepository.deleteUserFromEventRepo(_eventId!);
+      response =
+          _eventParticipatonResponse = await _eventDetailsRepository.unenrollUserRepo(_eventId!);
     }
 
     if (response.isOperationSuccessful) {
-      reloadInitialDataProvider();
-    } else {
-      _ref.read(_isLoadingProvider.notifier).state = false;
+      _isUserEnrolled = false;
     }
-  }
 
-  void reloadInitialDataProvider() {
-    _ref.invalidate(_initialDataProvider!);
-
-    _initialDataProvider = FutureProvider((ref) async {
-      var response = IsUserAppliedForEvent();
-
-      if (_eventId != null) {
-        response = await _eventDetailsRepository.isUserAppliedForEventRepo(_eventId!);
-      }
-
-      _ref.read(_isLoadingProvider.notifier).state = false;
-      return response;
-    });
+    _ref.read(_isLoadingProvider.notifier).state = false;
   }
 
   /// Gathers the requested data before showing the page to the user.
-  FutureProvider<IsUserAppliedForEvent> createInitialDataProvider(int? eventId, String? imagePath) {
-    setEventId(eventId);
+  FutureProvider<BaseLogicalResponse> createInitialDataProvider(int? eventId, String? imagePath) {
+    _eventId = eventId;
 
     if (_eventId != null && _eventId != eventId && _initialDataProvider != null) {
       _ref.invalidate(_initialDataProvider!);
     }
 
     return _initialDataProvider ??= FutureProvider((ref) async {
-      var response = IsUserAppliedForEvent();
+      var response = BaseLogicalResponse();
 
       if (imagePath != null) {
-        _imageURL = await _getDownloadURL(imagePath);
+        _imageURL = await FirebaseUtils.getDownloadURL(imagePath);
       }
 
       if (eventId != null) {
-        response = await _eventDetailsRepository.isUserAppliedForEventRepo(eventId);
+        response = await _eventDetailsRepository.isUserEnrolledRepo(eventId);
+        _isUserEnrolled = response.data;
       }
 
       return response;
     });
-  }
-
-  /// Gets the URL link from the connected Firebase Storage by the given path.
-  Future<String> _getDownloadURL(String imagePath) async {
-    String response;
-    Reference firebaseRef;
-
-    try {
-      firebaseRef = FirebaseStorage.instance.ref().child(imagePath);
-      response = await firebaseRef.getDownloadURL();
-    } catch (error) {
-      firebaseRef = FirebaseStorage.instance.ref().child(placeholderImagePath);
-      response = await firebaseRef.getDownloadURL();
-    }
-
-    return response;
   }
 }
 

@@ -1,9 +1,9 @@
-import './base_error_response.dart';
+import '../base_error.dart';
 
 class UpdateUsernameResponse {
   String authorizationToken;
   bool isOperationSuccessful;
-  BaseErrorResponse error = BaseErrorResponse();
+  BaseError error = BaseError();
 
   UpdateUsernameResponse({
     this.authorizationToken = '',

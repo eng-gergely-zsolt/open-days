@@ -1,11 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:open_days_frontend/repositories/guest_mode_repository.dart';
-import 'package:open_days_frontend/screens/home_base/models/get_all_event_model.dart';
+import 'package:open_days_frontend/models/responses/events_response.dart';
 
 class GuestModeController {
   final ProviderRef _ref;
   final GuestModeRepository _guestModeRepository;
-  late FutureProvider<GetAllEventModel> _eventsProvider;
+  late FutureProvider<EventsResponse> _eventsProvider;
   final _orderValueProvider = StateProvider<String?>((ref) => null);
 
   static const String dateOrder = 'Date';
@@ -19,11 +19,11 @@ class GuestModeController {
     return _orderValueProvider;
   }
 
-  FutureProvider<GetAllEventModel> getEventsProvider() {
+  FutureProvider<EventsResponse> getEventsProvider() {
     return _eventsProvider;
   }
 
-  FutureProvider<GetAllEventModel> createEventsProvider() {
+  FutureProvider<EventsResponse> createEventsProvider() {
     return FutureProvider((ref) async {
       return await _guestModeRepository.getEventsRepo();
     });
@@ -58,20 +58,20 @@ class GuestModeController {
     }
   }
 
-  FutureProvider<GetAllEventModel> _getOrderedByDateEventsProvider() {
+  FutureProvider<EventsResponse> _getOrderedByDateEventsProvider() {
     return FutureProvider((ref) async {
       return await _getOrderedByDateEvents();
     });
   }
 
-  FutureProvider<GetAllEventModel> _getOrderedByNameEventsProvider() {
+  FutureProvider<EventsResponse> _getOrderedByNameEventsProvider() {
     return FutureProvider((ref) async {
       return await _getOrderedByNameEvents();
     });
   }
 
-  Future<GetAllEventModel> _getOrderedByDateEvents() {
-    GetAllEventModel result = GetAllEventModel();
+  Future<EventsResponse> _getOrderedByDateEvents() {
+    EventsResponse result = EventsResponse();
     var savedEvents = _guestModeRepository.getSavedEventsRepo();
     var orderedEvents = savedEvents.events;
 
@@ -81,12 +81,16 @@ class GuestModeController {
       },
     );
 
-    result = GetAllEventModel(operationResult: savedEvents.operationResult, events: orderedEvents);
+    result = EventsResponse(
+      isOperationSuccessful: savedEvents.isOperationSuccessful,
+      events: orderedEvents,
+    );
+
     return Future.value(result);
   }
 
-  Future<GetAllEventModel> _getOrderedByNameEvents() {
-    GetAllEventModel result = GetAllEventModel();
+  Future<EventsResponse> _getOrderedByNameEvents() {
+    EventsResponse result = EventsResponse();
     var savedEvents = _guestModeRepository.getSavedEventsRepo();
     var orderedEvents = savedEvents.events;
 
@@ -96,7 +100,11 @@ class GuestModeController {
       },
     );
 
-    result = GetAllEventModel(operationResult: savedEvents.operationResult, events: orderedEvents);
+    result = EventsResponse(
+      isOperationSuccessful: savedEvents.isOperationSuccessful,
+      events: orderedEvents,
+    );
+
     return Future.value(result);
   }
 }

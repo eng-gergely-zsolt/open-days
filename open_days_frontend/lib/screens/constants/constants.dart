@@ -1,2 +1,3 @@
 // Firebase related constants
-const placeholderImagePath = 'event/placeholder.jpg';
+const userPlaceholderImagePath = 'user/placeholder.jpg';
+const eventPlaceholderImagePath = 'event/placeholder.jpg';

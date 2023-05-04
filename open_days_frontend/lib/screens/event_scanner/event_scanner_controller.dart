@@ -46,11 +46,11 @@ class EventScannerController {
     _qrViewController?.dispose();
   }
 
-  void participateInEvent() {
+  void saveUserParticipation() {
     _ref.invalidate(_eventParticipationProvider);
 
     _eventParticipationProvider = FutureProvider(((ref) async {
-      final response = await _eventScannerRepository.participateInEventRepo(_barcode?.code);
+      final response = await _eventScannerRepository.saveUserParticipationRepo(_barcode?.code);
 
       if (response.isOperationSuccessful == true) {
         _ref.read(_isApplyingSuccessful.notifier).state = true;

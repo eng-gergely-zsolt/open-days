@@ -1,16 +1,19 @@
 import 'package:firebase_storage/firebase_storage.dart';
 
+import '../screens/constants/constants.dart';
+
 class FirebaseUtils {
   /// Returns the URL of an image stored in Firebase storage by the path of the image.
   static Future<String> getDownloadURL(String imagePath) async {
     String response;
-    var imageRef = FirebaseStorage.instance.ref().child(imagePath);
+    Reference firebaseRef;
 
     try {
-      response = await imageRef.getDownloadURL();
-    } catch (_) {
-      imageRef = FirebaseStorage.instance.ref().child('event/placeholder.jpg');
-      response = await imageRef.getDownloadURL();
+      firebaseRef = FirebaseStorage.instance.ref().child(imagePath);
+      response = await firebaseRef.getDownloadURL();
+    } catch (error) {
+      firebaseRef = FirebaseStorage.instance.ref().child(eventPlaceholderImagePath);
+      response = await firebaseRef.getDownloadURL();
     }
 
     return response;

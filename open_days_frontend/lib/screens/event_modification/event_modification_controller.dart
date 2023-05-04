@@ -7,11 +7,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../models/activity_model.dart';
+import '../../models/activity.dart';
 import '../../utils/firebase_utils.dart';
 import '../../repositories/base_repository.dart';
 import '../../models/responses/base_response.dart';
-import '../../models/event_modification_request.dart';
+import '../../models/requests/update_event_request.dart';
 import '../../models/responses/activities_response.dart';
 import '../../repositories/event_modification_repository.dart';
 
@@ -102,10 +102,10 @@ class EventModificationController {
     _ref.read(_isOnlineMeetingProvider!.notifier).state = isOnlineMeeting;
   }
 
-  List<String> getAllActivityName(List<ActivityModel> activities) {
+  List<String> getAllActivityName(List<Activity> activities) {
     List<String> activityNames = [];
 
-    for (ActivityModel it in activities) {
+    for (Activity it in activities) {
       activityNames.add(it.name);
     }
 
@@ -140,7 +140,7 @@ class EventModificationController {
         _imageUrl = await FirebaseUtils.getDownloadURL(imagePath);
       }
 
-      response = await _baseRepository.getAllActivityRepo();
+      response = await _baseRepository.getActivitiesRepo();
 
       return response;
     });
@@ -192,33 +192,32 @@ class EventModificationController {
     _ref.read(_isLoadingProvider.notifier).state = true;
 
     final DateFormat dateFormatter = DateFormat('yyyy-MM-dd H:m');
-    EventModificationRequest updateEventPayload = EventModificationRequest();
+    UpdateEventRequest payload = UpdateEventRequest();
 
-    updateEventPayload.location = _location;
-    updateEventPayload.description = _description;
-    updateEventPayload.activityName = selectedActivityName;
-    updateEventPayload.isOnline = _ref.read(_isOnlineMeetingProvider!);
-    updateEventPayload.dateTime =
+    payload.location = _location;
+    payload.description = _description;
+    payload.activityName = selectedActivityName;
+    payload.isOnline = _ref.read(_isOnlineMeetingProvider!);
+    payload.dateTime =
         dateFormatter.format(_ref.read(_selectedDateTimeProvider as StateProvider<DateTime>));
 
-    if (updateEventPayload.isOnline == false) {
-      updateEventPayload.meetingLink = null;
+    if (payload.isOnline == false) {
+      payload.meetingLink = null;
     } else {
-      updateEventPayload.meetingLink = _meetingLink;
+      payload.meetingLink = _meetingLink;
     }
 
     if (_imageToUploadRef != null) {
       try {
         await _imageToUploadRef?.putFile(File(_ref.read(_imagePathProvider)));
-        updateEventPayload.imagePath = _imagePathInDB;
+        payload.imagePath = _imagePathInDB;
       } catch (error) {}
     }
 
     if (eventId == null) {
       _updateEventResponse = BaseResponse();
     } else {
-      _updateEventResponse =
-          await _eventModificationRepository.updateEventRepo(eventId, updateEventPayload);
+      _updateEventResponse = await _eventModificationRepository.updateEventRepo(eventId, payload);
     }
 
     _ref.read(_isLoadingProvider.notifier).state = false;

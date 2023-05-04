@@ -1,19 +1,19 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../services/home_base/get_all_event.dart';
-import '../screens/home_base/models/get_all_event_model.dart';
+import '../services/guest_mode/get_future_events_svc.dart';
+import '../models/responses/events_response.dart';
 
 final guestModeRepositoryProvider = Provider((_) => GuestModeRepository());
 
 class GuestModeRepository {
-  GetAllEventModel savedEvents = GetAllEventModel();
+  EventsResponse savedEvents = EventsResponse();
 
-  GetAllEventModel getSavedEventsRepo() {
+  EventsResponse getSavedEventsRepo() {
     return savedEvents;
   }
 
-  Future<GetAllEventModel> getEventsRepo() async {
-    savedEvents = await getAllEventSvc();
+  Future<EventsResponse> getEventsRepo() async {
+    savedEvents = await getFutureEventsSvc();
     return savedEvents;
   }
 }

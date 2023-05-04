@@ -1,11 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../models/institution.dart';
 import '../../../utils/user_data_utils.dart';
 import '../../../repositories/base_repository.dart';
-import '../../registration/models/institution.dart';
 import '../../../models/responses/base_response.dart';
 import '../../../repositories/profile_repository.dart';
 import '../models/institution_modification_payload.dart';
+import '../../../models/responses/institution_response.dart';
 
 class InstitutionModificationController {
   final ProviderRef _ref;
@@ -18,7 +19,7 @@ class InstitutionModificationController {
   final _selectedInstitutionProvider = StateProvider<String>((ref) => '');
 
   var _isConfirmAllowed = false;
-  late FutureProvider<List<Institution>> _institutionsProvider;
+  late FutureProvider<InstitutionsResponse> _institutionsProvider;
 
   String? _selectedCounty;
   String? _selectedInstitution;
@@ -26,7 +27,7 @@ class InstitutionModificationController {
   List<Institution> _institutions = List.empty();
 
   InstitutionModificationController(this._ref, this._baseRepository, this._profileRepository) {
-    _institutionsProvider = _getAllInstitution();
+    _institutionsProvider = _getInstitutions();
   }
 
   bool getConfirmAllowed() {
@@ -57,14 +58,15 @@ class InstitutionModificationController {
     return _selectedInstitutionProvider;
   }
 
-  FutureProvider<List<Institution>> getInstitutionsProvider() {
+  FutureProvider<InstitutionsResponse> getInstitutionsProvider() {
     return _institutionsProvider;
   }
 
-  FutureProvider<List<Institution>> _getAllInstitution() {
+  FutureProvider<InstitutionsResponse> _getInstitutions() {
     return FutureProvider((ref) async {
-      _institutions = await _baseRepository.getAllInstitutionRepo();
-      return _institutions;
+      InstitutionsResponse response = await _baseRepository.getInstitutionsRepo();
+      _institutions = response.institutions;
+      return response;
     });
   }
 
@@ -74,8 +76,8 @@ class InstitutionModificationController {
 
   void setPayload(InstitutionModificationPayload payload) {
     _payload.id = payload.id;
-    _payload.county = payload.county;
-    _payload.institution = payload.institution;
+    _payload.countyName = payload.countyName;
+    _payload.institutionName = payload.institutionName;
   }
 
   void setSelectedCountyProvider(String? selectedCounty) {
@@ -100,7 +102,8 @@ class InstitutionModificationController {
   }
 
   void setConfirmAllowedOnSelectedValueChange() {
-    if (_selectedCounty == _payload.county && _selectedInstitution == _payload.institution) {
+    if (_selectedCounty == _payload.countyName &&
+        _selectedInstitution == _payload.institutionName) {
       _isConfirmAllowed = false;
     } else {
       _isConfirmAllowed = true;
@@ -126,7 +129,7 @@ class InstitutionModificationController {
     _ref.read(_isLoadingProvider.notifier).state = true;
 
     _updateInstitutionResponse = await _profileRepository.updateInstitutionRepo(
-        _payload.id, _selectedCounty ?? '', _selectedInstitution ?? '');
+        _selectedCounty ?? '', _selectedInstitution ?? '');
 
     _ref.read(_isLoadingProvider.notifier).state = false;
   }

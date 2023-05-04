@@ -1,18 +1,17 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../constants/constants.dart';
 import '../../shared/secure_storage.dart';
 import '../../repositories/login_repository.dart';
-import '../../models/requests/user_request_model.dart';
-import '../../models/responses/user_login_response.dart';
+import '../../models/requests/login_user_request.dart';
+import '../../models/responses/login_user_response.dart';
 
 class LoginController {
-  UserLoginResponse? _loginResponse;
+  LoginUserResponse? _loginUserResponse;
 
   final ProviderRef _ref;
   final LoginRepository _loginRepository;
 
-  final _user = UserRequestModel();
+  final _user = LoginUserRequest();
   final _isLoadingProvider = StateProvider<bool>((ref) => false);
 
   LoginController(this._ref, this._loginRepository);
@@ -25,8 +24,8 @@ class LoginController {
     return _user.password;
   }
 
-  UserLoginResponse? getLoginResponse() {
-    return _loginResponse;
+  LoginUserResponse? getLoginUserResponse() {
+    return _loginUserResponse;
   }
 
   StateProvider<bool> getIsLoadinProvider() {
@@ -42,17 +41,21 @@ class LoginController {
   }
 
   void deleteResponse() {
-    _loginResponse = null;
+    _loginUserResponse = null;
+  }
+
+  void invalidateControllerProvider() {
+    _ref.invalidate(loginControllerProvider);
   }
 
   void loginUser() async {
     _ref.read(_isLoadingProvider.notifier).state = true;
-    _loginResponse = null;
-    _loginResponse = await _loginRepository.loginUserRepo(_user);
+    _loginUserResponse = null;
+    _loginUserResponse = await _loginRepository.loginUserRepo(_user);
 
-    if (_loginResponse != null && _loginResponse?.operationResult == operationResultSuccess) {
-      await SecureStorage.setUserId(_loginResponse?.id as String);
-      await SecureStorage.setAuthorizationToken(_loginResponse?.authorizationToken as String);
+    if (_loginUserResponse != null && _loginUserResponse!.isOperationSuccessful) {
+      await SecureStorage.setUserId(_loginUserResponse?.id as String);
+      await SecureStorage.setAuthorizationToken(_loginUserResponse?.authorizationToken as String);
     }
 
     _ref.read(_isLoadingProvider.notifier).state = false;

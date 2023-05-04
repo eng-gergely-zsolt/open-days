@@ -40,6 +40,7 @@ dependencies:
   qr_flutter: ^4.0.0
   flutter_riverpod: any
   image_picker: ^0.8.7+1
+  path_provider: ^2.0.14
   cupertino_icons: ^1.0.2
   qr_code_scanner: ^1.0.1
   loading_animation_widget:
@@ -51,6 +52,7 @@ dependencies:
   firebase_core: ^2.8.0
   cloud_firestore: ^4.4.5
   firebase_storage: ^11.0.16
+  
 
 dev_dependencies:
   flutter_test:

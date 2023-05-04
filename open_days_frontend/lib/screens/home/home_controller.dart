@@ -13,7 +13,7 @@ class HomeController {
     final response = await _homeRepository.deleteEventRepo(eventId);
 
     if (response.isOperationSuccessful == true) {
-      homeBaseController.invalidateInitialDataProviderNow();
+      homeBaseController.invalidateInitialDataProvider();
     }
   }
 }

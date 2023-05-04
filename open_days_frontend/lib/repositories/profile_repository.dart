@@ -10,19 +10,19 @@ import '../models/responses/update_username_response.dart';
 final profileRepositoryProvider = Provider((_) => ProfileRepository());
 
 class ProfileRepository {
-  Future<BaseResponse> updateImagePathRepo(String id, String imagePath) async {
-    return await updateImagePathSvc(id, imagePath);
+  Future<BaseResponse> updateImagePathRepo(String imagePath) async {
+    return await updateImagePathSvc(imagePath);
   }
 
-  Future<UpdateUsernameResponse> updateUsernameRepo(String id, String username) async {
-    return await updateUsernameSvc(id, username);
+  Future<UpdateUsernameResponse> updateUsernameRepo(String username) async {
+    return await updateUsernameSvc(username);
   }
 
-  Future<BaseResponse> updateNameRepo(String id, String lastName, String firstName) async {
-    return await updateNameSvc(id, lastName, firstName);
+  Future<BaseResponse> updateNameRepo(String lastName, String firstName) async {
+    return await updateNameSvc(lastName, firstName);
   }
 
-  Future<BaseResponse> updateInstitutionRepo(String id, String county, String institution) async {
-    return await updateInstitutionSvc(id, county, institution);
+  Future<BaseResponse> updateInstitutionRepo(String county, String institution) async {
+    return await updateInstitutionSvc(county, institution);
   }
 }

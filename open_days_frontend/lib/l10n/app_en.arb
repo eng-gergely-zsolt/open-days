@@ -4,15 +4,15 @@
         "description": "The current language"
     },
 
+    "home": "Home",
+    "email": "E-mail",
     "sign_up": "Sign up",
     "username": "Username",
     "password": "Password",
-    "first_name": "First name",
-    "last_name": "Last name",
-    "email": "E-mail",
-    "home": "Home",
     "settings": "Settings",
-
+    "last_name": "Last name",
+    "first_name": "First name",
+    
     "base_text_date": "Date",
     "base_text_time": "Time",
     "base_text_link": "Link",
@@ -26,6 +26,10 @@
     "base_text_general_error_message": "Something went wrong",
     "base_text_general_try_again_message": "Something went wrong. Please try again!",
 
+    "order_by": "Order by",
+    "order_by_name": "Name",
+    "order_by_date": "Date",
+    
     "sign_in": "Sign in",
     "sign_in_from_here": "Sign in from here",
 
@@ -34,11 +38,17 @@
     "connectivity_offline": "You're offline",
     "connectivity_check_connection": "Check your connection and try again.",
 
-    "event_scanner_successful_registration": "Successful registration",
+    "email_verification_main_button": "Verify",
+    "email_verification_header": "Verification Code",
+    "email_verification_title": "Verify your email address",
+    "email_verification_subtitle": "Enter your OTP code here.",
 
-    "bottom_navigation_bar_title_QR": "QR",
+    "home_base_app_bar_title_qr": "QR Code Scanner",
+    "home_base_navigation_bar_title_qr": "QR",
 
-    "application_bar_scanner": "QR Code Scanner",
+    "event_creator_main_button": "Save",
+    "event_creator_header": "Event Creator",
+    "event_creator_online_event": "Online event",
 
     "events": "Events",
     "event_details_enroll": "Enroll",
@@ -47,18 +57,15 @@
     "event_details_description": "Description",
     "event_details_create_qr_code": "Create QR",
 
-    "event_creator_main_button": "Save",
-    "event_creator_header": "Event Creator",
-    "event_creator_online_event": "Online event",
+    "event_modification_save": "Save",
+    "event_modification_image": "Image",
+    "event_modification_activity": "Activity",
+    "event_modification_header": "Edit Event",
+    "event_modification_description": "Description",
+    "event_modification_upload_image": "Choose image to upload",
+    "event_modification_successful_update": "Event updated successfully",
 
-    "order_by": "Order by",
-    "order_by_name": "Name",
-    "order_by_date": "Date",
-
-    "email_verification_main_button": "Verify",
-    "email_verification_header": "Verification Code",
-    "email_verification_title": "Verify your email address",
-    "email_verification_subtitle": "Enter your OTP code here.",
+    "event_scanner_successful_scan": "You'r participation has been registered.",
 
     "profile": "Profile",
     "profile_name": "Name",
@@ -70,12 +77,5 @@
     "profile_institution": "Institution",
     "profile_what_is_your_name": "What's your name?",
     "profile_institution_modification_title": "Choose your institution!",
-    "profile_username_modification_title": "What username do you want to use?",
-
-    "event_modification_save": "Save",
-    "event_modification_image": "Image",
-    "event_modification_activity": "Activity",
-    "event_modification_header": "Edit Event",
-    "event_modification_description": "Description",
-    "event_modification_upload_image": "Choose image to upload"
+    "profile_username_modification_title": "What username do you want to use?"
 }
