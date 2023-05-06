@@ -33,7 +33,6 @@ public class EventController {
 		return eventService.getFutureEvents();
 	}
 
-
 	/**
 	 * Returns the users that were enrolled in an event.
 	 */
