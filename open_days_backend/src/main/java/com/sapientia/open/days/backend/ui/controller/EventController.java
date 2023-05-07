@@ -42,6 +42,14 @@ public class EventController {
 	}
 
 	/**
+	 * Returns the users that participated in an event.
+	 */
+	@GetMapping(path = "/participated-users/{eventId}")
+	public List<User> getParticipatedUsers(@PathVariable long eventId) {
+		return eventService.getParticipatedUsers(eventId);
+	}
+
+	/**
 	 * Returns the events conform to the role of the user.
 	 */
 	@GetMapping(path = "/events-conform-to-user-role")

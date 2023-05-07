@@ -12,6 +12,8 @@ public interface EventService {
 
 	List<User> getEnrolledUsers(long eventId);
 
+	List<User> getParticipatedUsers(long eventId);
+
 	List<Event> getEventsConformToUserRole(String userPublicId);
 
 	boolean isUserEnrolled(long eventId, String userPublicId);

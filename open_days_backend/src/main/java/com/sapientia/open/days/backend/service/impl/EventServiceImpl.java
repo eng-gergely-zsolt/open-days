@@ -110,6 +110,34 @@ public class EventServiceImpl implements EventService {
 	}
 
 	/**
+	 * Returns the users that participated in an event.
+	 */
+	@Override
+	public List<User> getParticipatedUsers(long eventId) {
+		ArrayList<User> participatedUsers = new ArrayList<>();
+		EventEntity eventEntity = eventRepository.findById(eventId);
+
+		if (eventEntity == null) {
+			throw new BaseException(ErrorCode.EVENT_NOT_FOUND_WITH_ID.getErrorCode(),
+					ErrorMessage.EVENT_NOT_FOUND_WITH_ID.getErrorMessage());
+		}
+
+		for (UserEntity userEntity : eventEntity.getParticipatedUsers()) {
+			User user = new User();
+
+			BeanUtils.copyProperties(userEntity, user);
+
+			user.setRoleName(userEntity.getRole().getName());
+			user.setInstitutionName(userEntity.getInstitution().getName());
+			user.setCountyName(userEntity.getInstitution().getSettlement().getCounty().getName());
+
+			participatedUsers.add(user);
+		}
+
+		return participatedUsers;
+	}
+
+	/**
 	 * Returns the events conform to the role of the user.
 	 */
 	@Override
