@@ -6,11 +6,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="open-days-email-service" />
         <module name="open_days_backend" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="open-days-email-service" target="1.7" />
       <module name="open_days_email_service" target="1.7" />
     </bytecodeTargetLevel>
   </component>
