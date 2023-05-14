@@ -53,6 +53,8 @@
     "event_details_unenroll": "Leiratkozás",
     "event_details_description": "Leírás",
     "event_details_create_qr_code": "QR Készítése",
+    "event_details_enrolled_users": "Felíratkozott felhasználók",
+    "event_details_participated_users": "Résztvett felhasználók",
 
     "event_modification_save": "Mentés",
     "event_modification_image": "Kép",

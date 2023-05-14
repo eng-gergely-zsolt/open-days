@@ -4,7 +4,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import './home_controller.dart';
 import '../../theme/theme.dart';
+import '../../models/event.dart';
 import '../../constants/constants.dart';
+import '../../utils/custom_date_utils.dart';
 import '../event_details/event_details.dart';
 import '../home_base/home_base_controller.dart';
 import '../event_modification/event_modification.dart';
@@ -31,6 +33,7 @@ class _HomeState extends ConsumerState<Home> {
     final appHeight = MediaQuery.of(context).size.height;
     final appLocale = AppLocalizations.of(context);
 
+    var colorCount = 0;
     final homeController = ref.read(homeControllerProvider);
     final homeBaseController = ref.read(homeBaseControllerProvider);
     String? orderValue = ref.watch(homeBaseController.getOrderValueProvider());
@@ -107,12 +110,15 @@ class _HomeState extends ConsumerState<Home> {
                 itemBuilder: (context, index) {
                   final event = widget._initialData?.eventsResponse.events[index];
 
-                  return GestureDetector(
+                  final isPastDate = CustomDateUtils.isPastDate(
+                      widget._initialData?.eventsResponse.events[index].dateTime ?? '');
+
+                  Widget result = GestureDetector(
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: ((context) => EventDetails(
-                              widget._initialData?.eventsResponse.events[index],
+                              widget._initialData?.eventsResponse.events[index] ?? Event(),
                               widget._initialData?.userResponse.user.roleName ?? '',
                             )),
                       ),
@@ -129,11 +135,13 @@ class _HomeState extends ConsumerState<Home> {
                           Container(
                             height: double.infinity,
                             width: 10,
-                            color: index % 3 == 0
+                            color: isPastDate
                                 ? const Color.fromRGBO(231, 111, 81, 1)
-                                : index % 3 == 1
+                                : index % 3 == 0
                                     ? const Color.fromRGBO(42, 157, 143, 1)
-                                    : const Color.fromRGBO(233, 196, 106, 1),
+                                    : index % 3 == 1
+                                        ? const Color.fromRGBO(99, 174, 183, 1)
+                                        : const Color.fromRGBO(233, 196, 106, 1),
                           ),
                           Container(
                             margin: EdgeInsets.only(left: appWidth * 0.1),
@@ -213,6 +221,12 @@ class _HomeState extends ConsumerState<Home> {
                       ),
                     ),
                   );
+
+                  if (!isPastDate) {
+                    ++colorCount;
+                  }
+
+                  return result;
                 }),
           ),
         ],

@@ -1,9 +1,12 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../constants/constants.dart';
+import '../../utils/custom_date_utils.dart';
 import '../../utils/firebase_utils.dart';
+import './models/event_details_initial_data.dart';
 import '../../models/responses/base_response.dart';
 import '../../repositories/event_details_repository.dart';
-import '../../models/responses/base_logical_response.dart';
 
 class EventDetailsController {
   var _imageURL = '';
@@ -12,11 +15,18 @@ class EventDetailsController {
 
   final ProviderRef _ref;
   final EventDetailsRepository _eventDetailsRepository;
+
+  final _listViewController = ScrollController();
+  final _scrollViewController = ScrollController();
+  final _reloadScreen = StateProvider((ref) => false);
   final _isLoadingProvider = StateProvider((ref) => false);
 
   int? _eventId;
   BaseResponse? _eventParticipatonResponse;
-  FutureProvider<BaseLogicalResponse>? _initialDataProvider;
+  FutureProvider<EventDetailsInitialData>? _initialDataProvider;
+
+  var _isListViewActive = false;
+  var _isScrollViewActive = true;
 
   final _eventScannerUri =
       'https://open-days-thesis.herokuapp.com/open-days/event/save-user-participation/';
@@ -35,8 +45,32 @@ class EventDetailsController {
     return _qrImageText;
   }
 
+  bool isListViewActive() {
+    return _isListViewActive;
+  }
+
+  bool isScrollViewActive() {
+    return _isScrollViewActive;
+  }
+
+  ProviderRef getProviderRef() {
+    return _ref;
+  }
+
+  StateProvider getReloadProvider() {
+    return _reloadScreen;
+  }
+
   StateProvider getIsLoading() {
     return _isLoadingProvider;
+  }
+
+  ScrollController getListViewController() {
+    return _listViewController;
+  }
+
+  ScrollController getScrollViewController() {
+    return _scrollViewController;
   }
 
   BaseResponse? getEventParticipationResponse() {
@@ -52,6 +86,9 @@ class EventDetailsController {
   }
 
   Future<bool> invalidateControllerProvider() {
+    _listViewController.dispose();
+    _scrollViewController.dispose();
+
     _ref.invalidate(eventDetailsControllerProvider);
     return Future.value(true);
   }
@@ -89,7 +126,12 @@ class EventDetailsController {
   }
 
   /// Gathers the requested data before showing the page to the user.
-  FutureProvider<BaseLogicalResponse> createInitialDataProvider(int? eventId, String? imagePath) {
+  FutureProvider<EventDetailsInitialData> createInitialDataProvider(
+    int eventId,
+    String dateTime,
+    String roleName,
+    String imagePath,
+  ) {
     _eventId = eventId;
 
     if (_eventId != null && _eventId != eventId && _initialDataProvider != null) {
@@ -97,16 +139,59 @@ class EventDetailsController {
     }
 
     return _initialDataProvider ??= FutureProvider((ref) async {
-      var response = BaseLogicalResponse();
+      var response = EventDetailsInitialData();
 
-      if (imagePath != null) {
-        _imageURL = await FirebaseUtils.getDownloadURL(imagePath);
+      _imageURL = await FirebaseUtils.getDownloadURL(imagePath);
+
+      if (CustomDateUtils.isFutureDate(dateTime)) {
+        response.usersResponse = await _eventDetailsRepository.getEnrolledUsersRepo(eventId);
+      } else {
+        response.usersResponse = await _eventDetailsRepository.getParticipatedUsersRepo(eventId);
       }
 
-      if (eventId != null) {
-        response = await _eventDetailsRepository.isUserEnrolledRepo(eventId);
-        _isUserEnrolled = response.data;
+      if (roleName == roleOrganizer) {
+        response.isUserEnrolledResponse = await _eventDetailsRepository.isUserEnrolledRepo(eventId);
       }
+
+      _isUserEnrolled = response.isUserEnrolledResponse.data;
+
+      if (response.usersResponse.isOperationSuccessful &&
+          (roleName != roleOrganizer || response.isUserEnrolledResponse.isOperationSuccessful)) {
+        response.isOperationSuccessful = true;
+      }
+
+      // Add listeners
+      _listViewController.addListener(() {
+        if (_listViewController.position.atEdge) {
+          bool isTop = _listViewController.position.pixels == 0;
+          if (isTop) {
+            _isListViewActive = false;
+            _isScrollViewActive = true;
+
+            if (getProviderRef().read(_reloadScreen)) {
+              getProviderRef().read(_reloadScreen.notifier).state = false;
+            } else {
+              getProviderRef().read(_reloadScreen.notifier).state = true;
+            }
+          }
+        }
+      });
+
+      _scrollViewController.addListener(() {
+        if (_scrollViewController.position.atEdge) {
+          bool isTop = _scrollViewController.position.pixels == 0;
+          if (!isTop) {
+            _isListViewActive = true;
+            _isScrollViewActive = false;
+
+            if (getProviderRef().read(_reloadScreen)) {
+              getProviderRef().read(_reloadScreen.notifier).state = false;
+            } else {
+              getProviderRef().read(_reloadScreen.notifier).state = true;
+            }
+          }
+        }
+      });
 
       return response;
     });

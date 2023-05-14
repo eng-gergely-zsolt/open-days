@@ -56,6 +56,8 @@
     "event_details_unenroll": "Unenroll",
     "event_details_description": "Description",
     "event_details_create_qr_code": "Create QR",
+    "event_details_enrolled_users": "Enrolled users",
+    "event_details_participated_users": "Participated users",
 
     "event_modification_save": "Save",
     "event_modification_image": "Image",

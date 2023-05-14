@@ -10,11 +10,11 @@ import '../../error/error_messages.dart';
 import '../../shared/secure_storage.dart';
 import '../../models/responses/users_response.dart';
 
-Future<UsersResponse> getEnrolledUsersSvc(int eventId) async {
+Future<UsersResponse> getParticipatedUsersSvc(int eventId) async {
   final response = UsersResponse();
   final authorizationToken = await SecureStorage.getAuthorizationToken();
-  final uri =
-      'https://open-days-thesis.herokuapp.com/open-days/event/enrolled-users/' + eventId.toString();
+  final uri = 'https://open-days-thesis.herokuapp.com/open-days/event/participated-users/' +
+      eventId.toString();
 
   Map<String, String> headers = {
     "Accept": "application/json",

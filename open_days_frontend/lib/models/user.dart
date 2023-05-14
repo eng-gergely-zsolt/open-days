@@ -25,13 +25,13 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      id: json['publicId'] ?? '',
-      email: json['email'] ?? '',
-      roleName: json['roleName'] ?? '',
-      username: json['username'] ?? '',
-      lastName: json['lastName'] ?? '',
-      firstName: json['firstName'] ?? '',
-      imagePath: json['imagePath'] ?? '',
+      id: Utils.getDecodedString(json['publicId'] ?? ''),
+      email: Utils.getDecodedString(json['email'] ?? ''),
+      roleName: Utils.getDecodedString(json['roleName'] ?? ''),
+      username: Utils.getDecodedString(json['username'] ?? ''),
+      lastName: Utils.getDecodedString(json['lastName'] ?? ''),
+      firstName: Utils.getDecodedString(json['firstName'] ?? ''),
+      imagePath: Utils.getDecodedString(json['imagePath'] ?? ''),
       countyName: Utils.getDecodedString(json['countyName'] ?? ''),
       institutionName: Utils.getDecodedString(json['institutionName'] ?? ''),
     );

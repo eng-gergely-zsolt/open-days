@@ -53,6 +53,8 @@
     "event_details_unenroll": "Anulare",
     "event_details_description": "Descriere",
     "event_details_create_qr_code": "Crearea QR",
+    "event_details_enrolled_users": "Utilizatori înscriși",
+    "event_details_participated_users": "Utilizatori participanți",
 
     "event_modification_save": "Salvați",
     "event_modification_image": "Imagine",
