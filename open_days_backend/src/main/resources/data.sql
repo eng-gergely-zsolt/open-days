@@ -14,7 +14,7 @@ DELETE FROM settlements
 DELETE FROM counties
 
 --Organizer emails
-INSERT INTO organizer_emails (id, email) VALUES (1, 'anomakyr@gmail.com')
+INSERT INTO organizer_emails (id, email) VALUES (1, 'geergely.zsolt@gmail.com')
 
 --Counties
 INSERT INTO counties (id, name) VALUES (1, 'Kovászna')
@@ -97,7 +97,7 @@ INSERT INTO authorities (id, name) VALUES (3, 'DELETE_AUTHORITY')
 INSERT INTO users (id, email, email_verification_status, encrypted_password, first_name, last_name, otp_code, public_id, username, institution_id, image_path, role_id) VALUES (1, 'admin@mailinator.com', true, '$2a$10$z9BeqAxh0nY.kdpuvDi.xuP0mwIPgqK2WPtkTghwX3iAJJoHQ0MMm', 'John', 'Doe', NULL, 'qwertyuiopasdf1', 'admin', 37, NULL, 3)
 
 --Organizers
-INSERT INTO users (id, email, email_verification_status, encrypted_password, first_name, last_name, otp_code, public_id, username, institution_id, image_path, role_id) VALUES (2, 'geergely.zsolt@gmail.com', true, '$2a$10$z9BeqAxh0nY.kdpuvDi.xuP0mwIPgqK2WPtkTghwX3iAJJoHQ0MMm', 'Zsolt', 'Gergely', NULL, 'qwertyuiopasdf2', 'organizer', 37, 'user/placeholder.jpg', 2)
+INSERT INTO users (id, email, email_verification_status, encrypted_password, first_name, last_name, otp_code, public_id, username, institution_id, image_path, role_id) VALUES (2, 'gergely.zsolt@.com', true, '$2a$10$z9BeqAxh0nY.kdpuvDi.xuP0mwIPgqK2WPtkTghwX3iAJJoHQ0MMm', 'Zsolt', 'Gergely', NULL, 'qwertyuiopasdf2', 'organizer', 37, 'user/placeholder.jpg', 2)
 INSERT INTO users (id, email, email_verification_status, encrypted_password, first_name, last_name, otp_code, public_id, username, institution_id, image_path, role_id) VALUES (3, 'csenge.albert.toth@mailinator.com', true, '$2a$10$z9BeqAxh0nY.kdpuvDi.xuP0mwIPgqK2WPtkTghwX3iAJJoHQ0MMm', 'Csenge', 'Albert-Tóth', NULL, 'qwertyuiopasdf3', 'csenge', 37, NULL, 2)
 
 --Users
@@ -201,3 +201,52 @@ INSERT INTO participated_users (event_id, user_id) VALUES (11, 20)
 INSERT INTO participated_users (event_id, user_id) VALUES (11, 21)
 INSERT INTO participated_users (event_id, user_id) VALUES (11, 22)
 INSERT INTO participated_users (event_id, user_id) VALUES (11, 23)
+
+INSERT INTO participated_users (event_id, user_id) VALUES (1, 4)
+INSERT INTO participated_users (event_id, user_id) VALUES (1, 5)
+INSERT INTO participated_users (event_id, user_id) VALUES (1, 6)
+
+INSERT INTO participated_users (event_id, user_id) VALUES (2, 7)
+INSERT INTO participated_users (event_id, user_id) VALUES (2, 8)
+INSERT INTO participated_users (event_id, user_id) VALUES (2, 9)
+INSERT INTO participated_users (event_id, user_id) VALUES (2, 10)
+
+INSERT INTO participated_users (event_id, user_id) VALUES (3, 11)
+INSERT INTO participated_users (event_id, user_id) VALUES (3, 12)
+INSERT INTO participated_users (event_id, user_id) VALUES (3, 13)
+INSERT INTO participated_users (event_id, user_id) VALUES (3, 14)
+INSERT INTO participated_users (event_id, user_id) VALUES (3, 15)
+
+INSERT INTO participated_users (event_id, user_id) VALUES (4, 16)
+INSERT INTO participated_users (event_id, user_id) VALUES (4, 17)
+INSERT INTO participated_users (event_id, user_id) VALUES (4, 18)
+INSERT INTO participated_users (event_id, user_id) VALUES (4, 19)
+INSERT INTO participated_users (event_id, user_id) VALUES (4, 20)
+INSERT INTO participated_users (event_id, user_id) VALUES (4, 21)
+
+INSERT INTO participated_users (event_id, user_id) VALUES (5, 22)
+INSERT INTO participated_users (event_id, user_id) VALUES (5, 23)
+INSERT INTO participated_users (event_id, user_id) VALUES (5, 4)
+INSERT INTO participated_users (event_id, user_id) VALUES (5, 5)
+INSERT INTO participated_users (event_id, user_id) VALUES (5, 6)
+INSERT INTO participated_users (event_id, user_id) VALUES (5, 7)
+INSERT INTO participated_users (event_id, user_id) VALUES (5, 8)
+
+INSERT INTO participated_users (event_id, user_id) VALUES (6, 9)
+INSERT INTO participated_users (event_id, user_id) VALUES (6, 10)
+INSERT INTO participated_users (event_id, user_id) VALUES (6, 11)
+INSERT INTO participated_users (event_id, user_id) VALUES (6, 12)
+INSERT INTO participated_users (event_id, user_id) VALUES (6, 13)
+INSERT INTO participated_users (event_id, user_id) VALUES (6, 14)
+INSERT INTO participated_users (event_id, user_id) VALUES (6, 15)
+INSERT INTO participated_users (event_id, user_id) VALUES (6, 16)
+
+INSERT INTO participated_users (event_id, user_id) VALUES (7, 17)
+INSERT INTO participated_users (event_id, user_id) VALUES (7, 18)
+INSERT INTO participated_users (event_id, user_id) VALUES (7, 19)
+INSERT INTO participated_users (event_id, user_id) VALUES (7, 20)
+INSERT INTO participated_users (event_id, user_id) VALUES (7, 21)
+INSERT INTO participated_users (event_id, user_id) VALUES (7, 22)
+INSERT INTO participated_users (event_id, user_id) VALUES (7, 23)
+INSERT INTO participated_users (event_id, user_id) VALUES (7, 4)
+INSERT INTO participated_users (event_id, user_id) VALUES (7, 5)

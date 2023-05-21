@@ -17,6 +17,7 @@ import com.sapientia.open.days.backend.ui.model.resource.ErrorCode;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorMessage;
 import com.sapientia.open.days.backend.ui.model.Event;
 import com.sapientia.open.days.backend.ui.model.User;
+import com.sapientia.open.days.backend.ui.model.response.ParticipatedUsersStatisticResponse;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -210,6 +211,37 @@ public class EventServiceImpl implements EventService {
 		}
 
 		return events;
+	}
+
+	@Override
+	public List<ParticipatedUsersStatisticResponse> getParticipatedUserStatistic(List<String> activityNames) {
+		List<ParticipatedUsersStatisticResponse> response = new ArrayList<>();
+
+		if (activityNames.size() < 2) {
+			throw new BaseException(ErrorCode.EVENT_STATISTIC_NOT_ENOUGH_ACTIVITY.getErrorCode(),
+					ErrorMessage.EVENT_STATISTIC_NOT_ENOUGH_ACTIVITY.getErrorMessage());
+		}
+
+		for (String activityName: activityNames) {
+			ActivityEntity activity = activityRepository.findByName(activityName);
+
+			if (activity != null) {
+				int participatedUsersNr = 0;
+				List<EventEntity> events = eventRepository.findAllByActivityId(activity.getId());
+				ParticipatedUsersStatisticResponse responseElement = new ParticipatedUsersStatisticResponse();
+
+				for (EventEntity event: events) {
+					participatedUsersNr += event.getParticipatedUsers().size();
+				}
+
+				responseElement.setActivityName(activityName);
+				responseElement.setParticipatedUsersNr(participatedUsersNr);
+
+				response.add(responseElement);
+			}
+		}
+
+		return response;
 	}
 
 	/**

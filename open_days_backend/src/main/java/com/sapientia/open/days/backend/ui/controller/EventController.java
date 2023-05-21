@@ -7,6 +7,7 @@ import com.sapientia.open.days.backend.ui.model.resource.ErrorCode;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorMessage;
 import com.sapientia.open.days.backend.ui.model.Event;
 import com.sapientia.open.days.backend.ui.model.User;
+import com.sapientia.open.days.backend.ui.model.response.ParticipatedUsersStatisticResponse;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -37,6 +38,7 @@ public class EventController {
 	 * Returns the users that were enrolled in an event.
 	 */
 	@GetMapping(path = "/enrolled-users/{eventId}")
+
 	public List<User> getEnrolledUsers(@PathVariable long eventId) {
 		return eventService.getEnrolledUsers(eventId);
 	}
@@ -63,12 +65,20 @@ public class EventController {
 	}
 
 	/**
+	 * Returns the number of participated users to the given activities.
+	 */
+	@GetMapping(path = "/participated-users-statistic")
+	public List<ParticipatedUsersStatisticResponse> getParticipatedUserStatistic(@RequestBody List<String> payload) {
+		return eventService.getParticipatedUserStatistic(payload);
+	}
+
+	/**
 	 * Returns true if the user is already enrolled in the event.
 	 */
 	@ResponseBody
 	@GetMapping(path = "/is-user-enrolled/{eventId}")
 	public boolean isUserEnrolled(@PathVariable long eventId,
-	                                     @RequestHeader(value = "User-Public-ID") String userPublicId) {
+	                              @RequestHeader(value = "User-Public-ID") String userPublicId) {
 		if (eventId < 1) {
 			throw new BaseException(ErrorCode.EVENT_INVALID_ID.getErrorCode(),
 					ErrorMessage.EVENT_INVALID_ID.getErrorMessage());
@@ -192,7 +202,7 @@ public class EventController {
 	 */
 	@DeleteMapping(path = "/unenroll-user/{eventId}")
 	public void unenrollUser(@PathVariable long eventId,
-	                               @RequestHeader(value = "User-Public-ID") String userPublicId) {
+	                         @RequestHeader(value = "User-Public-ID") String userPublicId) {
 		if (eventId < 1) {
 			throw new BaseException(ErrorCode.EVENT_INVALID_ID.getErrorCode(),
 					ErrorMessage.EVENT_INVALID_ID.getErrorMessage());

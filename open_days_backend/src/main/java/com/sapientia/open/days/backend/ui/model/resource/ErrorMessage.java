@@ -43,6 +43,8 @@ public enum ErrorMessage {
     EVENT_COULD_NOT_DELETED_ENROLLED_USER("Could not delete the enrolled user."),
     EVENT_COULD_NOT_SAVE_PARTICIPATED_USER("Could not save participated user."),
 
+    EVENT_STATISTIC_NOT_ENOUGH_ACTIVITY("There is not activity given."),
+
     // County related
     COUNTY_INVALID_NAME("Invalid county name."),
 
