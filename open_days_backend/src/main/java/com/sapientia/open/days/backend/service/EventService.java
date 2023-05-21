@@ -3,7 +3,7 @@ package com.sapientia.open.days.backend.service;
 import com.sapientia.open.days.backend.ui.model.request.UpdateEventRequest;
 import com.sapientia.open.days.backend.ui.model.Event;
 import com.sapientia.open.days.backend.ui.model.User;
-import com.sapientia.open.days.backend.ui.model.response.ParticipatedUsersStatisticResponse;
+import com.sapientia.open.days.backend.ui.model.response.ParticipatedUsersStatResponse;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ public interface EventService {
 
 	List<Event> getEventsConformToUserRole(String userPublicId);
 
-	List<ParticipatedUsersStatisticResponse> getParticipatedUserStatistic (List<String> activityNames);
+	List<ParticipatedUsersStatResponse> getParticipatedUserStat (List<String> activityNames);
 
 	boolean isUserEnrolled(long eventId, String userPublicId);
 

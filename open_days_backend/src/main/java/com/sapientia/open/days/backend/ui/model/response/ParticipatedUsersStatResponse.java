@@ -1,7 +1,7 @@
 package com.sapientia.open.days.backend.ui.model.response;
 
 @SuppressWarnings("unused")
-public class ParticipatedUsersStatisticResponse {
+public class ParticipatedUsersStatResponse {
 	String activityName;
 	int participatedUsersNr;
 

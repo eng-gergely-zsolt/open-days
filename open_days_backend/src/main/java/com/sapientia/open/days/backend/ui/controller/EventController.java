@@ -7,7 +7,7 @@ import com.sapientia.open.days.backend.ui.model.resource.ErrorCode;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorMessage;
 import com.sapientia.open.days.backend.ui.model.Event;
 import com.sapientia.open.days.backend.ui.model.User;
-import com.sapientia.open.days.backend.ui.model.response.ParticipatedUsersStatisticResponse;
+import com.sapientia.open.days.backend.ui.model.response.ParticipatedUsersStatResponse;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -62,14 +62,6 @@ public class EventController {
 		}
 
 		return eventService.getEventsConformToUserRole(userPublicId);
-	}
-
-	/**
-	 * Returns the number of participated users to the given activities.
-	 */
-	@GetMapping(path = "/participated-users-statistic")
-	public List<ParticipatedUsersStatisticResponse> getParticipatedUserStatistic(@RequestBody List<String> payload) {
-		return eventService.getParticipatedUserStatistic(payload);
 	}
 
 	/**
@@ -184,6 +176,14 @@ public class EventController {
 		}
 
 		eventService.updateEvent(eventId, payload);
+	}
+
+	/**
+	 * Returns the number of participated users to the given activities.
+	 */
+	@PutMapping(path = "/participated-users-statistic")
+	public List<ParticipatedUsersStatResponse> getParticipatedUsersStat(@RequestBody List<String> payload) {
+		return eventService.getParticipatedUserStat(payload);
 	}
 
 	// Delete

@@ -17,7 +17,7 @@ import com.sapientia.open.days.backend.ui.model.resource.ErrorCode;
 import com.sapientia.open.days.backend.ui.model.resource.ErrorMessage;
 import com.sapientia.open.days.backend.ui.model.Event;
 import com.sapientia.open.days.backend.ui.model.User;
-import com.sapientia.open.days.backend.ui.model.response.ParticipatedUsersStatisticResponse;
+import com.sapientia.open.days.backend.ui.model.response.ParticipatedUsersStatResponse;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -214,8 +214,8 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public List<ParticipatedUsersStatisticResponse> getParticipatedUserStatistic(List<String> activityNames) {
-		List<ParticipatedUsersStatisticResponse> response = new ArrayList<>();
+	public List<ParticipatedUsersStatResponse> getParticipatedUserStat(List<String> activityNames) {
+		List<ParticipatedUsersStatResponse> response = new ArrayList<>();
 
 		if (activityNames.size() < 2) {
 			throw new BaseException(ErrorCode.EVENT_STATISTIC_NOT_ENOUGH_ACTIVITY.getErrorCode(),
@@ -228,7 +228,7 @@ public class EventServiceImpl implements EventService {
 			if (activity != null) {
 				int participatedUsersNr = 0;
 				List<EventEntity> events = eventRepository.findAllByActivityId(activity.getId());
-				ParticipatedUsersStatisticResponse responseElement = new ParticipatedUsersStatisticResponse();
+				ParticipatedUsersStatResponse responseElement = new ParticipatedUsersStatResponse();
 
 				for (EventEntity event: events) {
 					participatedUsersNr += event.getParticipatedUsers().size();
