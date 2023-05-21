@@ -181,7 +181,7 @@ public class EventController {
 	/**
 	 * Returns the number of participated users to the given activities.
 	 */
-	@PutMapping(path = "/participated-users-statistic")
+	@PutMapping(path = "/participated-users-stat")
 	public List<ParticipatedUsersStatResponse> getParticipatedUsersStat(@RequestBody List<String> payload) {
 		return eventService.getParticipatedUserStat(payload);
 	}
