@@ -97,7 +97,7 @@ INSERT INTO authorities (id, name) VALUES (3, 'DELETE_AUTHORITY')
 INSERT INTO users (id, email, email_verification_status, encrypted_password, first_name, last_name, otp_code, public_id, username, institution_id, image_path, role_id) VALUES (1, 'admin@mailinator.com', true, '$2a$10$z9BeqAxh0nY.kdpuvDi.xuP0mwIPgqK2WPtkTghwX3iAJJoHQ0MMm', 'John', 'Doe', NULL, 'qwertyuiopasdf1', 'admin', 37, NULL, 3)
 
 --Organizers
-INSERT INTO users (id, email, email_verification_status, encrypted_password, first_name, last_name, otp_code, public_id, username, institution_id, image_path, role_id) VALUES (2, 'gergely.zsolt@.com', true, '$2a$10$z9BeqAxh0nY.kdpuvDi.xuP0mwIPgqK2WPtkTghwX3iAJJoHQ0MMm', 'Zsolt', 'Gergely', NULL, 'qwertyuiopasdf2', 'organizer', 37, 'user/placeholder.jpg', 2)
+INSERT INTO users (id, email, email_verification_status, encrypted_password, first_name, last_name, otp_code, public_id, username, institution_id, image_path, role_id) VALUES (2, 'gergely.zsolt@gmail.com', true, '$2a$10$z9BeqAxh0nY.kdpuvDi.xuP0mwIPgqK2WPtkTghwX3iAJJoHQ0MMm', 'Zsolt', 'Gergely', NULL, 'qwertyuiopasdf2', 'organizer', 37, 'user/placeholder.jpg', 2)
 INSERT INTO users (id, email, email_verification_status, encrypted_password, first_name, last_name, otp_code, public_id, username, institution_id, image_path, role_id) VALUES (3, 'csenge.albert.toth@mailinator.com', true, '$2a$10$z9BeqAxh0nY.kdpuvDi.xuP0mwIPgqK2WPtkTghwX3iAJJoHQ0MMm', 'Csenge', 'Albert-Tóth', NULL, 'qwertyuiopasdf3', 'csenge', 37, NULL, 2)
 
 --Users
