@@ -5,6 +5,13 @@ public class UpdateInstitutionRequest {
 	private String countyName;
 	private String institutionName;
 
+	public UpdateInstitutionRequest() {}
+
+	public UpdateInstitutionRequest(String countyName, String institutionName) {
+		this.countyName = countyName;
+		this.institutionName = institutionName;
+	}
+
 	public String getCountyName() {
 		return countyName;
 	}

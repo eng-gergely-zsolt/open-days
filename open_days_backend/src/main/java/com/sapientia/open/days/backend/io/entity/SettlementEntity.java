@@ -23,6 +23,14 @@ public class SettlementEntity implements Serializable {
 	@JoinColumn(name = "county_id", nullable = false)
 	private CountyEntity county;
 
+	public SettlementEntity() {}
+
+	public SettlementEntity(long id, String name, CountyEntity county) {
+		this.id = id;
+		this.name = name;
+		this.county = county;
+	}
+
 	public long getId() {
 		return id;
 	}

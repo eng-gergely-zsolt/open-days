@@ -14,11 +14,28 @@ public class Event {
 	private String organizerLastName;
 	private String organizerFirstName;
 
+	public Event () {}
+
+	public Event(boolean isOnline, String location, String dateTime, String imagePath, String description,
+	             String meetingLink, String activityName, String organizerPublicId, String organizerLastName,
+	             String organizerFirstName) {
+		this.isOnline = isOnline;
+		this.location = location;
+		this.dateTime = dateTime;
+		this.imagePath = imagePath;
+		this.description = description;
+		this.meetingLink = meetingLink;
+		this.activityName = activityName;
+		this.organizerPublicId = organizerPublicId;
+		this.organizerLastName = organizerLastName;
+		this.organizerFirstName = organizerFirstName;
+	}
+
 	public long getId() {
 		return id;
 	}
 
-	public boolean isIsOnline() {
+	public boolean isOnline() {
 		return isOnline;
 	}
 
@@ -62,7 +79,7 @@ public class Event {
 		this.id = id;
 	}
 
-	public void setIsOnline(boolean isOnline) {
+	public void setOnline(boolean isOnline) {
 		this.isOnline = isOnline;
 	}
 

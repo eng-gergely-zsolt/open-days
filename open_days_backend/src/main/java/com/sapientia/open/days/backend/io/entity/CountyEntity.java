@@ -19,6 +19,13 @@ public class CountyEntity implements Serializable {
 	@OneToMany(mappedBy = "county")
 	private Set<SettlementEntity> settlements;
 
+	public CountyEntity() {}
+
+	public CountyEntity(long id, String name) {
+		this.id = id;
+		this.name = name;
+	}
+
 	public long getId() {
 		return id;
 	}

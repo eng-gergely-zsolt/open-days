@@ -10,6 +10,18 @@ public class CreateUserRequest {
     private String firstName;
     private String institutionName;
 
+    public CreateUserRequest() {}
+
+    public CreateUserRequest(String email, String password, String username, String lastName, String firstName,
+                             String institutionName) {
+        this.email = email;
+        this.password = password;
+        this.username = username;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.institutionName = institutionName;
+    }
+
     public String getEmail() {
         return email;
     }

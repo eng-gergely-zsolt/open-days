@@ -4,6 +4,12 @@ package com.sapientia.open.days.backend.ui.model.request.user;
 public class UpdateUsernameRequest {
 	private String username;
 
+	public UpdateUsernameRequest() {}
+
+	public UpdateUsernameRequest(String username) {
+		this.username = username;
+	}
+
 	public String getUsername() {
 		return username;
 	}

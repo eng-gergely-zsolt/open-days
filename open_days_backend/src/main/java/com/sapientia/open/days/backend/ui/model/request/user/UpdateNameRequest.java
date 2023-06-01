@@ -5,6 +5,13 @@ public class UpdateNameRequest {
 	private String lastName;
 	private String firstName;
 
+	public UpdateNameRequest() {}
+
+	public UpdateNameRequest(String lastName, String firstName) {
+		this.lastName = lastName;
+		this.firstName = firstName;
+	}
+
 	public String getLastName() {
 		return lastName;
 	}

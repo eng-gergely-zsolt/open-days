@@ -222,7 +222,7 @@ public class EventServiceImpl implements EventService {
 					ErrorMessage.EVENT_STATISTIC_NOT_ENOUGH_ACTIVITY.getErrorMessage());
 		}
 
-		for (String activityName: activityNames) {
+		for (String activityName : activityNames) {
 			ActivityEntity activity = activityRepository.findByName(activityName);
 
 			if (activity != null) {
@@ -230,7 +230,7 @@ public class EventServiceImpl implements EventService {
 				List<EventEntity> events = eventRepository.findAllByActivityId(activity.getId());
 				ParticipatedUsersStatResponse responseElement = new ParticipatedUsersStatResponse();
 
-				for (EventEntity event: events) {
+				for (EventEntity event : events) {
 					participatedUsersNr += event.getParticipatedUsers().size();
 				}
 
@@ -382,7 +382,7 @@ public class EventServiceImpl implements EventService {
 					ErrorMessage.EVENT_NOT_FOUND_WITH_ID.getErrorMessage());
 		}
 
-		eventEntity.setIsOnline(payload.getIsOnline());
+		eventEntity.setOnline(payload.getIsOnline());
 		eventEntity.setMeetingLink(payload.getMeetingLink());
 
 		if (activityEntity != null) {
@@ -459,6 +459,5 @@ public class EventServiceImpl implements EventService {
 			throw new BaseException(ErrorCode.EVENT_COULD_NOT_DELETED_ENROLLED_USER.getErrorCode(),
 					ErrorMessage.EVENT_COULD_NOT_DELETED_ENROLLED_USER.getErrorMessage());
 		}
-
 	}
 }

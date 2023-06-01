@@ -61,6 +61,21 @@ public class UserEntity implements Serializable {
 	@ManyToMany(mappedBy = "participatedUsers")
 	private Set<EventEntity> participatedEvents;
 
+	public UserEntity() {}
+
+	public UserEntity(long id, String publicId, String email, String username, String lastName, String firstName,
+	                  String encryptedPassword, RoleEntity role, InstitutionEntity institution) {
+		this.id = id;
+		this.role = role;
+		this.email = email;
+		this.publicId = publicId;
+		this.username = username;
+		this.lastName = lastName;
+		this.firstName = firstName;
+		this.institution = institution;
+		this.encryptedPassword = encryptedPassword;
+	}
+
 	public long getId() {
 		return id;
 	}

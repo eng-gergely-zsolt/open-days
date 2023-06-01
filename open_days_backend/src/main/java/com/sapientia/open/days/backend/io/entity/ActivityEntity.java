@@ -18,6 +18,13 @@ public class ActivityEntity {
 	@OneToMany(mappedBy = "activity")
 	private Set<EventEntity> events;
 
+	public ActivityEntity() {}
+
+	public ActivityEntity(long id, String name) {
+		this.id = id;
+		this.name = name;
+	}
+
 	public long getId() {
 		return id;
 	}

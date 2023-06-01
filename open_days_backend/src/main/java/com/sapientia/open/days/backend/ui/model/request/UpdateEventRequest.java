@@ -10,6 +10,19 @@ public class UpdateEventRequest {
 	private String meetingLink;
 	private String activityName;
 
+	public UpdateEventRequest() {}
+
+	public UpdateEventRequest(String location, String dateTime, String imagePath, String description,
+	                          String meetingLink, String activityName, boolean isOnline) {
+		this.location = location;
+		this.dateTime = dateTime;
+		this.isOnline = isOnline;
+		this.imagePath = imagePath;
+		this.description = description;
+		this.meetingLink = meetingLink;
+		this.activityName = activityName;
+	}
+
 	public String getLocation() {
 		return location;
 	}

@@ -5,6 +5,13 @@ public class VerifyEmailByOtpCodeRequest {
 	private int otpCode;
 	private String email;
 
+	public VerifyEmailByOtpCodeRequest() {}
+
+	public VerifyEmailByOtpCodeRequest(int otpCode, String email) {
+		this.email = email;
+		this.otpCode = otpCode;
+	}
+
 	public int getOtpCode() {
 		return otpCode;
 	}

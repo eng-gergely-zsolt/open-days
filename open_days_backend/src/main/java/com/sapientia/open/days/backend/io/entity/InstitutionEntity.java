@@ -23,6 +23,14 @@ public class InstitutionEntity implements Serializable {
 	@JoinColumn(name = "settlement_id", nullable = false)
 	private SettlementEntity settlement;
 
+	public InstitutionEntity() {}
+
+	public InstitutionEntity(long id, String name, SettlementEntity settlement) {
+		this.id = id;
+		this.name = name;
+		this.settlement = settlement;
+	}
+
 	public long getId() {
 		return id;
 	}

@@ -52,8 +52,24 @@ public class EventEntity {
 			inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
 	private Set<UserEntity> participatedUsers;
 
+	public EventEntity() {}
+
+	public EventEntity(String location, String dateTime, boolean isOnline, String description, UserEntity organizer,
+	                   ActivityEntity activity) {
+		this.location = location;
+		this.dateTime = dateTime;
+		this.isOnline = isOnline;
+		this.description = description;
+		this.organizer = organizer;
+		this.activity = activity;
+	}
+
 	public long getId() {
 		return id;
+	}
+
+	public boolean isOnline() {
+		return isOnline;
 	}
 
 	public String getLocation() {
@@ -62,10 +78,6 @@ public class EventEntity {
 
 	public String getDateTime() {
 		return dateTime;
-	}
-
-	public boolean getIsOnline() {
-		return isOnline;
 	}
 
 	public String getImagePath() {
@@ -100,16 +112,16 @@ public class EventEntity {
 		this.id = id;
 	}
 
+	public void setOnline(boolean online) {
+		isOnline = online;
+	}
+
 	public void setLocation(String location) {
 		this.location = location;
 	}
 
 	public void setDateTime(String dateTime) {
 		this.dateTime = dateTime;
-	}
-
-	public void setIsOnline(boolean isOnline) {
-		this.isOnline = isOnline;
 	}
 
 	public void setImagePath(String imagePath) {
