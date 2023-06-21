@@ -146,7 +146,7 @@ public class EventController {
 					ErrorMessage.EVENT_INVALID_DATE_TIME.getErrorMessage());
 		}
 
-		if (payload.isOnline() && payload.getMeetingLink().isEmpty()) {
+		if (payload.getIsOnline() && payload.getMeetingLink().isEmpty()) {
 			throw new BaseException(ErrorCode.EVENT_INVALID_MEETING_LINK.getErrorCode(),
 					ErrorMessage.EVENT_INVALID_MEETING_LINK.getErrorMessage());
 		}

@@ -35,16 +35,16 @@ public class Event {
 		return id;
 	}
 
-	public boolean isOnline() {
-		return isOnline;
-	}
-
 	public String getLocation() {
 		return location;
 	}
 
 	public String getDateTime() {
 		return dateTime;
+	}
+
+	public boolean getIsOnline() {
+		return isOnline;
 	}
 
 	public String getImagePath() {
