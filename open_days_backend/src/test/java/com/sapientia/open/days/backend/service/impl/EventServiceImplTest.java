@@ -420,7 +420,7 @@ public class EventServiceImplTest {
 		// Assert
 		assertFalse(eventEntity.isOnline());
 		assertEquals(event.getId(), capturedEventEntity.getId());
-		assertEquals(event.isOnline(), capturedEventEntity.isOnline());
+		assertEquals(event.getIsOnline(), capturedEventEntity.isOnline());
 		assertEquals(event.getDateTime(), capturedEventEntity.getDateTime());
 		assertEquals(event.getLocation(), capturedEventEntity.getLocation());
 		assertEquals(event.getImagePath(), capturedEventEntity.getImagePath());
