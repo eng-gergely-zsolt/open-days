@@ -56,7 +56,7 @@ class EventModification extends ConsumerWidget {
     return GestureDetector(
       onTap: (() => FocusScope.of(context).requestFocus(FocusNode())),
       child: WillPopScope(
-        onWillPop: () => controller.invalidateControllerProvider(),
+        onWillPop: (() => controller.invalidateControllerProvider()),
         child: Scaffold(
           appBar: AppBar(
             title: Text(appLocale?.event_modification_header as String),
@@ -77,8 +77,8 @@ class EventModification extends ConsumerWidget {
                         ),
                       ),
                   data: (activities) {
-                    selectedActivityName ??= activities.activities[0].name;
                     isOnlineMeeting ??= _event?.isOnline;
+                    selectedActivityName ??= _event?.activityName;
 
                     return SizedBox(
                       width: double.infinity,
@@ -168,7 +168,7 @@ class EventModification extends ConsumerWidget {
       ),
       TextFormField(
         maxLines: null,
-        initialValue: _event?.location,
+        initialValue: controller.getLocation() ?? _event?.location,
         keyboardType: TextInputType.multiline,
         onChanged: (location) => controller.setLocation(location),
       ),
@@ -185,7 +185,7 @@ class EventModification extends ConsumerWidget {
       TextFormField(
         maxLines: null,
         maxLength: 255,
-        initialValue: _event?.description,
+        initialValue: controller.getDescription() ?? _event?.description,
         keyboardType: TextInputType.multiline,
         onChanged: (description) => controller.setDescription(description),
       ),
@@ -250,7 +250,7 @@ class EventModification extends ConsumerWidget {
       isOnlineMeeting
           ? TextFormField(
               maxLines: null,
-              initialValue: _event?.meetingLink,
+              initialValue: controller.getMeetingLink() ?? _event?.meetingLink,
               keyboardType: TextInputType.multiline,
               onChanged: (link) => controller.setLink(link),
               decoration: InputDecoration(

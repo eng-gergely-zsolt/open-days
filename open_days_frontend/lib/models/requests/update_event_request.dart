@@ -1,5 +1,5 @@
 class UpdateEventRequest {
-  bool isOnline;
+  bool? isOnline;
   String? location;
   String? dateTime;
   String? imagePath;

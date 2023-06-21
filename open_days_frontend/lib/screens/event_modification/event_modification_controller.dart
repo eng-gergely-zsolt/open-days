@@ -18,16 +18,16 @@ import '../../repositories/event_modification_repository.dart';
 class EventModificationController {
   String? _location;
   String? _meetingLink;
+  String? _description;
   Reference? _imageToUploadRef;
   BaseResponse? _updateEventResponse;
-  StateProvider<bool>? _isOnlineMeetingProvider;
   StateProvider<DateTime>? _selectedDateTimeProvider;
 
   FutureProvider<ActivitiesResponse>? _activitiesProvider;
 
   var _imageUrl = '';
-  var _description = '';
   var _imagePathInDB = '';
+  var _isOnlineMeetingProvider = StateProvider<bool?>((ref) => null);
 
   final ProviderRef _ref;
   final BaseRepository _baseRepository;
@@ -40,7 +40,7 @@ class EventModificationController {
 
   EventModificationController(this._ref, this._baseRepository, this._eventModificationRepository);
 
-  String? getLink() {
+  String? getMeetingLink() {
     return _meetingLink;
   }
 
@@ -52,7 +52,7 @@ class EventModificationController {
     return _location;
   }
 
-  String getDescription() {
+  String? getDescription() {
     return _description;
   }
 
@@ -99,7 +99,7 @@ class EventModificationController {
 
   void setIsOnlineMeetingProvider(bool? isOnlineMeeting) {
     if (isOnlineMeeting == null) return;
-    _ref.read(_isOnlineMeetingProvider!.notifier).state = isOnlineMeeting;
+    _ref.read(_isOnlineMeetingProvider.notifier).state = isOnlineMeeting;
   }
 
   List<String> getAllActivityName(List<Activity> activities) {
@@ -197,7 +197,7 @@ class EventModificationController {
     payload.location = _location;
     payload.description = _description;
     payload.activityName = selectedActivityName;
-    payload.isOnline = _ref.read(_isOnlineMeetingProvider!);
+    payload.isOnline = _ref.read(_isOnlineMeetingProvider);
     payload.dateTime =
         dateFormatter.format(_ref.read(_selectedDateTimeProvider as StateProvider<DateTime>));
 

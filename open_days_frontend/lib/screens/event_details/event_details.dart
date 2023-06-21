@@ -155,6 +155,8 @@ class EventDetails extends ConsumerWidget {
     EventDetailsController controller,
     EventDetailsInitialData initialData,
   ) {
+    var isDescriptionAvailable = _event.description != '';
+
     return Column(
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -256,15 +258,17 @@ class EventDetails extends ConsumerWidget {
             color: CustomTheme.lightTheme.dividerColor,
           ),
           // Description
-          SizedBox(height: appHeight * 0.03),
-          Text(
-            appLocale?.event_details_description as String,
-            style: CustomTheme.lightTheme.textTheme.bodyText2?.copyWith(
-              fontWeight: FontWeight.w600,
-              color: CustomTheme.lightTheme.hintColor,
-            ),
-          ),
-          SizedBox(height: appHeight * 0.01),
+          isDescriptionAvailable ? SizedBox(height: appHeight * 0.03) : const SizedBox.shrink(),
+          isDescriptionAvailable
+              ? Text(
+                  appLocale?.event_details_description as String,
+                  style: CustomTheme.lightTheme.textTheme.bodyText2?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: CustomTheme.lightTheme.hintColor,
+                  ),
+                )
+              : const SizedBox.shrink(),
+          isDescriptionAvailable ? SizedBox(height: appHeight * 0.01) : const SizedBox.shrink(),
           Text(
             _event.description,
             style: CustomTheme.lightTheme.textTheme.bodyText1?.copyWith(
