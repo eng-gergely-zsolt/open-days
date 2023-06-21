@@ -265,10 +265,15 @@ class Profile extends ConsumerWidget {
         SizedBox(height: appHeight * 0.01),
         Row(
           children: [
-            Text(
-              _user.institutionName,
-              style: CustomTheme.lightTheme.textTheme.bodyText1?.copyWith(
-                fontSize: 18,
+            SizedBox(
+              width: appWidth * 0.75,
+              child: Expanded(
+                child: Text(
+                  _user.institutionName,
+                  style: CustomTheme.lightTheme.textTheme.bodyText1?.copyWith(
+                    fontSize: 18,
+                  ),
+                ),
               ),
             ),
             const Spacer(),

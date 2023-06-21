@@ -8,10 +8,10 @@ import '../../repositories/home_base_repository.dart';
 
 class HomeBaseController {
   HomeBaseInitialPayload? _initialData;
+  FutureProvider<HomeBaseInitialPayload>? _initialDataProvider;
 
   final ProviderRef _ref;
   final HomeBaseRepository _homeBaseRepository;
-  FutureProvider<HomeBaseInitialPayload>? _initialDataProvider;
   final _orderValueProvider = StateProvider<String?>((ref) => null);
   final _navigationBarIndexProvider = StateProvider<int>((_ref) => 0);
 

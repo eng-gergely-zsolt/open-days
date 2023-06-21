@@ -172,7 +172,8 @@ class _HomeState extends ConsumerState<Home> {
                             ),
                           ),
                           const Spacer(),
-                          widget._initialData?.userResponse.user.roleName == roleOrganizer
+                          widget._initialData?.userResponse.user.roleName == roleOrganizer ||
+                                  widget._initialData?.userResponse.user.roleName == roleAdmin
                               ? Container(
                                   margin: EdgeInsets.only(right: appWidth * 0.05),
                                   child: Column(

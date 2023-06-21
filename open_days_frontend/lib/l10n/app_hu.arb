@@ -42,6 +42,10 @@
 
     "home_base_app_bar_title_qr": "QR kód olvasó",
     "home_base_navigation_bar_title_qr": "QR",
+    "home_base_navigation_bar_title_stats": "Kimutatás",
+
+    "statistic_get_chart": "Diagram",
+    "participated_users_stats_title": "Válazd ki a látni kívánt programokat",
 
     "event_creator_main_button": "Mentés",
     "event_creator_header": "Eseménykészítő",

@@ -191,7 +191,7 @@ class EventCreatorController {
     _ref.read(_isLoadingProvider.notifier).state = true;
 
     var event = Event();
-    final DateFormat dateFormatter = DateFormat('yyyy-MM-dd H:m');
+    final DateFormat dateFormatter = DateFormat('yyyy-MM-dd HH:mm');
 
     event.location = _location;
     event.description = _description;

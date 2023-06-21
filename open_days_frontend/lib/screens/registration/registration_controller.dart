@@ -4,7 +4,6 @@ import '../../models/institution.dart';
 import '../../repositories/base_repository.dart';
 import '../../models/responses/base_response.dart';
 import '../../models/requests/create_user_request.dart';
-import '../../models/responses/login_user_response.dart';
 import '../../repositories/registration_repository.dart';
 import '../../models/responses/institution_response.dart';
 

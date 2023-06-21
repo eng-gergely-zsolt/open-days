@@ -8,6 +8,7 @@ import '../home/home.dart';
 import '../../theme/theme.dart';
 import '../../utils/utils.dart';
 import '../profile/profile.dart';
+import '../statistic/statistic.dart';
 import './home_base_controller.dart';
 import '../../constants/constants.dart';
 import '../error/base_error_screen.dart';
@@ -41,6 +42,12 @@ class HomeBase extends ConsumerWidget {
       Profile(userResponse.user, controller),
     ];
 
+    final adminSreens = [
+      Home(initialDataModel: controller.getInitialData(), homeBaseController: controller),
+      const Statistic(),
+      Profile(userResponse.user, controller),
+    ];
+
     final appBarTitles = [
       appLocale?.home,
       Utils.getString(appLocale?.home_base_app_bar_title_qr),
@@ -48,6 +55,12 @@ class HomeBase extends ConsumerWidget {
     ];
 
     final organizerAppBarTitles = [appLocale?.home, Utils.getString(appLocale?.profile)];
+
+    final adminAppBarTitles = [
+      appLocale?.home,
+      Utils.getString(appLocale?.home_base_navigation_bar_title_stats),
+      Utils.getString(appLocale?.profile)
+    ];
 
     return WillPopScope(
       onWillPop: (() {
@@ -62,7 +75,9 @@ class HomeBase extends ConsumerWidget {
             title: Center(
               child: controller.isParticipant(initialData)
                   ? Text(appBarTitles[navigationBarIndex] as String)
-                  : Text(organizerAppBarTitles[navigationBarIndex] as String),
+                  : initialData.userResponse.user.roleName == roleOrganizer
+                      ? Text(organizerAppBarTitles[navigationBarIndex] as String)
+                      : Text(adminAppBarTitles[navigationBarIndex] as String),
             ),
           ),
         ),
@@ -79,13 +94,22 @@ class HomeBase extends ConsumerWidget {
                 ? RefreshIndicator(
                     child: initialData.userResponse.user.roleName == roleUser
                         ? screens[navigationBarIndex]
-                        : organizerSreens[navigationBarIndex],
+                        : initialData.userResponse.user.roleName == roleOrganizer
+                            ? organizerSreens[navigationBarIndex]
+                            : adminSreens[navigationBarIndex],
                     onRefresh: () => controller.invalidateInitialDataProvider(),
                   )
                 : const BaseErrorScreen();
           },
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButtonLocation: initialData.when(
+            loading: () => null,
+            error: (error, stackTrace) => null,
+            data: (initialData) {
+              return initialData.userResponse.user.roleName == roleOrganizer
+                  ? FloatingActionButtonLocation.centerDocked
+                  : FloatingActionButtonLocation.endFloat;
+            }),
         floatingActionButton: initialData.when(
           loading: () => null,
           error: (error, stackTrace) => null,
@@ -153,29 +177,62 @@ class HomeBase extends ConsumerWidget {
               ),
             ],
           )
-        : BottomNavigationBar(
-            showUnselectedLabels: false,
-            currentIndex: navigationBarIndex,
-            selectedIconTheme: CustomTheme.lightTheme.iconTheme,
-            onTap: (index) => controller.setNavigationBarIndexProvider(index),
-            items: [
-              BottomNavigationBarItem(
-                label: appLocale?.home,
-                icon: const Icon(Icons.home_outlined),
-                activeIcon: Icon(
-                  Icons.home,
-                  color: CustomTheme.lightTheme.primaryColor,
-                ),
-              ),
-              BottomNavigationBarItem(
-                label: Utils.getString(appLocale?.profile),
-                icon: const Icon(Icons.person_outline_outlined),
-                activeIcon: Icon(
-                  Icons.person,
-                  color: CustomTheme.lightTheme.primaryColor,
-                ),
-              ),
-            ],
-          );
+        : initialData.userResponse.user.roleName == roleOrganizer
+            ? BottomNavigationBar(
+                showUnselectedLabels: false,
+                currentIndex: navigationBarIndex,
+                selectedIconTheme: CustomTheme.lightTheme.iconTheme,
+                onTap: (index) => controller.setNavigationBarIndexProvider(index),
+                items: [
+                  BottomNavigationBarItem(
+                    label: appLocale?.home,
+                    icon: const Icon(Icons.home_outlined),
+                    activeIcon: Icon(
+                      Icons.home,
+                      color: CustomTheme.lightTheme.primaryColor,
+                    ),
+                  ),
+                  BottomNavigationBarItem(
+                    label: Utils.getString(appLocale?.profile),
+                    icon: const Icon(Icons.person_outline_outlined),
+                    activeIcon: Icon(
+                      Icons.person,
+                      color: CustomTheme.lightTheme.primaryColor,
+                    ),
+                  ),
+                ],
+              )
+            : BottomNavigationBar(
+                showUnselectedLabels: false,
+                currentIndex: navigationBarIndex,
+                selectedIconTheme: CustomTheme.lightTheme.iconTheme,
+                onTap: (index) => controller.setNavigationBarIndexProvider(index),
+                items: [
+                  BottomNavigationBarItem(
+                    label: appLocale?.home,
+                    icon: const Icon(Icons.home_outlined),
+                    activeIcon: Icon(
+                      Icons.home,
+                      color: CustomTheme.lightTheme.primaryColor,
+                    ),
+                  ),
+                  BottomNavigationBarItem(
+                    label: appLocale?.home_base_navigation_bar_title_stats,
+                    icon: const Icon(Icons.bar_chart_outlined),
+                    activeIcon: Icon(
+                      Icons.home,
+                      color: CustomTheme.lightTheme.primaryColor,
+                    ),
+                  ),
+                  BottomNavigationBarItem(
+                    label: Utils.getString(appLocale?.profile),
+                    icon: const Icon(Icons.person_outline_outlined),
+                    activeIcon: Icon(
+                      Icons.person,
+                      color: CustomTheme.lightTheme.primaryColor,
+                    ),
+                  ),
+                ],
+              );
   }
 }

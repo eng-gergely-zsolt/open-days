@@ -45,6 +45,10 @@
 
     "home_base_app_bar_title_qr": "QR Code Scanner",
     "home_base_navigation_bar_title_qr": "QR",
+    "home_base_navigation_bar_title_stats": "Stats",
+
+    "statistic_get_chart": "Get chart",
+    "participated_users_stats_title": "Select the activities you would like to see on the chart",
 
     "event_creator_main_button": "Save",
     "event_creator_header": "Event Creator",

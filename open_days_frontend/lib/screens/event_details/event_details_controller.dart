@@ -149,7 +149,7 @@ class EventDetailsController {
         response.usersResponse = await _eventDetailsRepository.getParticipatedUsersRepo(eventId);
       }
 
-      if (roleName == roleOrganizer) {
+      if (roleName == roleUser) {
         response.isUserEnrolledResponse = await _eventDetailsRepository.isUserEnrolledRepo(eventId);
       }
 

@@ -42,6 +42,10 @@
 
     "home_base_app_bar_title_qr": "Scaner QR",
     "home_base_navigation_bar_title_qr": "QR",
+    "home_base_navigation_bar_title_stats": "Statistic",
+
+    "statistic_get_chart": "Diagramă",
+    "participated_users_stats_title": "Selectați activitățile pe care doriți să le vedeți pe diagramă",
 
     "event_creator_main_button": "Salvați",
     "event_creator_header": "Crearea evenimentelor",
