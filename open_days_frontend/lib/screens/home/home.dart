@@ -33,7 +33,6 @@ class _HomeState extends ConsumerState<Home> {
     final appHeight = MediaQuery.of(context).size.height;
     final appLocale = AppLocalizations.of(context);
 
-    var colorCount = 0;
     final homeController = ref.read(homeControllerProvider);
     final homeBaseController = ref.read(homeBaseControllerProvider);
     String? orderValue = ref.watch(homeBaseController.getOrderValueProvider());
@@ -41,11 +40,11 @@ class _HomeState extends ConsumerState<Home> {
     orderValue = orderValue ?? appLocale?.order_by as String;
 
     return Container(
-      width: appWidth * 1,
       height: appHeight * 1,
       color: CustomTheme.lightTheme.scaffoldBackgroundColor,
       child: Column(
         children: [
+          // Order section
           Container(
             height: appHeight * 0.08,
             decoration: BoxDecoration(
@@ -102,9 +101,8 @@ class _HomeState extends ConsumerState<Home> {
               ],
             ),
           ),
-          SizedBox(
-            width: appWidth * 1,
-            height: appHeight * 0.744,
+          // Event
+          Expanded(
             child: ListView.builder(
                 itemCount: widget._initialData?.eventsResponse.events.length,
                 itemBuilder: (context, index) {
@@ -222,11 +220,6 @@ class _HomeState extends ConsumerState<Home> {
                       ),
                     ),
                   );
-
-                  if (!isPastDate) {
-                    ++colorCount;
-                  }
-
                   return result;
                 }),
           ),

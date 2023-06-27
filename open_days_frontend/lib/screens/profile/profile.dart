@@ -79,13 +79,13 @@ class Profile extends ConsumerWidget {
                           height: appHeight * 0.2,
                           color: CustomTheme.lightTheme.primaryColor,
                         ),
-                        Container(
-                          width: double.infinity,
-                          height: appHeight * 0.62,
-                          margin: EdgeInsets.symmetric(horizontal: appWidth * 0.05),
-                          child: SingleChildScrollView(
-                            child:
-                                getDataColumn(appWidth, appHeight, context, appLocale, controller),
+                        Expanded(
+                          child: Container(
+                            margin: EdgeInsets.symmetric(horizontal: appWidth * 0.05),
+                            child: SingleChildScrollView(
+                              child: getDataColumn(
+                                  appWidth, appHeight, context, appLocale, controller),
+                            ),
                           ),
                         ),
                       ],
@@ -265,15 +265,10 @@ class Profile extends ConsumerWidget {
         SizedBox(height: appHeight * 0.01),
         Row(
           children: [
-            SizedBox(
-              width: appWidth * 0.75,
-              child: Expanded(
-                child: Text(
-                  _user.institutionName,
-                  style: CustomTheme.lightTheme.textTheme.bodyText1?.copyWith(
-                    fontSize: 18,
-                  ),
-                ),
+            Text(
+              _user.institutionName,
+              style: CustomTheme.lightTheme.textTheme.bodyText1?.copyWith(
+                fontSize: 18,
               ),
             ),
             const Spacer(),
