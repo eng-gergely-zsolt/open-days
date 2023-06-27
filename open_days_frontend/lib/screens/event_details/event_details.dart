@@ -328,18 +328,22 @@ class EventDetails extends ConsumerWidget {
                               ),
                             ),
                             SizedBox(width: appWidth * 0.03),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  initialData.usersResponse.users[index].firstName +
-                                      ' ' +
-                                      initialData.usersResponse.users[index].lastName,
-                                  style:
-                                      Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 18),
-                                ),
-                                Text(initialData.usersResponse.users[index].institutionName),
-                              ],
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    initialData.usersResponse.users[index].firstName +
+                                        ' ' +
+                                        initialData.usersResponse.users[index].lastName,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        ?.copyWith(fontSize: 18),
+                                  ),
+                                  Text(initialData.usersResponse.users[index].institutionName),
+                                ],
+                              ),
                             ),
                           ],
                         ),

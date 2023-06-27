@@ -31,22 +31,23 @@ class _RegistrationState extends ConsumerState<Registration> {
     final appWidth = MediaQuery.of(context).size.width;
     final appHeight = MediaQuery.of(context).size.height;
 
-    final registrationController = ref.read(registrationControllerProvider);
-    final isLoading = ref.watch(registrationController.getIsLoadingProvider());
-    final initialData = ref.watch(registrationController.getInstitutionsProvider());
+    final controller = ref.read(registrationControllerProvider);
+    final isLoading = ref.watch(controller.getIsLoadingProvider());
+    final initialData = ref.watch(controller.getInstitutionsProvider());
 
-    var selectedCounty = ref.watch(registrationController.getSelectedCountyProvider());
-    var selectedInstitution = ref.watch(registrationController.getSelectedInstitutionProvider());
+    var selectedCounty = ref.watch(controller.getSelectedCountyProvider());
+    var selectedInstitution = ref.watch(controller.getSelectedInstitutionProvider());
 
-    if (registrationController.getRegistrationResponse() != null) {
-      if (registrationController.getRegistrationResponse()!.isOperationSuccessful) {
-        Future.microtask(
-          () => Navigator.pushNamed(
+    if (controller.getRegistrationResponse() != null) {
+      if (controller.getRegistrationResponse()!.isOperationSuccessful) {
+        Future.microtask(() {
+          controller.invalidateControllerProvider();
+          Navigator.pushNamed(
             context,
             emailVerificationRoute,
-            arguments: registrationController.getEmail(),
-          ),
-        );
+            arguments: controller.getEmail(),
+          );
+        });
       } else {
         const snackBar = SnackBar(
           content: Text('Something went wrong. Please try again!'),
@@ -56,7 +57,7 @@ class _RegistrationState extends ConsumerState<Registration> {
       }
     }
 
-    registrationController.deleteRegistrationResponse();
+    controller.deleteRegistrationResponse();
 
     return GestureDetector(
       onTap: (() => FocusScope.of(context).requestFocus(FocusNode())),
@@ -75,7 +76,7 @@ class _RegistrationState extends ConsumerState<Registration> {
             child: Text(error.toString()),
           ),
           data: (data) {
-            selectedCounty ??= registrationController.getFirstCounty(data.institutions);
+            selectedCounty ??= controller.getFirstCounty(data.institutions);
 
             if (selectedInstitution == null ||
                 !UserDataUtils.getInstitutions(selectedCounty, data.institutions)
@@ -84,7 +85,7 @@ class _RegistrationState extends ConsumerState<Registration> {
                   UserDataUtils.getFirstInstitution(selectedCounty, data.institutions);
             }
 
-            registrationController.setInstitutionName(selectedInstitution);
+            controller.setInstitutionName(selectedInstitution);
 
             return isLoading == true
                 ? Center(
@@ -112,10 +113,10 @@ class _RegistrationState extends ConsumerState<Registration> {
                                   ),
                                 ),
                                 onChanged: ((value) {
-                                  registrationController.setFirstName(value);
+                                  controller.setFirstName(value);
                                 }),
-                                initialValue: registrationController.getUser().firstName,
-                                validator: (value) => registrationController.validateName(value)),
+                                initialValue: controller.getUser().firstName,
+                                validator: (value) => controller.validateName(value)),
                             TextFormField(
                               maxLength: 50,
                               decoration: InputDecoration(
@@ -126,10 +127,10 @@ class _RegistrationState extends ConsumerState<Registration> {
                                 ),
                               ),
                               onChanged: ((value) {
-                                registrationController.setLastName(value);
+                                controller.setLastName(value);
                               }),
-                              initialValue: registrationController.getUser().lastName,
-                              validator: ((value) => registrationController.validateName(value)),
+                              initialValue: controller.getUser().lastName,
+                              validator: ((value) => controller.validateName(value)),
                             ),
                             TextFormField(
                               maxLength: 50,
@@ -141,10 +142,10 @@ class _RegistrationState extends ConsumerState<Registration> {
                                 ),
                               ),
                               onChanged: ((value) {
-                                registrationController.setUsername(value);
+                                controller.setUsername(value);
                               }),
-                              initialValue: registrationController.getUser().username,
-                              validator: ((value) => registrationController.validateName(value)),
+                              initialValue: controller.getUser().username,
+                              validator: ((value) => controller.validateName(value)),
                             ),
                             TextFormField(
                               maxLength: 100,
@@ -156,9 +157,9 @@ class _RegistrationState extends ConsumerState<Registration> {
                                 ),
                               ),
                               onChanged: ((value) {
-                                registrationController.setEmail(value);
+                                controller.setEmail(value);
                               }),
-                              initialValue: registrationController.getUser().email,
+                              initialValue: controller.getUser().email,
                               validator: ((value) => ValidatorUtils.validateEmail(value)),
                             ),
                             TextFormField(
@@ -172,11 +173,10 @@ class _RegistrationState extends ConsumerState<Registration> {
                                 ),
                               ),
                               onChanged: ((value) {
-                                registrationController.setPassword(value);
+                                controller.setPassword(value);
                               }),
-                              validator: ((value) =>
-                                  registrationController.validatePassword(value)),
-                              initialValue: registrationController.getUser().password,
+                              validator: ((value) => controller.validatePassword(value)),
+                              initialValue: controller.getUser().password,
                             ),
                             SizedBox(height: appHeight * 0.03),
                             Container(
@@ -207,9 +207,7 @@ class _RegistrationState extends ConsumerState<Registration> {
                                   ).toList(),
                                   onChanged: (String? value) {
                                     ref
-                                        .read(registrationController
-                                            .getSelectedCountyProvider()
-                                            .notifier)
+                                        .read(controller.getSelectedCountyProvider().notifier)
                                         .state = value;
                                   },
                                 ),
@@ -245,11 +243,9 @@ class _RegistrationState extends ConsumerState<Registration> {
                                   ).toList(),
                                   onChanged: (String? value) {
                                     ref
-                                        .read(registrationController
-                                            .getSelectedInstitutionProvider()
-                                            .notifier)
+                                        .read(controller.getSelectedInstitutionProvider().notifier)
                                         .state = value;
-                                    registrationController.setInstitutionName(value);
+                                    controller.setInstitutionName(value);
                                   },
                                 ),
                               ),
@@ -258,7 +254,7 @@ class _RegistrationState extends ConsumerState<Registration> {
                             ElevatedButton(
                               onPressed: (() {
                                 if (_formKey.currentState!.validate()) {
-                                  registrationController.createUser();
+                                  controller.createUser();
                                 }
                               }),
                               style: ElevatedButton.styleFrom(

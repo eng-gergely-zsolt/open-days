@@ -265,13 +265,17 @@ class Profile extends ConsumerWidget {
         SizedBox(height: appHeight * 0.01),
         Row(
           children: [
-            Text(
-              _user.institutionName,
-              style: CustomTheme.lightTheme.textTheme.bodyText1?.copyWith(
-                fontSize: 18,
+            Expanded(
+              child: SizedBox(
+                width: appWidth * 0.7,
+                child: Text(
+                  _user.institutionName,
+                  style: CustomTheme.lightTheme.textTheme.bodyText1?.copyWith(
+                    fontSize: 18,
+                  ),
+                ),
               ),
             ),
-            const Spacer(),
             IconButton(
               icon: const Icon(Icons.edit),
               onPressed: () async {

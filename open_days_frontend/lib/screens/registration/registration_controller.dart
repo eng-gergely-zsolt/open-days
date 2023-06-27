@@ -83,6 +83,10 @@ class RegistrationController {
     _registrationResponse = null;
   }
 
+  void invalidateControllerProvider() {
+    _ref.invalidate(registrationControllerProvider);
+  }
+
   createUser() async {
     _ref.read(_isLoadingProvider.notifier).state = true;
     _registrationResponse = await _registrationRepository.createUserRepo(_user);
